@@ -1,0 +1,179 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>RAG Chat</title>
+<style>
+  :root { color-scheme: light dark; }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; font-family: -apple-system, Segoe UI, Roboto, sans-serif;
+    background: #f5f5f7; color: #1d1d1f; height: 100vh; display: flex;
+  }
+  @media (prefers-color-scheme: dark) {
+    body { background: #17181c; color: #eee; }
+    .sidebar, .msg.assistant { background: #24262b !important; }
+    .msg.user { background: #2b3a55 !important; }
+    input[type=text], .file-drop { background: #1d1e22 !important; color: #eee !important; border-color: #3a3c42 !important; }
+  }
+  .sidebar {
+    width: 300px; background: #fff; border-right: 1px solid #e2e2e5;
+    padding: 20px; display: flex; flex-direction: column; gap: 16px; flex-shrink: 0;
+  }
+  .sidebar h1 { font-size: 18px; margin: 0; }
+  .sidebar p.hint { font-size: 13px; color: #86868b; margin: 0; }
+  .file-drop {
+    border: 2px dashed #c7c7cc; border-radius: 10px; padding: 20px;
+    text-align: center; font-size: 13px; color: #6e6e73; cursor: pointer;
+  }
+  .file-drop.dragover { border-color: #0071e3; color: #0071e3; }
+  #status { font-size: 13px; color: #6e6e73; }
+  .main { flex: 1; display: flex; flex-direction: column; min-width: 0; }
+  #chat { flex: 1; overflow-y: auto; padding: 24px; display: flex; flex-direction: column; gap: 14px; }
+  .msg { max-width: 75%; padding: 10px 14px; border-radius: 14px; line-height: 1.45; white-space: pre-wrap; }
+  .msg.user { align-self: flex-end; background: #0071e3; color: white; }
+  .msg.assistant { align-self: flex-start; background: #fff; border: 1px solid #e2e2e5; }
+  .sources { font-size: 12px; color: #86868b; margin-top: 6px; }
+  form#ask-form {
+    display: flex; gap: 10px; padding: 16px 24px; border-top: 1px solid #e2e2e5;
+  }
+  input[type=text] {
+    flex: 1; padding: 12px 14px; border-radius: 10px; border: 1px solid #d2d2d7; font-size: 14px;
+  }
+  button {
+    padding: 12px 18px; border-radius: 10px; border: none; background: #0071e3;
+    color: white; font-size: 14px; cursor: pointer;
+  }
+  button:disabled { opacity: 0.5; cursor: not-allowed; }
+</style>
+</head>
+<body>
+  <div class="sidebar">
+    <h1>📚 RAG Chat</h1>
+    <p class="hint">Upload documents (.txt, .md, .pdf), then ask questions grounded in their content.</p>
+    <div class="file-drop" id="drop-zone">
+      Click or drop a file here to ingest
+      <input type="file" id="file-input" accept=".txt,.md,.pdf" style="display:none" />
+    </div>
+    <div id="status">{{ document_count }} chunk(s) indexed.</div>
+  </div>
+  <div class="main">
+    <div id="chat"></div>
+    <form id="ask-form">
+      <input type="text" id="question" placeholder="Ask a question about your documents…" autocomplete="off" />
+      <button type="submit" id="ask-btn">Ask</button>
+    </form>
+  </div>
+
+<script>
+const chat = document.getElementById('chat');
+const form = document.getElementById('ask-form');
+const questionInput = document.getElementById('question');
+const askBtn = document.getElementById('ask-btn');
+const statusEl = document.getElementById('status');
+const dropZone = document.getElementById('drop-zone');
+const fileInput = document.getElementById('file-input');
+
+function addMessage(role, text) {
+  const div = document.createElement('div');
+  div.className = 'msg ' + role;
+  div.textContent = text;
+  chat.appendChild(div);
+  chat.scrollTop = chat.scrollHeight;
+  return div;
+}
+
+async function refreshStatus() {
+  const res = await fetch('/api/status');
+  const data = await res.json();
+  statusEl.textContent = `${data.chunks_indexed} chunk(s) indexed.`;
+}
+
+async function uploadFile(file) {
+  statusEl.textContent = `Ingesting ${file.name}…`;
+  const formData = new FormData();
+  formData.append('file', file);
+  try {
+    const res = await fetch('/api/ingest', { method: 'POST', body: formData });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.detail || 'Ingest failed');
+    statusEl.textContent = `Ingested ${file.name} (${data.chunks_ingested} chunks). Total: ${data.chunks_indexed_total}.`;
+  } catch (err) {
+    statusEl.textContent = `Error: ${err.message}`;
+  }
+}
+
+dropZone.addEventListener('click', () => fileInput.click());
+fileInput.addEventListener('change', () => {
+  if (fileInput.files.length) uploadFile(fileInput.files[0]);
+});
+dropZone.addEventListener('dragover', (e) => { e.preventDefault(); dropZone.classList.add('dragover'); });
+dropZone.addEventListener('dragleave', () => dropZone.classList.remove('dragover'));
+dropZone.addEventListener('drop', (e) => {
+  e.preventDefault();
+  dropZone.classList.remove('dragover');
+  if (e.dataTransfer.files.length) uploadFile(e.dataTransfer.files[0]);
+});
+
+form.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const question = questionInput.value.trim();
+  if (!question) return;
+
+  addMessage('user', question);
+  questionInput.value = '';
+  askBtn.disabled = true;
+
+  const answerEl = addMessage('assistant', '');
+
+  try {
+    const res = await fetch('/api/ask', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ question }),
+    });
+    if (!res.ok) {
+      const data = await res.json();
+      answerEl.textContent = 'Error: ' + (data.detail || res.statusText);
+      return;
+    }
+
+    const reader = res.body.getReader();
+    const decoder = new TextDecoder();
+    let buffer = '';
+    let answerText = '';
+
+    while (true) {
+      const { value, done } = await reader.read();
+      if (done) break;
+      buffer += decoder.decode(value, { stream: true });
+
+      const events = buffer.split('\n\n');
+      buffer = events.pop();
+      for (const raw of events) {
+        const line = raw.trim();
+        if (!line.startsWith('data:')) continue;
+        const event = JSON.parse(line.slice(5).trim());
+        if (event.type === 'token') {
+          answerText += event.text;
+          answerEl.textContent = answerText;
+          chat.scrollTop = chat.scrollHeight;
+        } else if (event.type === 'sources' && event.sources.length) {
+          const src = document.createElement('div');
+          src.className = 'sources';
+          src.textContent = 'Sources: ' + event.sources.join(', ');
+          answerEl.appendChild(src);
+        }
+      }
+    }
+  } catch (err) {
+    answerEl.textContent = 'Error: ' + err.message;
+  } finally {
+    askBtn.disabled = false;
+    refreshStatus();
+  }
+});
+</script>
+</body>
+</html>
