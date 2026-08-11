@@ -1,6 +1,6 @@
-from collections.abc import AsyncIterator, Iterator
+from collections.abc import Iterator
 
-from groq import AsyncGroq, Groq
+from groq import Groq
 
 from rag.config import GROQ_API_KEY, GROQ_MODEL
 
@@ -15,7 +15,6 @@ instead of guessing.
 - Be concise and direct."""
 
 _client: Groq | None = None
-_async_client: AsyncGroq | None = None
 
 
 def _get_client() -> Groq:
@@ -25,13 +24,6 @@ def _get_client() -> Groq:
     return _client
 
 
-def _get_async_client() -> AsyncGroq:
-    global _async_client
-    if _async_client is None:
-        _async_client = AsyncGroq(api_key=GROQ_API_KEY)
-    return _async_client
-
-
 def build_context(chunks: list[dict]) -> str:
     if not chunks:
         return "(no relevant context was found in the indexed documents)"
@@ -39,7 +31,9 @@ def build_context(chunks: list[dict]) -> str:
     parts = []
     for chunk in chunks:
         source = chunk["metadata"].get("source", "unknown")
-        parts.append(f"[source: {source}]\n{chunk['text']}")
+        heading_path = chunk["metadata"].get("heading_path", "")
+        tag = f"{source} → {heading_path}" if heading_path else source
+        parts.append(f"[source: {tag}]\n{chunk['text']}")
     return "\n\n---\n\n".join(parts)
 
 
@@ -82,23 +76,6 @@ def stream_answer_text(question: str, chunks: list[dict], max_tokens: int = 2048
         stream=True,
     )
     for chunk in stream:
-        delta = chunk.choices[0].delta.content
-        if delta:
-            yield delta
-
-
-async def async_stream_answer_text(
-    question: str, chunks: list[dict], max_tokens: int = 2048
-) -> AsyncIterator[str]:
-    """Yield text deltas asynchronously, used by the FastAPI SSE endpoint."""
-    client = _get_async_client()
-    stream = await client.chat.completions.create(
-        model=GROQ_MODEL,
-        max_tokens=max_tokens,
-        messages=_build_messages(question, chunks),
-        stream=True,
-    )
-    async for chunk in stream:
         delta = chunk.choices[0].delta.content
         if delta:
             yield delta

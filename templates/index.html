@@ -75,6 +75,19 @@ const statusEl = document.getElementById('status');
 const dropZone = document.getElementById('drop-zone');
 const fileInput = document.getElementById('file-input');
 
+function displayText(fullText) {
+  // Hide inline "[source: ...]" citations from the rendered answer (the
+  // Sources: footer below already covers attribution). Hold back a
+  // still-incomplete trailing citation so it never flashes on screen
+  // token-by-token while it's being streamed in.
+  let display = fullText.replace(/\s*\[source:[^\]]*\]/gi, '');
+  const pendingIdx = display.search(/\s*\[source\b[^\]]*$/i);
+  if (pendingIdx !== -1) {
+    display = display.slice(0, pendingIdx);
+  }
+  return display;
+}
+
 function addMessage(role, text) {
   const div = document.createElement('div');
   div.className = 'msg ' + role;
@@ -125,7 +138,7 @@ form.addEventListener('submit', async (e) => {
   questionInput.value = '';
   askBtn.disabled = true;
 
-  const answerEl = addMessage('assistant', '');
+  const answerEl = addMessage('assistant', '…');
 
   try {
     const res = await fetch('/api/ask', {
@@ -133,40 +146,20 @@ form.addEventListener('submit', async (e) => {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ question }),
     });
+    const data = await res.json();
     if (!res.ok) {
-      const data = await res.json();
       answerEl.textContent = 'Error: ' + (data.detail || res.statusText);
       return;
     }
 
-    const reader = res.body.getReader();
-    const decoder = new TextDecoder();
-    let buffer = '';
-    let answerText = '';
-
-    while (true) {
-      const { value, done } = await reader.read();
-      if (done) break;
-      buffer += decoder.decode(value, { stream: true });
-
-      const events = buffer.split('\n\n');
-      buffer = events.pop();
-      for (const raw of events) {
-        const line = raw.trim();
-        if (!line.startsWith('data:')) continue;
-        const event = JSON.parse(line.slice(5).trim());
-        if (event.type === 'token') {
-          answerText += event.text;
-          answerEl.textContent = answerText;
-          chat.scrollTop = chat.scrollHeight;
-        } else if (event.type === 'sources' && event.sources.length) {
-          const src = document.createElement('div');
-          src.className = 'sources';
-          src.textContent = 'Sources: ' + event.sources.join(', ');
-          answerEl.appendChild(src);
-        }
-      }
+    answerEl.textContent = displayText(data.answer);
+    if (data.sources && data.sources.length) {
+      const src = document.createElement('div');
+      src.className = 'sources';
+      src.textContent = 'Sources: ' + data.sources.join(', ');
+      answerEl.appendChild(src);
     }
+    chat.scrollTop = chat.scrollHeight;
   } catch (err) {
     answerEl.textContent = 'Error: ' + err.message;
   } finally {

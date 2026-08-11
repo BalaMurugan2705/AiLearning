@@ -1,14 +1,9 @@
 import hashlib
 from pathlib import Path
 
-from rag.chunking import chunk_text
+from rag.chunking import chunk_document
 from rag.config import TOP_K
-from rag.generator import (
-    answer_question,
-    async_stream_answer_text,
-    sources_from_chunks,
-    stream_answer_text,
-)
+from rag.generator import answer_question, sources_from_chunks
 from rag.loaders import iter_documents
 from rag.store import VectorStore
 
@@ -27,16 +22,30 @@ class RAGPipeline:
         chunks_ingested = 0
 
         for file_path, text in iter_documents(p):
-            chunks = chunk_text(text)
+            # Canonicalize so the same file is recognized as one source
+            # regardless of whether it's referenced via a relative or
+            # absolute path across different ingest calls.
+            source = str(file_path.resolve())
+            chunks = chunk_document(text, file_path.suffix.lower())
+
+            # Re-ingesting a source should reflect only its current content,
+            # so drop whatever chunks it previously contributed first.
+            self.store.delete_by_source(source)
             if not chunks:
                 continue
 
-            source = str(file_path)
             texts, metadatas, ids = [], [], []
             for i, chunk in enumerate(chunks):
                 chunk_id = hashlib.sha256(f"{source}:{i}".encode()).hexdigest()
-                texts.append(chunk)
-                metadatas.append({"source": file_path.name, "path": source, "chunk_index": i})
+                texts.append(chunk.text)
+                metadatas.append(
+                    {
+                        "source": file_path.name,
+                        "path": source,
+                        "chunk_index": i,
+                        "heading_path": " > ".join(chunk.heading_path),
+                    }
+                )
                 ids.append(chunk_id)
 
             self.store.add_texts(texts, metadatas, ids)
@@ -52,22 +61,6 @@ class RAGPipeline:
         chunks = self.retrieve(question, k)
         answer = answer_question(question, chunks)
         return {"answer": answer, "sources": sources_from_chunks(chunks)}
-
-    def ask_stream(self, question: str, k: int = TOP_K):
-        """Sync generator: retrieves chunks, then yields answer text deltas.
-        The CLI calls retrieve() separately beforehand so it can print sources
-        after streaming completes."""
-        chunks = self.retrieve(question, k)
-        yield from stream_answer_text(question, chunks)
-
-    async def ask_stream_async(self, question: str, k: int = TOP_K):
-        """Async generator for the web UI: retrieves, then yields
-        {"type": "token", "text": ...} events followed by a final
-        {"type": "sources", "sources": [...]} event."""
-        chunks = self.retrieve(question, k)
-        async for text in async_stream_answer_text(question, chunks):
-            yield {"type": "token", "text": text}
-        yield {"type": "sources", "sources": sources_from_chunks(chunks)}
 
     def reset(self) -> None:
         self.store.reset()

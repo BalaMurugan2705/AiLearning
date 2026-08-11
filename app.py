@@ -1,9 +1,8 @@
-import json
 import shutil
 from pathlib import Path
 
 from fastapi import FastAPI, File, HTTPException, UploadFile
-from fastapi.responses import HTMLResponse, StreamingResponse
+from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
 from starlette.requests import Request
 from pydantic import BaseModel
@@ -58,11 +57,7 @@ async def ask(payload: AskRequest):
     if pipeline.document_count() == 0:
         raise HTTPException(status_code=400, detail="No documents indexed yet. Upload one first.")
 
-    async def event_stream():
-        async for event in pipeline.ask_stream_async(payload.question, k=payload.k):
-            yield f"data: {json.dumps(event)}\n\n"
-
-    return StreamingResponse(event_stream(), media_type="text/event-stream")
+    return pipeline.ask(payload.question, k=payload.k)
 
 
 if __name__ == "__main__":
