@@ -4,10 +4,13 @@ from dataclasses import dataclass, field
 from rag.config import CHUNK_OVERLAP, CHUNK_SIZE
 
 _HEADER_RE = re.compile(r"^(#{1,6})\s+(.+?)\s*$", re.MULTILINE)
-_FENCE_RE = re.compile(r"^```.*?^```", re.MULTILINE | re.DOTALL)
+# _FENCE_RE = re.compile(r"^```.*?^```", re.MULTILINE | re.DOTALL)
 _BOLD_LABEL_LINE_RE = re.compile(r"^\*\*(.+?):?\*\*$")
 
-
+_FENCE_RE = re.compile(
+    r"^(`{3,}|~{3,}).*?$.*?^\1\s*$",
+    re.MULTILINE | re.DOTALL
+)
 @dataclass
 class Chunk:
     text: str
