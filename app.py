@@ -46,6 +46,9 @@ async def ingest(file: UploadFile = File(...)):
     with dest.open("wb") as f:
         shutil.copyfileobj(file.file, f)
 
+    # Web uploads replace the whole index: only the latest upload is searchable,
+    # so answers never cite chunks from previously uploaded documents.
+    pipeline.reset()
     result = pipeline.ingest_path(str(dest))
     return {**result, "chunks_indexed_total": pipeline.document_count()}
 
