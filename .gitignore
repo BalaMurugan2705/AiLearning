@@ -6,3 +6,8 @@ venv/
 chroma_db/
 data/documents/*
 !data/documents/.gitkeep
+
+# The SDK reference corpus is an input to the Week 3 measurement, not scratch
+# data — results.md is unreproducible without it.
+!data/documents/v2/
+!data/documents/v3/

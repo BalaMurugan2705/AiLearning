@@ -1,0 +1,143 @@
+{
+  "_provenance": "Authored by reading data/documents/v3/*.md directly. No index existed and no search had been run at the time these were written. answer_span values were copied out of the page source, not out of retrieval output.",
+  "_support_spans_disclosure": "support_spans were added AFTER the first run, and this is disclosed rather than hidden. The pre-registered metric (expected page + answer_span in a top-5 chunk) scored 8/8 for BOTH strategies and therefore could not distinguish them. Inspecting the dump showed why: for Q1 the baseline chunker 'hit' on a code-sample fragment containing retry_backoff_ms=2000 as a caller-supplied argument, which does not state the default at all. support_spans define a second, stricter metric that asks requirement 3's actual question - is the parameter row still attached to its header row? - and applies only where structure is what is being tested. For prose questions support_spans is empty and the two metrics agree by construction. Both numbers are reported; the pre-registered one is not discarded.",
+  "eval": [
+    {
+      "id": "Q1",
+      "question": "What is the default value of retry_backoff_ms on Client.send() in the v3 SDK?",
+      "page": "v3/client.md",
+      "section": "Client.send() > Parameters",
+      "answer_span": "2000",
+      "depends_on": "parameter-table-row",
+      "support_spans": [
+        "`retry_backoff_ms`",
+        "| Parameter | Type | Default | Required | Description |"
+      ]
+    },
+    {
+      "id": "Q2",
+      "question": "What is the maximum accepted value for dedupe_window_ms on Client.send()?",
+      "page": "v3/client.md",
+      "section": "Client.send() > Parameters",
+      "answer_span": "86400000",
+      "depends_on": "parameter-table-row",
+      "support_spans": [
+        "`dedupe_window_ms`",
+        "| Parameter | Type | Default | Required | Description |"
+      ]
+    },
+    {
+      "id": "Q3",
+      "question": "Which HTTP header carries the webhook signature in v3?",
+      "page": "v3/webhooks.md",
+      "section": "Signature verification",
+      "answer_span": "X-Relay-Signature-V3",
+      "depends_on": "parameter-table-row",
+      "support_spans": [
+        "| Header | Type | Required | Description |"
+      ]
+    },
+    {
+      "id": "Q4",
+      "question": "What algorithm is used to compute the webhook signature?",
+      "page": "v3/webhooks.md",
+      "section": "Signature verification",
+      "answer_span": "HMAC-SHA256",
+      "depends_on": "prose",
+      "support_spans": []
+    },
+    {
+      "id": "Q5",
+      "question": "What is the maximum page_size accepted by Client.fetch()?",
+      "page": "v3/pagination.md",
+      "section": "Client.fetch()",
+      "answer_span": "250",
+      "depends_on": "parameter-table-row",
+      "support_spans": [
+        "`page_size`",
+        "| Parameter | Type | Default | Required | Description |"
+      ]
+    },
+    {
+      "id": "Q6",
+      "question": "Which error code means the bearer token is past its expiry?",
+      "page": "v3/errors.md",
+      "section": "Error codes",
+      "answer_span": "AUTH_TOKEN_EXPIRED",
+      "depends_on": "parameter-table-row",
+      "support_spans": [
+        "| Code | HTTP | Retryable | Meaning |"
+      ]
+    },
+    {
+      "id": "Q7",
+      "question": "Which argument must be passed to Client.subscribe() to receive incremental messages?",
+      "page": "v3/streaming.md",
+      "section": "Client.subscribe()",
+      "answer_span": "stream=True",
+      "depends_on": "code-fence",
+      "support_spans": [
+        "```"
+      ]
+    },
+    {
+      "id": "Q8",
+      "question": "How long is a v3 access token valid for?",
+      "page": "v3/auth.md",
+      "section": "Token lifecycle",
+      "answer_span": "3600 seconds",
+      "depends_on": "prose",
+      "support_spans": []
+    }
+  ],
+  "out_of_corpus": [
+    {
+      "id": "X1",
+      "question": "What is the per-minute rate limit on the /v3/messages endpoint?",
+      "why_absent": "RELAY_429 is documented as a code in v3/errors.md, but no numeric rate limit appears anywhere in the corpus."
+    },
+    {
+      "id": "X2",
+      "question": "Which TLS cipher suites does the Relay broker accept?",
+      "why_absent": "No page in the corpus discusses transport security or cipher negotiation."
+    },
+    {
+      "id": "X3",
+      "question": "What does the urgent priority tier cost per message?",
+      "why_absent": "v3/client.md says urgent messages are 'billed at a higher rate' but states no price. A tempting near-miss: relevant context exists, the fact does not."
+    }
+  ],
+  "calibration": [
+    {
+      "id": "C1",
+      "question": "Which compression algorithms can Client.send() use?",
+      "answerable": true,
+      "page": "v3/client.md",
+      "answer_span": "zstd"
+    },
+    {
+      "id": "C2",
+      "question": "How many webhook delivery attempts does Relay make before giving up?",
+      "answerable": true,
+      "page": "v3/webhooks.md",
+      "answer_span": "6 delivery attempts"
+    },
+    {
+      "id": "C3",
+      "question": "How long does a pagination cursor stay valid?",
+      "answerable": true,
+      "page": "v3/pagination.md",
+      "answer_span": "7 days"
+    },
+    {
+      "id": "C4",
+      "question": "What is the maximum number of concurrent connections allowed per API key?",
+      "answerable": false
+    },
+    {
+      "id": "C5",
+      "question": "Which cloud provider hosts the eu-west-1 region?",
+      "answerable": false
+    }
+  ]
+}

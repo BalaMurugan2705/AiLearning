@@ -1,0 +1,1926 @@
+{
+  "k": 5,
+  "indexes": {
+    "structural": {
+      "strategy": "structural",
+      "v2_seed": {
+        "files": 5,
+        "chunks": 20
+      },
+      "v3_ingest": {
+        "files": 6,
+        "chunks": 29,
+        "source_files": [
+          "v3/auth.md",
+          "v3/client.md",
+          "v3/errors.md",
+          "v3/pagination.md",
+          "v3/streaming.md",
+          "v3/webhooks.md"
+        ],
+        "seconds": 0.65
+      },
+      "v2_chunks_untouched": true,
+      "v2_chunk_count": 20,
+      "total_chunks": 49
+    },
+    "baseline": {
+      "strategy": "baseline",
+      "v2_seed": {
+        "files": 5,
+        "chunks": 7
+      },
+      "v3_ingest": {
+        "files": 6,
+        "chunks": 23,
+        "source_files": [
+          "v3/auth.md",
+          "v3/client.md",
+          "v3/errors.md",
+          "v3/pagination.md",
+          "v3/streaming.md",
+          "v3/webhooks.md"
+        ],
+        "seconds": 0.47
+      },
+      "v2_chunks_untouched": true,
+      "v2_chunk_count": 7,
+      "total_chunks": 30
+    }
+  },
+  "search": {
+    "structural": {
+      "hits": 8,
+      "supported_hits": 8,
+      "total": 8,
+      "records": [
+        {
+          "id": "Q1",
+          "question": "What is the default value of retry_backoff_ms on Client.send() in the v3 SDK?",
+          "expected_page": "v3/client.md",
+          "expected_section": "Client.send() > Parameters",
+          "answer_span": "2000",
+          "support_spans": [
+            "`retry_backoff_ms`",
+            "| Parameter | Type | Default | Required | Description |"
+          ],
+          "depends_on": "parameter-table-row",
+          "hit": true,
+          "hit_rank": 2,
+          "supported_hit": true,
+          "supported_hit_rank": 2,
+          "results": [
+            {
+              "rank": 1,
+              "chunk_id": "v2:client:structural:3",
+              "source_file": "v2/client.md",
+              "anchor": "#default-retry-backoff",
+              "heading_path": "Client > Client.send() > Default retry backoff",
+              "sdk_version": "v2",
+              "rrf_score": 0.032787,
+              "cosine_distance": 0.3648,
+              "bm25_score": 12.881,
+              "preview": "Client > Client.send() > Default retry backoff The default retry backoff for `Client.send()` is 500 ms. Retries use a fixed delay: every attempt waits the same `retry_backoff_ms` interval, with no multiplier and no jitte",
+              "contains_answer_span": false,
+              "supports_claim": false
+            },
+            {
+              "rank": 2,
+              "chunk_id": "v3:client:structural:2",
+              "source_file": "v3/client.md",
+              "anchor": "#parameters",
+              "heading_path": "Client > Client.send() > Parameters",
+              "sdk_version": "v3",
+              "rrf_score": 0.031746,
+              "cosine_distance": 0.4245,
+              "bm25_score": 11.911,
+              "preview": "Client > Client.send() > Parameters | Parameter | Type | Default | Required | Description | |---|---|---|---|---| | `message` | `str` | — | yes | Body of the message. Must be valid UTF-8 and at most 256 KiB after encodin",
+              "contains_answer_span": true,
+              "supports_claim": true
+            },
+            {
+              "rank": 3,
+              "chunk_id": "v2:client:structural:2",
+              "source_file": "v2/client.md",
+              "anchor": "#parameters",
+              "heading_path": "Client > Client.send() > Parameters",
+              "sdk_version": "v2",
+              "rrf_score": 0.031281,
+              "cosine_distance": 0.3856,
+              "bm25_score": 9.908,
+              "preview": "Client > Client.send() > Parameters | Parameter | Type | Default | Required | Description | |---|---|---|---|---| | `message` | `str` | — | yes | Body of the message. Must be valid UTF-8 and at most 64 KiB. | | `channel`",
+              "contains_answer_span": false,
+              "supports_claim": false
+            },
+            {
+              "rank": 4,
+              "chunk_id": "v3:client:structural:4",
+              "source_file": "v3/client.md",
+              "anchor": "#retry-behaviour",
+              "heading_path": "Client > Client.send() > Retry behaviour",
+              "sdk_version": "v3",
+              "rrf_score": 0.030536,
+              "cosine_distance": 0.4523,
+              "bm25_score": 10.162,
+              "preview": "Client > Client.send() > Retry behaviour Retries use exponential backoff seeded by `retry_backoff_ms` and multiplied by `retry_backoff_factor` after each failure. With the defaults, the delays before attempts two, three ",
+              "contains_answer_span": true,
+              "supports_claim": false
+            },
+            {
+              "rank": 5,
+              "chunk_id": "v2:migrating-to-v3:structural:1",
+              "source_file": "v2/migrating-to-v3.md",
+              "anchor": "#breaking-changes",
+              "heading_path": "Migrating from v2 to v3 > Breaking changes",
+              "sdk_version": "v2",
+              "rrf_score": 0.030415,
+              "cosine_distance": 0.4888,
+              "bm25_score": 12.403,
+              "preview": "Migrating from v2 to v3 > Breaking changes Channel identifiers gained a segment. A v2 channel `org/topic` becomes `org/team/topic` in v3, and the v3 broker rejects two-segment identifiers with `RELAY_400` rather than inf",
+              "contains_answer_span": false,
+              "supports_claim": false
+            }
+          ]
+        },
+        {
+          "id": "Q2",
+          "question": "What is the maximum accepted value for dedupe_window_ms on Client.send()?",
+          "expected_page": "v3/client.md",
+          "expected_section": "Client.send() > Parameters",
+          "answer_span": "86400000",
+          "support_spans": [
+            "`dedupe_window_ms`",
+            "| Parameter | Type | Default | Required | Description |"
+          ],
+          "depends_on": "parameter-table-row",
+          "hit": true,
+          "hit_rank": 1,
+          "supported_hit": true,
+          "supported_hit_rank": 1,
+          "results": [
+            {
+              "rank": 1,
+              "chunk_id": "v3:client:structural:3",
+              "source_file": "v3/client.md",
+              "anchor": "#parameters",
+              "heading_path": "Client > Client.send() > Parameters",
+              "sdk_version": "v3",
+              "rrf_score": 0.032787,
+              "cosine_distance": 0.4331,
+              "bm25_score": 12.769,
+              "preview": "Client > Client.send() > Parameters tempt. A value of `1.0` produces constant-delay retries. | | `retry_max_attempts` | `int` | `4` | no | Total number of delivery attempts, including the first. Set to `1` to disable ret",
+              "contains_answer_span": true,
+              "supports_claim": true
+            },
+            {
+              "rank": 2,
+              "chunk_id": "v3:client:structural:2",
+              "source_file": "v3/client.md",
+              "anchor": "#parameters",
+              "heading_path": "Client > Client.send() > Parameters",
+              "sdk_version": "v3",
+              "rrf_score": 0.032258,
+              "cosine_distance": 0.447,
+              "bm25_score": 8.971,
+              "preview": "Client > Client.send() > Parameters | Parameter | Type | Default | Required | Description | |---|---|---|---|---| | `message` | `str` | — | yes | Body of the message. Must be valid UTF-8 and at most 256 KiB after encodin",
+              "contains_answer_span": false,
+              "supports_claim": false
+            },
+            {
+              "rank": 3,
+              "chunk_id": "v3:client:structural:5",
+              "source_file": "v3/client.md",
+              "anchor": "#returns",
+              "heading_path": "Client > Client.send() > Returns",
+              "sdk_version": "v3",
+              "rrf_score": 0.030366,
+              "cosine_distance": 0.4718,
+              "bm25_score": 6.114,
+              "preview": "Client > Client.send() > Returns A `Receipt` with fields `id` (string), `accepted_at` (RFC 3339 timestamp), `attempts` (integer) and `deduplicated` (boolean). When `deduplicated` is true the message was suppressed and th",
+              "contains_answer_span": false,
+              "supports_claim": false
+            },
+            {
+              "rank": 4,
+              "chunk_id": "v2:changelog:structural:0",
+              "source_file": "v2/CHANGELOG.md",
+              "anchor": "#270",
+              "heading_path": "Changelog > 2.7.0",
+              "sdk_version": "v2",
+              "rrf_score": 0.030331,
+              "cosine_distance": 0.4994,
+              "bm25_score": 6.185,
+              "preview": "Changelog > 2.7.0 Added `idempotency_key` to `Client.send()`. Reusing a key within 60 seconds returns the original receipt instead of sending again. Raised the maximum message body from 32 KiB to 64 KiB.",
+              "contains_answer_span": false,
+              "supports_claim": false
+            },
+            {
+              "rank": 5,
+              "chunk_id": "v2:client:structural:3",
+              "source_file": "v2/client.md",
+              "anchor": "#default-retry-backoff",
+              "heading_path": "Client > Client.send() > Default retry backoff",
+              "sdk_version": "v2",
+              "rrf_score": 0.03009,
+              "cosine_distance": 0.618,
+              "bm25_score": 7.039,
+              "preview": "Client > Client.send() > Default retry backoff The default retry backoff for `Client.send()` is 500 ms. Retries use a fixed delay: every attempt waits the same `retry_backoff_ms` interval, with no multiplier and no jitte",
+              "contains_answer_span": false,
+              "supports_claim": false
+            }
+          ]
+        },
+        {
+          "id": "Q3",
+          "question": "Which HTTP header carries the webhook signature in v3?",
+          "expected_page": "v3/webhooks.md",
+          "expected_section": "Signature verification",
+          "answer_span": "X-Relay-Signature-V3",
+          "support_spans": [
+            "| Header | Type | Required | Description |"
+          ],
+          "depends_on": "parameter-table-row",
+          "hit": true,
+          "hit_rank": 1,
+          "supported_hit": true,
+          "supported_hit_rank": 1,
+          "results": [
+            {
+              "rank": 1,
+              "chunk_id": "v3:webhooks:structural:1",
+              "source_file": "v3/webhooks.md",
+              "anchor": "#signature-verification",
+              "heading_path": "Webhooks > Signature verification",
+              "sdk_version": "v3",
+              "rrf_score": 0.032522,
+              "cosine_distance": 0.4545,
+              "bm25_score": 14.174,
+              "preview": "Webhooks > Signature verification Each request carries the signature in the `X-Relay-Signature-V3` header. The signature is computed as HMAC-SHA256 over the concatenation of the request timestamp, a literal `.` separator",
+              "contains_answer_span": true,
+              "supports_claim": true
+            },
+            {
+              "rank": 2,
+              "chunk_id": "v2:migrating-to-v3:structural:2",
+              "source_file": "v2/migrating-to-v3.md",
+              "anchor": "#order-of-work",
+              "heading_path": "Migrating from v2 to v3 > Order of work",
+              "sdk_version": "v2",
+              "rrf_score": 0.032018,
+              "cosine_distance": 0.4381,
+              "bm25_score": 6.019,
+              "preview": "Migrating from v2 to v3 > Order of work 1. Update channel identifiers everywhere, including in stored configuration. 2. Move to the v3 client and let it manage tokens. 3. Re-derive retry settings against the new exponent",
+              "contains_answer_span": false,
+              "supports_claim": false
+            },
+            {
+              "rank": 3,
+              "chunk_id": "v3:webhooks:structural:2",
+              "source_file": "v3/webhooks.md",
+              "anchor": "#signature-verification",
+              "heading_path": "Webhooks > Signature verification",
+              "sdk_version": "v3",
+              "rrf_score": 0.031754,
+              "cosine_distance": 0.5575,
+              "bm25_score": 8.747,
+              "preview": "Webhooks > Signature verification etries of the same event. | Verification must be done against the **raw** request body. Parsing the JSON and re-serialising it will change byte ordering and whitespace, and the digest wi",
+              "contains_answer_span": true,
+              "supports_claim": false
+            },
+            {
+              "rank": 4,
+              "chunk_id": "v3:webhooks:structural:0",
+              "source_file": "v3/webhooks.md",
+              "anchor": "#webhooks",
+              "heading_path": "Webhooks",
+              "sdk_version": "v3",
+              "rrf_score": 0.030366,
+              "cosine_distance": 0.4613,
+              "bm25_score": 3.818,
+              "preview": "Webhooks Relay delivers asynchronous delivery outcomes to the `callback_url` registered on a send. Every webhook request is signed so that receivers can verify it originated from Relay and has not been altered in transit",
+              "contains_answer_span": false,
+              "supports_claim": false
+            },
+            {
+              "rank": 5,
+              "chunk_id": "v2:migrating-to-v3:structural:1",
+              "source_file": "v2/migrating-to-v3.md",
+              "anchor": "#breaking-changes",
+              "heading_path": "Migrating from v2 to v3 > Breaking changes",
+              "sdk_version": "v2",
+              "rrf_score": 0.029236,
+              "cosine_distance": 0.7323,
+              "bm25_score": 3.355,
+              "preview": "Migrating from v2 to v3 > Breaking changes Channel identifiers gained a segment. A v2 channel `org/topic` becomes `org/team/topic` in v3, and the v3 broker rejects two-segment identifiers with `RELAY_400` rather than inf",
+              "contains_answer_span": false,
+              "supports_claim": false
+            }
+          ]
+        },
+        {
+          "id": "Q4",
+          "question": "What algorithm is used to compute the webhook signature?",
+          "expected_page": "v3/webhooks.md",
+          "expected_section": "Signature verification",
+          "answer_span": "HMAC-SHA256",
+          "support_spans": [],
+          "depends_on": "prose",
+          "hit": true,
+          "hit_rank": 2,
+          "supported_hit": true,
+          "supported_hit_rank": 2,
+          "results": [
+            {
+              "rank": 1,
+              "chunk_id": "v3:webhooks:structural:2",
+              "source_file": "v3/webhooks.md",
+              "anchor": "#signature-verification",
+              "heading_path": "Webhooks > Signature verification",
+              "sdk_version": "v3",
+              "rrf_score": 0.032266,
+              "cosine_distance": 0.5178,
+              "bm25_score": 8.615,
+              "preview": "Webhooks > Signature verification etries of the same event. | Verification must be done against the **raw** request body. Parsing the JSON and re-serialising it will change byte ordering and whitespace, and the digest wi",
+              "contains_answer_span": false,
+              "supports_claim": false
+            },
+            {
+              "rank": 2,
+              "chunk_id": "v3:webhooks:structural:1",
+              "source_file": "v3/webhooks.md",
+              "anchor": "#signature-verification",
+              "heading_path": "Webhooks > Signature verification",
+              "sdk_version": "v3",
+              "rrf_score": 0.032258,
+              "cosine_distance": 0.4688,
+              "bm25_score": 6.911,
+              "preview": "Webhooks > Signature verification Each request carries the signature in the `X-Relay-Signature-V3` header. The signature is computed as HMAC-SHA256 over the concatenation of the request timestamp, a literal `.` separator",
+              "contains_answer_span": true,
+              "supports_claim": true
+            },
+            {
+              "rank": 3,
+              "chunk_id": "v3:webhooks:structural:0",
+              "source_file": "v3/webhooks.md",
+              "anchor": "#webhooks",
+              "heading_path": "Webhooks",
+              "sdk_version": "v3",
+              "rrf_score": 0.031778,
+              "cosine_distance": 0.4515,
+              "bm25_score": 5.383,
+              "preview": "Webhooks Relay delivers asynchronous delivery outcomes to the `callback_url` registered on a send. Every webhook request is signed so that receivers can verify it originated from Relay and has not been altered in transit",
+              "contains_answer_span": false,
+              "supports_claim": false
+            },
+            {
+              "rank": 4,
+              "chunk_id": "v2:migrating-to-v3:structural:2",
+              "source_file": "v2/migrating-to-v3.md",
+              "anchor": "#order-of-work",
+              "heading_path": "Migrating from v2 to v3 > Order of work",
+              "sdk_version": "v2",
+              "rrf_score": 0.03055,
+              "cosine_distance": 0.5487,
+              "bm25_score": 4.374,
+              "preview": "Migrating from v2 to v3 > Order of work 1. Update channel identifiers everywhere, including in stored configuration. 2. Move to the v3 client and let it manage tokens. 3. Re-derive retry settings against the new exponent",
+              "contains_answer_span": false,
+              "supports_claim": false
+            },
+            {
+              "rank": 5,
+              "chunk_id": "v3:webhooks:structural:3",
+              "source_file": "v3/webhooks.md",
+              "anchor": "#retry-schedule",
+              "heading_path": "Webhooks > Retry schedule",
+              "sdk_version": "v3",
+              "rrf_score": 0.030536,
+              "cosine_distance": 0.6805,
+              "bm25_score": 5.057,
+              "preview": "Webhooks > Retry schedule A webhook endpoint that does not return a 2xx status within 10 seconds is retried. Relay makes at most 6 delivery attempts spread over 24 hours, at intervals of 30 seconds, 5 minutes, 30 minutes",
+              "contains_answer_span": false,
+              "supports_claim": false
+            }
+          ]
+        },
+        {
+          "id": "Q5",
+          "question": "What is the maximum page_size accepted by Client.fetch()?",
+          "expected_page": "v3/pagination.md",
+          "expected_section": "Client.fetch()",
+          "answer_span": "250",
+          "support_spans": [
+            "`page_size`",
+            "| Parameter | Type | Default | Required | Description |"
+          ],
+          "depends_on": "parameter-table-row",
+          "hit": true,
+          "hit_rank": 1,
+          "supported_hit": true,
+          "supported_hit_rank": 1,
+          "results": [
+            {
+              "rank": 1,
+              "chunk_id": "v3:pagination:structural:1",
+              "source_file": "v3/pagination.md",
+              "anchor": "#clientfetch",
+              "heading_path": "Pagination > Client.fetch()",
+              "sdk_version": "v3",
+              "rrf_score": 0.032787,
+              "cosine_distance": 0.4556,
+              "bm25_score": 18.039,
+              "preview": "Pagination > Client.fetch() | Parameter | Type | Default | Required | Description | |---|---|---|---|---| | `channel` | `str` | — | yes | Channel to read from. | | `page_size` | `int` | `50` | no | Messages per page. The",
+              "contains_answer_span": true,
+              "supports_claim": true
+            },
+            {
+              "rank": 2,
+              "chunk_id": "v2:changelog:structural:0",
+              "source_file": "v2/CHANGELOG.md",
+              "anchor": "#270",
+              "heading_path": "Changelog > 2.7.0",
+              "sdk_version": "v2",
+              "rrf_score": 0.031025,
+              "cosine_distance": 0.7009,
+              "bm25_score": 5.399,
+              "preview": "Changelog > 2.7.0 Added `idempotency_key` to `Client.send()`. Reusing a key within 60 seconds returns the original receipt instead of sending again. Raised the maximum message body from 32 KiB to 64 KiB.",
+              "contains_answer_span": false,
+              "supports_claim": false
+            },
+            {
+              "rank": 3,
+              "chunk_id": "v3:streaming:structural:0",
+              "source_file": "v3/streaming.md",
+              "anchor": "#streaming",
+              "heading_path": "Streaming",
+              "sdk_version": "v3",
+              "rrf_score": 0.030415,
+              "cosine_distance": 0.6841,
+              "bm25_score": 4.728,
+              "preview": "Streaming Streaming subscribes to a channel and yields messages as they arrive, over a single long-lived HTTP/2 connection. Use it for tailing a channel; use `Client.fetch()` for bounded historical reads.",
+              "contains_answer_span": false,
+              "supports_claim": false
+            },
+            {
+              "rank": 4,
+              "chunk_id": "v3:errors:structural:4",
+              "source_file": "v3/errors.md",
+              "anchor": "#timeouts",
+              "heading_path": "Errors > Timeouts",
+              "sdk_version": "v3",
+              "rrf_score": 0.030331,
+              "cosine_distance": 0.7649,
+              "bm25_score": 6.367,
+              "preview": "Errors > Timeouts `RelayTimeout` is raised when the total budget set by `timeout_ms` is exhausted across all retry attempts. It is not an error code returned by the broker — it is raised client-side and carries `attempts",
+              "contains_answer_span": false,
+              "supports_claim": false
+            },
+            {
+              "rank": 5,
+              "chunk_id": "v3:client:structural:3",
+              "source_file": "v3/client.md",
+              "anchor": "#parameters",
+              "heading_path": "Client > Client.send() > Parameters",
+              "sdk_version": "v3",
+              "rrf_score": 0.03031,
+              "cosine_distance": 0.7352,
+              "bm25_score": 5.827,
+              "preview": "Client > Client.send() > Parameters tempt. A value of `1.0` produces constant-delay retries. | | `retry_max_attempts` | `int` | `4` | no | Total number of delivery attempts, including the first. Set to `1` to disable ret",
+              "contains_answer_span": false,
+              "supports_claim": false
+            }
+          ]
+        },
+        {
+          "id": "Q6",
+          "question": "Which error code means the bearer token is past its expiry?",
+          "expected_page": "v3/errors.md",
+          "expected_section": "Error codes",
+          "answer_span": "AUTH_TOKEN_EXPIRED",
+          "support_spans": [
+            "| Code | HTTP | Retryable | Meaning |"
+          ],
+          "depends_on": "parameter-table-row",
+          "hit": true,
+          "hit_rank": 1,
+          "supported_hit": true,
+          "supported_hit_rank": 1,
+          "results": [
+            {
+              "rank": 1,
+              "chunk_id": "v3:errors:structural:1",
+              "source_file": "v3/errors.md",
+              "anchor": "#error-codes",
+              "heading_path": "Errors > Error codes",
+              "sdk_version": "v3",
+              "rrf_score": 0.032787,
+              "cosine_distance": 0.4896,
+              "bm25_score": 15.663,
+              "preview": "Errors > Error codes | Code | HTTP | Retryable | Meaning | |---|---|---|---| | `RELAY_400` | 400 | no | Malformed request. The payload failed schema validation before reaching the broker. | | `AUTH_TOKEN_EXPIRED` | 401 |",
+              "contains_answer_span": true,
+              "supports_claim": true
+            },
+            {
+              "rank": 2,
+              "chunk_id": "v2:auth:structural:1",
+              "source_file": "v2/auth.md",
+              "anchor": "#api-keys",
+              "heading_path": "Authentication > API keys",
+              "sdk_version": "v2",
+              "rrf_score": 0.032002,
+              "cosine_distance": 0.5401,
+              "bm25_score": 8.544,
+              "preview": "Authentication > API keys | Parameter | Type | Default | Required | Description | |---|---|---|---|---| | `api_key` | `str` | — | yes | Long-lived key beginning `rk_live_` or `rk_test_`. Sent as a bearer credential on ea",
+              "contains_answer_span": true,
+              "supports_claim": false
+            },
+            {
+              "rank": 3,
+              "chunk_id": "v3:auth:structural:1",
+              "source_file": "v3/auth.md",
+              "anchor": "#token-lifecycle",
+              "heading_path": "Authentication > Token lifecycle",
+              "sdk_version": "v3",
+              "rrf_score": 0.031754,
+              "cosine_distance": 0.5369,
+              "bm25_score": 7.434,
+              "preview": "Authentication > Token lifecycle An access token issued by `POST /v3/auth/token` is valid for 3600 seconds. The SDK refreshes it when 80% of its lifetime has elapsed, so a healthy client refreshes roughly every 48 minute",
+              "contains_answer_span": false,
+              "supports_claim": false
+            },
+            {
+              "rank": 4,
+              "chunk_id": "v3:auth:structural:4",
+              "source_file": "v3/auth.md",
+              "anchor": "#rotation",
+              "heading_path": "Authentication > Rotation",
+              "sdk_version": "v3",
+              "rrf_score": 0.030769,
+              "cosine_distance": 0.5779,
+              "bm25_score": 7.315,
+              "preview": "Authentication > Rotation Keys are rotated from the console or with `Client.rotate_key()`. Rotation mints a replacement and marks the old key for expiry after a 24 hour overlap window, during which both keys authenticate",
+              "contains_answer_span": false,
+              "supports_claim": false
+            },
+            {
+              "rank": 5,
+              "chunk_id": "v2:migrating-to-v3:structural:3",
+              "source_file": "v2/migrating-to-v3.md",
+              "anchor": "#what-did-not-change",
+              "heading_path": "Migrating from v2 to v3 > What did not change",
+              "sdk_version": "v2",
+              "rrf_score": 0.029762,
+              "cosine_distance": 0.655,
+              "bm25_score": 7.547,
+              "preview": "Migrating from v2 to v3 > What did not change Message bodies are still UTF-8 strings, receipts still carry `id` and `accepted_at`, and `RELAY_503` still means the same thing. The error type hierarchy is source-compatible",
+              "contains_answer_span": false,
+              "supports_claim": false
+            }
+          ]
+        },
+        {
+          "id": "Q7",
+          "question": "Which argument must be passed to Client.subscribe() to receive incremental messages?",
+          "expected_page": "v3/streaming.md",
+          "expected_section": "Client.subscribe()",
+          "answer_span": "stream=True",
+          "support_spans": [
+            "```"
+          ],
+          "depends_on": "code-fence",
+          "hit": true,
+          "hit_rank": 2,
+          "supported_hit": true,
+          "supported_hit_rank": 2,
+          "results": [
+            {
+              "rank": 1,
+              "chunk_id": "v3:streaming:structural:1",
+              "source_file": "v3/streaming.md",
+              "anchor": "#clientsubscribe",
+              "heading_path": "Streaming > Client.subscribe()",
+              "sdk_version": "v3",
+              "rrf_score": 0.032787,
+              "cosine_distance": 0.4384,
+              "bm25_score": 14.516,
+              "preview": "Streaming > Client.subscribe() Opens a stream and returns an iterator. The iterator blocks between messages and terminates when the server closes the stream or `max_messages` is reached. | Parameter | Type | Default | Re",
+              "contains_answer_span": false,
+              "supports_claim": false
+            },
+            {
+              "rank": 2,
+              "chunk_id": "v3:streaming:structural:2",
+              "source_file": "v3/streaming.md",
+              "anchor": "#clientsubscribe",
+              "heading_path": "Streaming > Client.subscribe()",
+              "sdk_version": "v3",
+              "rrf_score": 0.032258,
+              "cosine_distance": 0.4772,
+              "bm25_score": 9.99,
+              "preview": "Streaming > Client.subscribe() frames. Set to `0` to disable, at the cost of slower dead-connection detection. | | `max_messages` | `int` | `None` | no | Stop after this many messages. `None` streams until the connection",
+              "contains_answer_span": true,
+              "supports_claim": true
+            },
+            {
+              "rank": 3,
+              "chunk_id": "v3:streaming:structural:3",
+              "source_file": "v3/streaming.md",
+              "anchor": "#reconnection",
+              "heading_path": "Streaming > Reconnection",
+              "sdk_version": "v3",
+              "rrf_score": 0.030536,
+              "cosine_distance": 0.5744,
+              "bm25_score": 5.415,
+              "preview": "Streaming > Reconnection The SDK reconnects automatically when the connection drops, resuming from the cursor of the last message it yielded. Reconnection uses the same exponential backoff policy as `Client.send()`, capp",
+              "contains_answer_span": true,
+              "supports_claim": true
+            },
+            {
+              "rank": 4,
+              "chunk_id": "v3:streaming:structural:4",
+              "source_file": "v3/streaming.md",
+              "anchor": "#backpressure",
+              "heading_path": "Streaming > Backpressure",
+              "sdk_version": "v3",
+              "rrf_score": 0.030366,
+              "cosine_distance": 0.6217,
+              "bm25_score": 6.024,
+              "preview": "Streaming > Backpressure If a consumer reads slower than the channel produces, the server buffers up to 2000 messages per subscription and then begins dropping the oldest. Dropped messages are reported as a `StreamLagged",
+              "contains_answer_span": false,
+              "supports_claim": false
+            },
+            {
+              "rank": 5,
+              "chunk_id": "v3:streaming:structural:0",
+              "source_file": "v3/streaming.md",
+              "anchor": "#streaming",
+              "heading_path": "Streaming",
+              "sdk_version": "v3",
+              "rrf_score": 0.03009,
+              "cosine_distance": 0.5349,
+              "bm25_score": 4.488,
+              "preview": "Streaming Streaming subscribes to a channel and yields messages as they arrive, over a single long-lived HTTP/2 connection. Use it for tailing a channel; use `Client.fetch()` for bounded historical reads.",
+              "contains_answer_span": false,
+              "supports_claim": false
+            }
+          ]
+        },
+        {
+          "id": "Q8",
+          "question": "How long is a v3 access token valid for?",
+          "expected_page": "v3/auth.md",
+          "expected_section": "Token lifecycle",
+          "answer_span": "3600 seconds",
+          "support_spans": [],
+          "depends_on": "prose",
+          "hit": true,
+          "hit_rank": 1,
+          "supported_hit": true,
+          "supported_hit_rank": 1,
+          "results": [
+            {
+              "rank": 1,
+              "chunk_id": "v3:auth:structural:1",
+              "source_file": "v3/auth.md",
+              "anchor": "#token-lifecycle",
+              "heading_path": "Authentication > Token lifecycle",
+              "sdk_version": "v3",
+              "rrf_score": 0.032787,
+              "cosine_distance": 0.4849,
+              "bm25_score": 11.778,
+              "preview": "Authentication > Token lifecycle An access token issued by `POST /v3/auth/token` is valid for 3600 seconds. The SDK refreshes it when 80% of its lifetime has elapsed, so a healthy client refreshes roughly every 48 minute",
+              "contains_answer_span": true,
+              "supports_claim": true
+            },
+            {
+              "rank": 2,
+              "chunk_id": "v2:auth:structural:1",
+              "source_file": "v2/auth.md",
+              "anchor": "#api-keys",
+              "heading_path": "Authentication > API keys",
+              "sdk_version": "v2",
+              "rrf_score": 0.032002,
+              "cosine_distance": 0.6159,
+              "bm25_score": 5.686,
+              "preview": "Authentication > API keys | Parameter | Type | Default | Required | Description | |---|---|---|---|---| | `api_key` | `str` | — | yes | Long-lived key beginning `rk_live_` or `rk_test_`. Sent as a bearer credential on ea",
+              "contains_answer_span": false,
+              "supports_claim": false
+            },
+            {
+              "rank": 3,
+              "chunk_id": "v2:migrating-to-v3:structural:1",
+              "source_file": "v2/migrating-to-v3.md",
+              "anchor": "#breaking-changes",
+              "heading_path": "Migrating from v2 to v3 > Breaking changes",
+              "sdk_version": "v2",
+              "rrf_score": 0.03055,
+              "cosine_distance": 0.6233,
+              "bm25_score": 4.63,
+              "preview": "Migrating from v2 to v3 > Breaking changes Channel identifiers gained a segment. A v2 channel `org/topic` becomes `org/team/topic` in v3, and the v3 broker rejects two-segment identifiers with `RELAY_400` rather than inf",
+              "contains_answer_span": false,
+              "supports_claim": false
+            },
+            {
+              "rank": 4,
+              "chunk_id": "v2:auth:structural:0",
+              "source_file": "v2/auth.md",
+              "anchor": "#authentication",
+              "heading_path": "Authentication",
+              "sdk_version": "v2",
+              "rrf_score": 0.030214,
+              "cosine_distance": 0.6047,
+              "bm25_score": 3.742,
+              "preview": "Authentication Relay v2 authenticates with the API key sent directly on every request. There is no token exchange and no refresh loop.",
+              "contains_answer_span": false,
+              "supports_claim": false
+            },
+            {
+              "rank": 5,
+              "chunk_id": "v3:auth:structural:2",
+              "source_file": "v3/auth.md",
+              "anchor": "#token-lifecycle",
+              "heading_path": "Authentication > Token lifecycle",
+              "sdk_version": "v3",
+              "rrf_score": 0.029877,
+              "cosine_distance": 0.6948,
+              "bm25_score": 4.672,
+              "preview": "Authentication > Token lifecycle resh is attempted. Values above `0.95` are rejected. | | `token_cache` | `TokenCache` | `MemoryCache()` | no | Where minted tokens are stored. Supply a shared cache to avoid one refresh p",
+              "contains_answer_span": false,
+              "supports_claim": false
+            }
+          ]
+        }
+      ]
+    },
+    "baseline": {
+      "hits": 8,
+      "supported_hits": 7,
+      "total": 8,
+      "records": [
+        {
+          "id": "Q1",
+          "question": "What is the default value of retry_backoff_ms on Client.send() in the v3 SDK?",
+          "expected_page": "v3/client.md",
+          "expected_section": "Client.send() > Parameters",
+          "answer_span": "2000",
+          "support_spans": [
+            "`retry_backoff_ms`",
+            "| Parameter | Type | Default | Required | Description |"
+          ],
+          "depends_on": "parameter-table-row",
+          "hit": true,
+          "hit_rank": 1,
+          "supported_hit": true,
+          "supported_hit_rank": 3,
+          "results": [
+            {
+              "rank": 1,
+              "chunk_id": "v3:client:baseline:4",
+              "source_file": "v3/client.md",
+              "anchor": "",
+              "heading_path": "",
+              "sdk_version": "v3",
+              "rrf_score": 0.031025,
+              "cosine_distance": 0.4302,
+              "bm25_score": 8.162,
+              "preview": "\"acme/platform/deploys\", retry_backoff_ms=2000, retry_backoff_factor=2.0, retry_max_attempts=4, idempotency_key=\"deploy-8817\", ) print(receipt.id, receipt.accepted_at) ``` ### Returns A `Receipt` with fields `id` (string",
+              "contains_answer_span": true,
+              "supports_claim": false
+            },
+            {
+              "rank": 2,
+              "chunk_id": "v3:errors:baseline:2",
+              "source_file": "v3/errors.md",
+              "anchor": "",
+              "heading_path": "",
+              "sdk_version": "v3",
+              "rrf_score": 0.030835,
+              "cosine_distance": 0.4167,
+              "bm25_score": 8.085,
+              "preview": "LAY_429` | 429 | yes | Rate limit exceeded. Honour the `Retry-After` header rather than the SDK's own backoff. | | `RELAY_503` | 503 | yes | Broker temporarily unavailable. Safe to retry with backoff. | | `RELAY_504` | 5",
+              "contains_answer_span": false,
+              "supports_claim": false
+            },
+            {
+              "rank": 3,
+              "chunk_id": "v3:client:baseline:1",
+              "source_file": "v3/client.md",
+              "anchor": "",
+              "heading_path": "",
+              "sdk_version": "v3",
+              "rrf_score": 0.030769,
+              "cosine_distance": 0.4556,
+              "bm25_score": 8.436,
+              "preview": "| Parameter | Type | Default | Required | Description | |---|---|---|---|---| | `message` | `str` | — | yes | Body of the message. Must be valid UTF-8 and at most 256 KiB after encoding. | | `channel` | `str` | — | yes |",
+              "contains_answer_span": true,
+              "supports_claim": true
+            },
+            {
+              "rank": 4,
+              "chunk_id": "v2:client:baseline:1",
+              "source_file": "v2/client.md",
+              "anchor": "",
+              "heading_path": "",
+              "sdk_version": "v2",
+              "rrf_score": 0.03055,
+              "cosine_distance": 0.4524,
+              "bm25_score": 8.132,
+              "preview": "_max_attempts` | `int` | `3` | no | Total number of delivery attempts, including the first. | | `timeout_ms` | `int` | `10000` | no | Total wall-clock budget for the call. | ### Default retry backoff The default retry ba",
+              "contains_answer_span": false,
+              "supports_claim": false
+            },
+            {
+              "rank": 5,
+              "chunk_id": "v2:migrating-to-v3:baseline:1",
+              "source_file": "v2/migrating-to-v3.md",
+              "anchor": "",
+              "heading_path": "",
+              "sdk_version": "v2",
+              "rrf_score": 0.030478,
+              "cosine_distance": 0.5107,
+              "bm25_score": 11.327,
+              "preview": "to exponential backoff, and the default base delay changed. Any service that hand-tuned `retry_backoff_ms` against v2's fixed-delay behaviour should re-derive the value rather than carrying it across. Offset pagination w",
+              "contains_answer_span": false,
+              "supports_claim": false
+            }
+          ]
+        },
+        {
+          "id": "Q2",
+          "question": "What is the maximum accepted value for dedupe_window_ms on Client.send()?",
+          "expected_page": "v3/client.md",
+          "expected_section": "Client.send() > Parameters",
+          "answer_span": "86400000",
+          "support_spans": [
+            "`dedupe_window_ms`",
+            "| Parameter | Type | Default | Required | Description |"
+          ],
+          "depends_on": "parameter-table-row",
+          "hit": true,
+          "hit_rank": 1,
+          "supported_hit": false,
+          "supported_hit_rank": null,
+          "results": [
+            {
+              "rank": 1,
+              "chunk_id": "v3:client:baseline:2",
+              "source_file": "v3/client.md",
+              "anchor": "",
+              "heading_path": "",
+              "sdk_version": "v3",
+              "rrf_score": 0.032787,
+              "cosine_distance": 0.5091,
+              "bm25_score": 10.969,
+              "preview": "| | `timeout_ms` | `int` | `30000` | no | Total wall-clock budget for the call, covering all retry attempts. Exceeding it raises `RelayTimeout`. | | `priority` | `str` | `\"normal\"` | no | One of `\"low\"`, `\"normal\"`, or `",
+              "contains_answer_span": true,
+              "supports_claim": false
+            },
+            {
+              "rank": 2,
+              "chunk_id": "v3:client:baseline:1",
+              "source_file": "v3/client.md",
+              "anchor": "",
+              "heading_path": "",
+              "sdk_version": "v3",
+              "rrf_score": 0.032002,
+              "cosine_distance": 0.5255,
+              "bm25_score": 7.011,
+              "preview": "| Parameter | Type | Default | Required | Description | |---|---|---|---|---| | `message` | `str` | — | yes | Body of the message. Must be valid UTF-8 and at most 256 KiB after encoding. | | `channel` | `str` | — | yes |",
+              "contains_answer_span": false,
+              "supports_claim": false
+            },
+            {
+              "rank": 3,
+              "chunk_id": "v3:client:baseline:4",
+              "source_file": "v3/client.md",
+              "anchor": "",
+              "heading_path": "",
+              "sdk_version": "v3",
+              "rrf_score": 0.031025,
+              "cosine_distance": 0.5367,
+              "bm25_score": 6.163,
+              "preview": "\"acme/platform/deploys\", retry_backoff_ms=2000, retry_backoff_factor=2.0, retry_max_attempts=4, idempotency_key=\"deploy-8817\", ) print(receipt.id, receipt.accepted_at) ``` ### Returns A `Receipt` with fields `id` (string",
+              "contains_answer_span": false,
+              "supports_claim": false
+            },
+            {
+              "rank": 4,
+              "chunk_id": "v2:changelog:baseline:0",
+              "source_file": "v2/CHANGELOG.md",
+              "anchor": "",
+              "heading_path": "",
+              "sdk_version": "v2",
+              "rrf_score": 0.03101,
+              "cosine_distance": 0.5776,
+              "bm25_score": 6.242,
+              "preview": "# Changelog ## 2.7.0 Added `idempotency_key` to `Client.send()`. Reusing a key within 60 seconds returns the original receipt instead of sending again. Raised the maximum message body from 32 KiB to 64 KiB. ## 2.6.1 Fixe",
+              "contains_answer_span": false,
+              "supports_claim": false
+            },
+            {
+              "rank": 5,
+              "chunk_id": "v3:pagination:baseline:0",
+              "source_file": "v3/pagination.md",
+              "anchor": "",
+              "heading_path": "",
+              "sdk_version": "v3",
+              "rrf_score": 0.03055,
+              "cosine_distance": 0.6525,
+              "bm25_score": 6.822,
+              "preview": "# Pagination List endpoints return cursor-paginated results. Cursors are opaque strings encoding a position in a stable sort order; do not parse or construct them. Offset pagination was removed in v3. ## Client.fetch() |",
+              "contains_answer_span": false,
+              "supports_claim": false
+            }
+          ]
+        },
+        {
+          "id": "Q3",
+          "question": "Which HTTP header carries the webhook signature in v3?",
+          "expected_page": "v3/webhooks.md",
+          "expected_section": "Signature verification",
+          "answer_span": "X-Relay-Signature-V3",
+          "support_spans": [
+            "| Header | Type | Required | Description |"
+          ],
+          "depends_on": "parameter-table-row",
+          "hit": true,
+          "hit_rank": 1,
+          "supported_hit": true,
+          "supported_hit_rank": 1,
+          "results": [
+            {
+              "rank": 1,
+              "chunk_id": "v3:webhooks:baseline:0",
+              "source_file": "v3/webhooks.md",
+              "anchor": "",
+              "heading_path": "",
+              "sdk_version": "v3",
+              "rrf_score": 0.032787,
+              "cosine_distance": 0.4564,
+              "bm25_score": 14.881,
+              "preview": "# Webhooks Relay delivers asynchronous delivery outcomes to the `callback_url` registered on a send. Every webhook request is signed so that receivers can verify it originated from Relay and has not been altered in trans",
+              "contains_answer_span": true,
+              "supports_claim": true
+            },
+            {
+              "rank": 2,
+              "chunk_id": "v3:webhooks:baseline:1",
+              "source_file": "v3/webhooks.md",
+              "anchor": "",
+              "heading_path": "",
+              "sdk_version": "v3",
+              "rrf_score": 0.032002,
+              "cosine_distance": 0.6267,
+              "bm25_score": 8.223,
+              "preview": "p` | `str` | yes | Unix epoch seconds at which the request was signed. | | `X-Relay-Delivery-Id` | `str` | yes | Unique identifier for this delivery attempt, stable across retries of the same event. | Verification must b",
+              "contains_answer_span": true,
+              "supports_claim": false
+            },
+            {
+              "rank": 3,
+              "chunk_id": "v2:migrating-to-v3:baseline:1",
+              "source_file": "v2/migrating-to-v3.md",
+              "anchor": "",
+              "heading_path": "",
+              "sdk_version": "v2",
+              "rrf_score": 0.031754,
+              "cosine_distance": 0.5934,
+              "bm25_score": 4.909,
+              "preview": "to exponential backoff, and the default base delay changed. Any service that hand-tuned `retry_backoff_ms` against v2's fixed-delay behaviour should re-derive the value rather than carrying it across. Offset pagination w",
+              "contains_answer_span": false,
+              "supports_claim": false
+            },
+            {
+              "rank": 4,
+              "chunk_id": "v3:errors:baseline:1",
+              "source_file": "v3/errors.md",
+              "anchor": "",
+              "heading_path": "",
+              "sdk_version": "v3",
+              "rrf_score": 0.030798,
+              "cosine_distance": 0.7854,
+              "bm25_score": 5.105,
+              "preview": "| Code | HTTP | Retryable | Meaning | |---|---|---|---| | `RELAY_400` | 400 | no | Malformed request. The payload failed schema validation before reaching the broker. | | `AUTH_TOKEN_EXPIRED` | 401 | no | The bearer toke",
+              "contains_answer_span": false,
+              "supports_claim": false
+            },
+            {
+              "rank": 5,
+              "chunk_id": "v2:migrating-to-v3:baseline:0",
+              "source_file": "v2/migrating-to-v3.md",
+              "anchor": "",
+              "heading_path": "",
+              "sdk_version": "v2",
+              "rrf_score": 0.03009,
+              "cosine_distance": 0.7226,
+              "bm25_score": 3.915,
+              "preview": "# Migrating from v2 to v3 This guide covers the breaking changes between v2 and v3 and the order to make them in. Budget roughly a day for a service of moderate size. ## Breaking changes Channel identifiers gained a segm",
+              "contains_answer_span": false,
+              "supports_claim": false
+            }
+          ]
+        },
+        {
+          "id": "Q4",
+          "question": "What algorithm is used to compute the webhook signature?",
+          "expected_page": "v3/webhooks.md",
+          "expected_section": "Signature verification",
+          "answer_span": "HMAC-SHA256",
+          "support_spans": [],
+          "depends_on": "prose",
+          "hit": true,
+          "hit_rank": 1,
+          "supported_hit": true,
+          "supported_hit_rank": 1,
+          "results": [
+            {
+              "rank": 1,
+              "chunk_id": "v3:webhooks:baseline:0",
+              "source_file": "v3/webhooks.md",
+              "anchor": "",
+              "heading_path": "",
+              "sdk_version": "v3",
+              "rrf_score": 0.032787,
+              "cosine_distance": 0.4658,
+              "bm25_score": 8.604,
+              "preview": "# Webhooks Relay delivers asynchronous delivery outcomes to the `callback_url` registered on a send. Every webhook request is signed so that receivers can verify it originated from Relay and has not been altered in trans",
+              "contains_answer_span": true,
+              "supports_claim": true
+            },
+            {
+              "rank": 2,
+              "chunk_id": "v3:webhooks:baseline:1",
+              "source_file": "v3/webhooks.md",
+              "anchor": "",
+              "heading_path": "",
+              "sdk_version": "v3",
+              "rrf_score": 0.032258,
+              "cosine_distance": 0.5992,
+              "bm25_score": 7.084,
+              "preview": "p` | `str` | yes | Unix epoch seconds at which the request was signed. | | `X-Relay-Delivery-Id` | `str` | yes | Unique identifier for this delivery attempt, stable across retries of the same event. | Verification must b",
+              "contains_answer_span": false,
+              "supports_claim": false
+            },
+            {
+              "rank": 3,
+              "chunk_id": "v2:migrating-to-v3:baseline:1",
+              "source_file": "v2/migrating-to-v3.md",
+              "anchor": "",
+              "heading_path": "",
+              "sdk_version": "v2",
+              "rrf_score": 0.031746,
+              "cosine_distance": 0.6458,
+              "bm25_score": 6.093,
+              "preview": "to exponential backoff, and the default base delay changed. Any service that hand-tuned `retry_backoff_ms` against v2's fixed-delay behaviour should re-derive the value rather than carrying it across. Offset pagination w",
+              "contains_answer_span": false,
+              "supports_claim": false
+            },
+            {
+              "rank": 4,
+              "chunk_id": "v3:webhooks:baseline:2",
+              "source_file": "v3/webhooks.md",
+              "anchor": "",
+              "heading_path": "",
+              "sdk_version": "v3",
+              "rrf_score": 0.03101,
+              "cosine_distance": 0.6503,
+              "bm25_score": 4.542,
+              "preview": "h` when the digest does not match and `SignatureExpired` when the timestamp is outside `tolerance_seconds`. The default tolerance is 300 seconds; widening it beyond 900 is rejected. ## Retry schedule A webhook endpoint t",
+              "contains_answer_span": false,
+              "supports_claim": false
+            },
+            {
+              "rank": 5,
+              "chunk_id": "v3:auth:baseline:2",
+              "source_file": "v3/auth.md",
+              "anchor": "",
+              "heading_path": "",
+              "sdk_version": "v3",
+              "rrf_score": 0.03055,
+              "cosine_distance": 0.8089,
+              "bm25_score": 5.398,
+              "preview": "okenCache` | `MemoryCache()` | no | Where minted tokens are stored. Supply a shared cache to avoid one refresh per process. | ```python from relay import Client from relay.auth import RedisTokenCache client = Client( api",
+              "contains_answer_span": false,
+              "supports_claim": false
+            }
+          ]
+        },
+        {
+          "id": "Q5",
+          "question": "What is the maximum page_size accepted by Client.fetch()?",
+          "expected_page": "v3/pagination.md",
+          "expected_section": "Client.fetch()",
+          "answer_span": "250",
+          "support_spans": [
+            "`page_size`",
+            "| Parameter | Type | Default | Required | Description |"
+          ],
+          "depends_on": "parameter-table-row",
+          "hit": true,
+          "hit_rank": 1,
+          "supported_hit": true,
+          "supported_hit_rank": 1,
+          "results": [
+            {
+              "rank": 1,
+              "chunk_id": "v3:pagination:baseline:0",
+              "source_file": "v3/pagination.md",
+              "anchor": "",
+              "heading_path": "",
+              "sdk_version": "v3",
+              "rrf_score": 0.032787,
+              "cosine_distance": 0.4607,
+              "bm25_score": 13.365,
+              "preview": "# Pagination List endpoints return cursor-paginated results. Cursors are opaque strings encoding a position in a stable sort order; do not parse or construct them. Offset pagination was removed in v3. ## Client.fetch() |",
+              "contains_answer_span": true,
+              "supports_claim": true
+            },
+            {
+              "rank": 2,
+              "chunk_id": "v3:pagination:baseline:1",
+              "source_file": "v3/pagination.md",
+              "anchor": "",
+              "heading_path": "",
+              "sdk_version": "v3",
+              "rrf_score": 0.032258,
+              "cosine_distance": 0.5929,
+              "bm25_score": 10.383,
+              "preview": "oldest to newest; `\"backward\"` reads newest to oldest. | A page response carries `items`, `next_cursor` and `has_more`. When `has_more` is `False`, `next_cursor` is `None` and iteration is complete. ```python cursor, out",
+              "contains_answer_span": true,
+              "supports_claim": false
+            },
+            {
+              "rank": 3,
+              "chunk_id": "v3:streaming:baseline:0",
+              "source_file": "v3/streaming.md",
+              "anchor": "",
+              "heading_path": "",
+              "sdk_version": "v3",
+              "rrf_score": 0.031498,
+              "cosine_distance": 0.655,
+              "bm25_score": 5.417,
+              "preview": "# Streaming Streaming subscribes to a channel and yields messages as they arrive, over a single long-lived HTTP/2 connection. Use it for tailing a channel; use `Client.fetch()` for bounded historical reads. ## Client.sub",
+              "contains_answer_span": false,
+              "supports_claim": false
+            },
+            {
+              "rank": 4,
+              "chunk_id": "v3:client:baseline:2",
+              "source_file": "v3/client.md",
+              "anchor": "",
+              "heading_path": "",
+              "sdk_version": "v3",
+              "rrf_score": 0.030769,
+              "cosine_distance": 0.7547,
+              "bm25_score": 5.259,
+              "preview": "| | `timeout_ms` | `int` | `30000` | no | Total wall-clock budget for the call, covering all retry attempts. Exceeding it raises `RelayTimeout`. | | `priority` | `str` | `\"normal\"` | no | One of `\"low\"`, `\"normal\"`, or `",
+              "contains_answer_span": false,
+              "supports_claim": false
+            },
+            {
+              "rank": 5,
+              "chunk_id": "v2:migrating-to-v3:baseline:1",
+              "source_file": "v2/migrating-to-v3.md",
+              "anchor": "",
+              "heading_path": "",
+              "sdk_version": "v2",
+              "rrf_score": 0.030366,
+              "cosine_distance": 0.7709,
+              "bm25_score": 7.734,
+              "preview": "to exponential backoff, and the default base delay changed. Any service that hand-tuned `retry_backoff_ms` against v2's fixed-delay behaviour should re-derive the value rather than carrying it across. Offset pagination w",
+              "contains_answer_span": false,
+              "supports_claim": false
+            }
+          ]
+        },
+        {
+          "id": "Q6",
+          "question": "Which error code means the bearer token is past its expiry?",
+          "expected_page": "v3/errors.md",
+          "expected_section": "Error codes",
+          "answer_span": "AUTH_TOKEN_EXPIRED",
+          "support_spans": [
+            "| Code | HTTP | Retryable | Meaning |"
+          ],
+          "depends_on": "parameter-table-row",
+          "hit": true,
+          "hit_rank": 1,
+          "supported_hit": true,
+          "supported_hit_rank": 1,
+          "results": [
+            {
+              "rank": 1,
+              "chunk_id": "v3:errors:baseline:1",
+              "source_file": "v3/errors.md",
+              "anchor": "",
+              "heading_path": "",
+              "sdk_version": "v3",
+              "rrf_score": 0.032787,
+              "cosine_distance": 0.4895,
+              "bm25_score": 15.095,
+              "preview": "| Code | HTTP | Retryable | Meaning | |---|---|---|---| | `RELAY_400` | 400 | no | Malformed request. The payload failed schema validation before reaching the broker. | | `AUTH_TOKEN_EXPIRED` | 401 | no | The bearer toke",
+              "contains_answer_span": true,
+              "supports_claim": true
+            },
+            {
+              "rank": 2,
+              "chunk_id": "v3:auth:baseline:0",
+              "source_file": "v3/auth.md",
+              "anchor": "",
+              "heading_path": "",
+              "sdk_version": "v3",
+              "rrf_score": 0.032258,
+              "cosine_distance": 0.5517,
+              "bm25_score": 8.195,
+              "preview": "# Authentication Relay authenticates with short-lived bearer tokens minted from a long-lived API key. The SDK handles the exchange transparently; you supply the key and the client refreshes tokens in the background. ## T",
+              "contains_answer_span": false,
+              "supports_claim": false
+            },
+            {
+              "rank": 3,
+              "chunk_id": "v2:auth:baseline:0",
+              "source_file": "v2/auth.md",
+              "anchor": "",
+              "heading_path": "",
+              "sdk_version": "v2",
+              "rrf_score": 0.031498,
+              "cosine_distance": 0.5973,
+              "bm25_score": 7.937,
+              "preview": "# Authentication Relay v2 authenticates with the API key sent directly on every request. There is no token exchange and no refresh loop. ## API keys | Parameter | Type | Default | Required | Description | |---|---|---|--",
+              "contains_answer_span": true,
+              "supports_claim": false
+            },
+            {
+              "rank": 4,
+              "chunk_id": "v3:auth:baseline:1",
+              "source_file": "v3/auth.md",
+              "anchor": "",
+              "heading_path": "",
+              "sdk_version": "v3",
+              "rrf_score": 0.03031,
+              "cosine_distance": 0.6299,
+              "bm25_score": 5.97,
+              "preview": "0 seconds. The SDK refreshes it when 80% of its lifetime has elapsed, so a healthy client refreshes roughly every 48 minutes. Refresh happens on a background thread and does not block calls in flight. | Parameter | Type ",
+              "contains_answer_span": false,
+              "supports_claim": false
+            },
+            {
+              "rank": 5,
+              "chunk_id": "v3:errors:baseline:3",
+              "source_file": "v3/errors.md",
+              "anchor": "",
+              "heading_path": "",
+              "sdk_version": "v3",
+              "rrf_score": 0.029877,
+              "cosine_distance": 0.6132,
+              "bm25_score": 5.328,
+              "preview": "imeout_ms` is exhausted across all retry attempts. It is not an error code returned by the broker — it is raised client-side and carries `attempts`, the number of tries made before the budget ran out. A timeout does not ",
+              "contains_answer_span": false,
+              "supports_claim": false
+            }
+          ]
+        },
+        {
+          "id": "Q7",
+          "question": "Which argument must be passed to Client.subscribe() to receive incremental messages?",
+          "expected_page": "v3/streaming.md",
+          "expected_section": "Client.subscribe()",
+          "answer_span": "stream=True",
+          "support_spans": [
+            "```"
+          ],
+          "depends_on": "code-fence",
+          "hit": true,
+          "hit_rank": 1,
+          "supported_hit": true,
+          "supported_hit_rank": 1,
+          "results": [
+            {
+              "rank": 1,
+              "chunk_id": "v3:streaming:baseline:3",
+              "source_file": "v3/streaming.md",
+              "anchor": "",
+              "heading_path": "",
+              "sdk_version": "v3",
+              "rrf_score": 0.032522,
+              "cosine_distance": 0.4129,
+              "bm25_score": 6.462,
+              "preview": "n attempts. Messages are delivered at least once. A reconnect can replay the most recent message if it was yielded but its cursor had not yet been acknowledged, so consumers must tolerate duplicates. ```python cursor = N",
+              "contains_answer_span": true,
+              "supports_claim": true
+            },
+            {
+              "rank": 2,
+              "chunk_id": "v3:streaming:baseline:1",
+              "source_file": "v3/streaming.md",
+              "anchor": "",
+              "heading_path": "",
+              "sdk_version": "v3",
+              "rrf_score": 0.032266,
+              "cosine_distance": 0.4586,
+              "bm25_score": 13.14,
+              "preview": "ed historical reads. ## Client.subscribe() Opens a stream and returns an iterator. The iterator blocks between messages and terminates when the server closes the stream or `max_messages` is reached. | Parameter | Type | ",
+              "contains_answer_span": false,
+              "supports_claim": false
+            },
+            {
+              "rank": 3,
+              "chunk_id": "v3:streaming:baseline:0",
+              "source_file": "v3/streaming.md",
+              "anchor": "",
+              "heading_path": "",
+              "sdk_version": "v3",
+              "rrf_score": 0.031754,
+              "cosine_distance": 0.4283,
+              "bm25_score": 5.965,
+              "preview": "# Streaming Streaming subscribes to a channel and yields messages as they arrive, over a single long-lived HTTP/2 connection. Use it for tailing a channel; use `Client.fetch()` for bounded historical reads. ## Client.sub",
+              "contains_answer_span": false,
+              "supports_claim": false
+            },
+            {
+              "rank": 4,
+              "chunk_id": "v3:streaming:baseline:2",
+              "source_file": "v3/streaming.md",
+              "anchor": "",
+              "heading_path": "",
+              "sdk_version": "v3",
+              "rrf_score": 0.031498,
+              "cosine_distance": 0.5858,
+              "bm25_score": 6.296,
+              "preview": "frames. Set to `0` to disable, at the cost of slower dead-connection detection. | | `max_messages` | `int` | `None` | no | Stop after this many messages. `None` streams until the connection closes. | Enable streaming by ",
+              "contains_answer_span": true,
+              "supports_claim": true
+            },
+            {
+              "rank": 5,
+              "chunk_id": "v2:changelog:baseline:0",
+              "source_file": "v2/CHANGELOG.md",
+              "anchor": "",
+              "heading_path": "",
+              "sdk_version": "v2",
+              "rrf_score": 0.030303,
+              "cosine_distance": 0.6791,
+              "bm25_score": 4.126,
+              "preview": "# Changelog ## 2.7.0 Added `idempotency_key` to `Client.send()`. Reusing a key within 60 seconds returns the original receipt instead of sending again. Raised the maximum message body from 32 KiB to 64 KiB. ## 2.6.1 Fixe",
+              "contains_answer_span": false,
+              "supports_claim": false
+            }
+          ]
+        },
+        {
+          "id": "Q8",
+          "question": "How long is a v3 access token valid for?",
+          "expected_page": "v3/auth.md",
+          "expected_section": "Token lifecycle",
+          "answer_span": "3600 seconds",
+          "support_spans": [],
+          "depends_on": "prose",
+          "hit": true,
+          "hit_rank": 1,
+          "supported_hit": true,
+          "supported_hit_rank": 1,
+          "results": [
+            {
+              "rank": 1,
+              "chunk_id": "v3:auth:baseline:0",
+              "source_file": "v3/auth.md",
+              "anchor": "",
+              "heading_path": "",
+              "sdk_version": "v3",
+              "rrf_score": 0.032787,
+              "cosine_distance": 0.4832,
+              "bm25_score": 12.956,
+              "preview": "# Authentication Relay authenticates with short-lived bearer tokens minted from a long-lived API key. The SDK handles the exchange transparently; you supply the key and the client refreshes tokens in the background. ## T",
+              "contains_answer_span": true,
+              "supports_claim": true
+            },
+            {
+              "rank": 2,
+              "chunk_id": "v2:auth:baseline:0",
+              "source_file": "v2/auth.md",
+              "anchor": "",
+              "heading_path": "",
+              "sdk_version": "v2",
+              "rrf_score": 0.031754,
+              "cosine_distance": 0.6127,
+              "bm25_score": 6.44,
+              "preview": "# Authentication Relay v2 authenticates with the API key sent directly on every request. There is no token exchange and no refresh loop. ## API keys | Parameter | Type | Default | Required | Description | |---|---|---|--",
+              "contains_answer_span": false,
+              "supports_claim": false
+            },
+            {
+              "rank": 3,
+              "chunk_id": "v2:migrating-to-v3:baseline:0",
+              "source_file": "v2/migrating-to-v3.md",
+              "anchor": "",
+              "heading_path": "",
+              "sdk_version": "v2",
+              "rrf_score": 0.031281,
+              "cosine_distance": 0.542,
+              "bm25_score": 5.162,
+              "preview": "# Migrating from v2 to v3 This guide covers the breaking changes between v2 and v3 and the order to make them in. Budget roughly a day for a service of moderate size. ## Breaking changes Channel identifiers gained a segm",
+              "contains_answer_span": false,
+              "supports_claim": false
+            },
+            {
+              "rank": 4,
+              "chunk_id": "v3:auth:baseline:1",
+              "source_file": "v3/auth.md",
+              "anchor": "",
+              "heading_path": "",
+              "sdk_version": "v3",
+              "rrf_score": 0.031258,
+              "cosine_distance": 0.5905,
+              "bm25_score": 5.456,
+              "preview": "0 seconds. The SDK refreshes it when 80% of its lifetime has elapsed, so a healthy client refreshes roughly every 48 minutes. Refresh happens on a background thread and does not block calls in flight. | Parameter | Type ",
+              "contains_answer_span": false,
+              "supports_claim": false
+            },
+            {
+              "rank": 5,
+              "chunk_id": "v3:errors:baseline:1",
+              "source_file": "v3/errors.md",
+              "anchor": "",
+              "heading_path": "",
+              "sdk_version": "v3",
+              "rrf_score": 0.029877,
+              "cosine_distance": 0.6678,
+              "bm25_score": 3.94,
+              "preview": "| Code | HTTP | Retryable | Meaning | |---|---|---|---| | `RELAY_400` | 400 | no | Malformed request. The payload failed schema validation before reaching the broker. | | `AUTH_TOKEN_EXPIRED` | 401 | no | The bearer toke",
+              "contains_answer_span": false,
+              "supports_claim": false
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "filter_demo": {
+    "queries_tried": 1,
+    "found": true,
+    "attempts": [
+      {
+        "query": "default retry backoff for Client.send()",
+        "top1_flipped_v2_to_v3": true,
+        "unfiltered": [
+          {
+            "rank": 1,
+            "chunk_id": "v2:client:structural:3",
+            "source_file": "v2/client.md",
+            "anchor": "#default-retry-backoff",
+            "heading_path": "Client > Client.send() > Default retry backoff",
+            "sdk_version": "v2",
+            "rrf_score": 0.032787,
+            "cosine_distance": 0.2759,
+            "bm25_score": 8.238,
+            "preview": "Client > Client.send() > Default retry backoff The default retry backoff for `Client.send()` is 500 ms. Retries use a fixed delay: every attempt waits the same `retry_backoff_ms` interval, with no multiplier and no jitte"
+          },
+          {
+            "rank": 2,
+            "chunk_id": "v3:client:structural:4",
+            "source_file": "v3/client.md",
+            "anchor": "#retry-behaviour",
+            "heading_path": "Client > Client.send() > Retry behaviour",
+            "sdk_version": "v3",
+            "rrf_score": 0.032258,
+            "cosine_distance": 0.3617,
+            "bm25_score": 6.095,
+            "preview": "Client > Client.send() > Retry behaviour Retries use exponential backoff seeded by `retry_backoff_ms` and multiplied by `retry_backoff_factor` after each failure. With the defaults, the delays before attempts two, three "
+          },
+          {
+            "rank": 3,
+            "chunk_id": "v2:client:structural:2",
+            "source_file": "v2/client.md",
+            "anchor": "#parameters",
+            "heading_path": "Client > Client.send() > Parameters",
+            "sdk_version": "v2",
+            "rrf_score": 0.031746,
+            "cosine_distance": 0.3863,
+            "bm25_score": 5.57,
+            "preview": "Client > Client.send() > Parameters | Parameter | Type | Default | Required | Description | |---|---|---|---|---| | `message` | `str` | — | yes | Body of the message. Must be valid UTF-8 and at most 64 KiB. | | `channel`"
+          },
+          {
+            "rank": 4,
+            "chunk_id": "v3:client:structural:2",
+            "source_file": "v3/client.md",
+            "anchor": "#parameters",
+            "heading_path": "Client > Client.send() > Parameters",
+            "sdk_version": "v3",
+            "rrf_score": 0.03125,
+            "cosine_distance": 0.4201,
+            "bm25_score": 5.388,
+            "preview": "Client > Client.send() > Parameters | Parameter | Type | Default | Required | Description | |---|---|---|---|---| | `message` | `str` | — | yes | Body of the message. Must be valid UTF-8 and at most 256 KiB after encodin"
+          },
+          {
+            "rank": 5,
+            "chunk_id": "v3:streaming:structural:3",
+            "source_file": "v3/streaming.md",
+            "anchor": "#reconnection",
+            "heading_path": "Streaming > Reconnection",
+            "sdk_version": "v3",
+            "rrf_score": 0.03031,
+            "cosine_distance": 0.433,
+            "bm25_score": 3.285,
+            "preview": "Streaming > Reconnection The SDK reconnects automatically when the connection drops, resuming from the cursor of the last message it yielded. Reconnection uses the same exponential backoff policy as `Client.send()`, capp"
+          }
+        ],
+        "filtered": [
+          {
+            "rank": 1,
+            "chunk_id": "v3:client:structural:4",
+            "source_file": "v3/client.md",
+            "anchor": "#retry-behaviour",
+            "heading_path": "Client > Client.send() > Retry behaviour",
+            "sdk_version": "v3",
+            "rrf_score": 0.032787,
+            "cosine_distance": 0.3617,
+            "bm25_score": 6.095,
+            "preview": "Client > Client.send() > Retry behaviour Retries use exponential backoff seeded by `retry_backoff_ms` and multiplied by `retry_backoff_factor` after each failure. With the defaults, the delays before attempts two, three "
+          },
+          {
+            "rank": 2,
+            "chunk_id": "v3:client:structural:2",
+            "source_file": "v3/client.md",
+            "anchor": "#parameters",
+            "heading_path": "Client > Client.send() > Parameters",
+            "sdk_version": "v3",
+            "rrf_score": 0.032258,
+            "cosine_distance": 0.4201,
+            "bm25_score": 5.388,
+            "preview": "Client > Client.send() > Parameters | Parameter | Type | Default | Required | Description | |---|---|---|---|---| | `message` | `str` | — | yes | Body of the message. Must be valid UTF-8 and at most 256 KiB after encodin"
+          },
+          {
+            "rank": 3,
+            "chunk_id": "v3:streaming:structural:3",
+            "source_file": "v3/streaming.md",
+            "anchor": "#reconnection",
+            "heading_path": "Streaming > Reconnection",
+            "sdk_version": "v3",
+            "rrf_score": 0.031498,
+            "cosine_distance": 0.433,
+            "bm25_score": 3.285,
+            "preview": "Streaming > Reconnection The SDK reconnects automatically when the connection drops, resuming from the cursor of the last message it yielded. Reconnection uses the same exponential backoff policy as `Client.send()`, capp"
+          },
+          {
+            "rank": 4,
+            "chunk_id": "v3:client:structural:3",
+            "source_file": "v3/client.md",
+            "anchor": "#parameters",
+            "heading_path": "Client > Client.send() > Parameters",
+            "sdk_version": "v3",
+            "rrf_score": 0.030536,
+            "cosine_distance": 0.4851,
+            "bm25_score": 3.07,
+            "preview": "Client > Client.send() > Parameters tempt. A value of `1.0` produces constant-delay retries. | | `retry_max_attempts` | `int` | `4` | no | Total number of delivery attempts, including the first. Set to `1` to disable ret"
+          },
+          {
+            "rank": 5,
+            "chunk_id": "v3:errors:structural:2",
+            "source_file": "v3/errors.md",
+            "anchor": "#error-codes",
+            "heading_path": "Errors > Error codes",
+            "sdk_version": "v3",
+            "rrf_score": 0.030366,
+            "cosine_distance": 0.5008,
+            "bm25_score": 3.501,
+            "preview": "Errors > Error codes Y_429` | 429 | yes | Rate limit exceeded. Honour the `Retry-After` header rather than the SDK's own backoff. | | `RELAY_503` | 503 | yes | Broker temporarily unavailable. Safe to retry with backoff. "
+          }
+        ]
+      }
+    ]
+  },
+  "calibration": {
+    "rows": [
+      {
+        "id": "C1",
+        "question": "Which compression algorithms can Client.send() use?",
+        "answerable": true,
+        "best_cosine_distance": 0.5721,
+        "top1_chunk_id": "v3:streaming:structural:0"
+      },
+      {
+        "id": "C2",
+        "question": "How many webhook delivery attempts does Relay make before giving up?",
+        "answerable": true,
+        "best_cosine_distance": 0.233,
+        "top1_chunk_id": "v3:webhooks:structural:3"
+      },
+      {
+        "id": "C3",
+        "question": "How long does a pagination cursor stay valid?",
+        "answerable": true,
+        "best_cosine_distance": 0.2062,
+        "top1_chunk_id": "v3:pagination:structural:2"
+      },
+      {
+        "id": "C4",
+        "question": "What is the maximum number of concurrent connections allowed per API key?",
+        "answerable": false,
+        "best_cosine_distance": 0.6157,
+        "top1_chunk_id": "v3:client:structural:3"
+      },
+      {
+        "id": "C5",
+        "question": "Which cloud provider hosts the eu-west-1 region?",
+        "answerable": false,
+        "best_cosine_distance": 0.8028,
+        "top1_chunk_id": "v3:client:structural:0"
+      }
+    ],
+    "worst_answerable_distance": 0.5721,
+    "best_out_of_corpus_distance": 0.6157,
+    "separable": true,
+    "threshold": 0.5939,
+    "threshold_source": "calibrated"
+  },
+  "generation": {
+    "skipped": false,
+    "cited": [
+      {
+        "id": "Q1",
+        "question": "What is the default value of retry_backoff_ms on Client.send() in the v3 SDK?",
+        "answer": "The default `retry_backoff_ms` for `Client.send()` in the v3 SDK is **2000 ms**【chunk: v3:client:structural:2】.",
+        "answer_span": "2000",
+        "citations": [],
+        "unresolvable": [],
+        "all_citations_resolve": false,
+        "cited_chunk_contains_claim": false,
+        "retrieved": [
+          {
+            "rank": 1,
+            "chunk_id": "v2:client:structural:3",
+            "source_file": "v2/client.md",
+            "anchor": "#default-retry-backoff",
+            "heading_path": "Client > Client.send() > Default retry backoff",
+            "sdk_version": "v2",
+            "rrf_score": 0.032787,
+            "cosine_distance": 0.3648,
+            "bm25_score": 12.881,
+            "preview": "Client > Client.send() > Default retry backoff The default retry backoff for `Client.send()` is 500 ms. Retries use a fixed delay: every attempt waits the same `retry_backoff_ms` interval, with no multiplier and no jitte",
+            "contains_answer_span": false
+          },
+          {
+            "rank": 2,
+            "chunk_id": "v3:client:structural:2",
+            "source_file": "v3/client.md",
+            "anchor": "#parameters",
+            "heading_path": "Client > Client.send() > Parameters",
+            "sdk_version": "v3",
+            "rrf_score": 0.031746,
+            "cosine_distance": 0.4245,
+            "bm25_score": 11.911,
+            "preview": "Client > Client.send() > Parameters | Parameter | Type | Default | Required | Description | |---|---|---|---|---| | `message` | `str` | — | yes | Body of the message. Must be valid UTF-8 and at most 256 KiB after encodin",
+            "contains_answer_span": true
+          },
+          {
+            "rank": 3,
+            "chunk_id": "v2:client:structural:2",
+            "source_file": "v2/client.md",
+            "anchor": "#parameters",
+            "heading_path": "Client > Client.send() > Parameters",
+            "sdk_version": "v2",
+            "rrf_score": 0.031281,
+            "cosine_distance": 0.3856,
+            "bm25_score": 9.908,
+            "preview": "Client > Client.send() > Parameters | Parameter | Type | Default | Required | Description | |---|---|---|---|---| | `message` | `str` | — | yes | Body of the message. Must be valid UTF-8 and at most 64 KiB. | | `channel`",
+            "contains_answer_span": false
+          },
+          {
+            "rank": 4,
+            "chunk_id": "v3:client:structural:4",
+            "source_file": "v3/client.md",
+            "anchor": "#retry-behaviour",
+            "heading_path": "Client > Client.send() > Retry behaviour",
+            "sdk_version": "v3",
+            "rrf_score": 0.030536,
+            "cosine_distance": 0.4523,
+            "bm25_score": 10.162,
+            "preview": "Client > Client.send() > Retry behaviour Retries use exponential backoff seeded by `retry_backoff_ms` and multiplied by `retry_backoff_factor` after each failure. With the defaults, the delays before attempts two, three ",
+            "contains_answer_span": true
+          },
+          {
+            "rank": 5,
+            "chunk_id": "v2:migrating-to-v3:structural:1",
+            "source_file": "v2/migrating-to-v3.md",
+            "anchor": "#breaking-changes",
+            "heading_path": "Migrating from v2 to v3 > Breaking changes",
+            "sdk_version": "v2",
+            "rrf_score": 0.030415,
+            "cosine_distance": 0.4888,
+            "bm25_score": 12.403,
+            "preview": "Migrating from v2 to v3 > Breaking changes Channel identifiers gained a segment. A v2 channel `org/topic` becomes `org/team/topic` in v3, and the v3 broker rejects two-segment identifiers with `RELAY_400` rather than inf",
+            "contains_answer_span": false
+          }
+        ]
+      },
+      {
+        "id": "Q4",
+        "question": "What algorithm is used to compute the webhook signature?",
+        "answer": "The webhook signature is computed using **HMAC‑SHA256**. [chunk: v3:webhooks:structural:1]",
+        "answer_span": "HMAC-SHA256",
+        "citations": [
+          "v3:webhooks:structural:1"
+        ],
+        "unresolvable": [],
+        "all_citations_resolve": true,
+        "cited_chunk_contains_claim": true,
+        "retrieved": [
+          {
+            "rank": 1,
+            "chunk_id": "v3:webhooks:structural:2",
+            "source_file": "v3/webhooks.md",
+            "anchor": "#signature-verification",
+            "heading_path": "Webhooks > Signature verification",
+            "sdk_version": "v3",
+            "rrf_score": 0.032266,
+            "cosine_distance": 0.5178,
+            "bm25_score": 8.615,
+            "preview": "Webhooks > Signature verification etries of the same event. | Verification must be done against the **raw** request body. Parsing the JSON and re-serialising it will change byte ordering and whitespace, and the digest wi",
+            "contains_answer_span": false
+          },
+          {
+            "rank": 2,
+            "chunk_id": "v3:webhooks:structural:1",
+            "source_file": "v3/webhooks.md",
+            "anchor": "#signature-verification",
+            "heading_path": "Webhooks > Signature verification",
+            "sdk_version": "v3",
+            "rrf_score": 0.032258,
+            "cosine_distance": 0.4688,
+            "bm25_score": 6.911,
+            "preview": "Webhooks > Signature verification Each request carries the signature in the `X-Relay-Signature-V3` header. The signature is computed as HMAC-SHA256 over the concatenation of the request timestamp, a literal `.` separator",
+            "contains_answer_span": true
+          },
+          {
+            "rank": 3,
+            "chunk_id": "v3:webhooks:structural:0",
+            "source_file": "v3/webhooks.md",
+            "anchor": "#webhooks",
+            "heading_path": "Webhooks",
+            "sdk_version": "v3",
+            "rrf_score": 0.031778,
+            "cosine_distance": 0.4515,
+            "bm25_score": 5.383,
+            "preview": "Webhooks Relay delivers asynchronous delivery outcomes to the `callback_url` registered on a send. Every webhook request is signed so that receivers can verify it originated from Relay and has not been altered in transit",
+            "contains_answer_span": false
+          },
+          {
+            "rank": 4,
+            "chunk_id": "v2:migrating-to-v3:structural:2",
+            "source_file": "v2/migrating-to-v3.md",
+            "anchor": "#order-of-work",
+            "heading_path": "Migrating from v2 to v3 > Order of work",
+            "sdk_version": "v2",
+            "rrf_score": 0.03055,
+            "cosine_distance": 0.5487,
+            "bm25_score": 4.374,
+            "preview": "Migrating from v2 to v3 > Order of work 1. Update channel identifiers everywhere, including in stored configuration. 2. Move to the v3 client and let it manage tokens. 3. Re-derive retry settings against the new exponent",
+            "contains_answer_span": false
+          },
+          {
+            "rank": 5,
+            "chunk_id": "v3:webhooks:structural:3",
+            "source_file": "v3/webhooks.md",
+            "anchor": "#retry-schedule",
+            "heading_path": "Webhooks > Retry schedule",
+            "sdk_version": "v3",
+            "rrf_score": 0.030536,
+            "cosine_distance": 0.6805,
+            "bm25_score": 5.057,
+            "preview": "Webhooks > Retry schedule A webhook endpoint that does not return a 2xx status within 10 seconds is retried. Relay makes at most 6 delivery attempts spread over 24 hours, at intervals of 30 seconds, 5 minutes, 30 minutes",
+            "contains_answer_span": false
+          }
+        ]
+      },
+      {
+        "id": "Q7",
+        "question": "Which argument must be passed to Client.subscribe() to receive incremental messages?",
+        "answer": "Pass `stream=True` to `Client.subscribe()` to receive incremental (streaming) messages [chunk: v3:streaming:structural:1] [chunk: v3:streaming:structural:2]",
+        "answer_span": "stream=True",
+        "citations": [
+          "v3:streaming:structural:1",
+          "v3:streaming:structural:2"
+        ],
+        "unresolvable": [],
+        "all_citations_resolve": true,
+        "cited_chunk_contains_claim": true,
+        "retrieved": [
+          {
+            "rank": 1,
+            "chunk_id": "v3:streaming:structural:1",
+            "source_file": "v3/streaming.md",
+            "anchor": "#clientsubscribe",
+            "heading_path": "Streaming > Client.subscribe()",
+            "sdk_version": "v3",
+            "rrf_score": 0.032787,
+            "cosine_distance": 0.4384,
+            "bm25_score": 14.516,
+            "preview": "Streaming > Client.subscribe() Opens a stream and returns an iterator. The iterator blocks between messages and terminates when the server closes the stream or `max_messages` is reached. | Parameter | Type | Default | Re",
+            "contains_answer_span": false
+          },
+          {
+            "rank": 2,
+            "chunk_id": "v3:streaming:structural:2",
+            "source_file": "v3/streaming.md",
+            "anchor": "#clientsubscribe",
+            "heading_path": "Streaming > Client.subscribe()",
+            "sdk_version": "v3",
+            "rrf_score": 0.032258,
+            "cosine_distance": 0.4772,
+            "bm25_score": 9.99,
+            "preview": "Streaming > Client.subscribe() frames. Set to `0` to disable, at the cost of slower dead-connection detection. | | `max_messages` | `int` | `None` | no | Stop after this many messages. `None` streams until the connection",
+            "contains_answer_span": true
+          },
+          {
+            "rank": 3,
+            "chunk_id": "v3:streaming:structural:3",
+            "source_file": "v3/streaming.md",
+            "anchor": "#reconnection",
+            "heading_path": "Streaming > Reconnection",
+            "sdk_version": "v3",
+            "rrf_score": 0.030536,
+            "cosine_distance": 0.5744,
+            "bm25_score": 5.415,
+            "preview": "Streaming > Reconnection The SDK reconnects automatically when the connection drops, resuming from the cursor of the last message it yielded. Reconnection uses the same exponential backoff policy as `Client.send()`, capp",
+            "contains_answer_span": true
+          },
+          {
+            "rank": 4,
+            "chunk_id": "v3:streaming:structural:4",
+            "source_file": "v3/streaming.md",
+            "anchor": "#backpressure",
+            "heading_path": "Streaming > Backpressure",
+            "sdk_version": "v3",
+            "rrf_score": 0.030366,
+            "cosine_distance": 0.6217,
+            "bm25_score": 6.024,
+            "preview": "Streaming > Backpressure If a consumer reads slower than the channel produces, the server buffers up to 2000 messages per subscription and then begins dropping the oldest. Dropped messages are reported as a `StreamLagged",
+            "contains_answer_span": false
+          },
+          {
+            "rank": 5,
+            "chunk_id": "v3:streaming:structural:0",
+            "source_file": "v3/streaming.md",
+            "anchor": "#streaming",
+            "heading_path": "Streaming",
+            "sdk_version": "v3",
+            "rrf_score": 0.03009,
+            "cosine_distance": 0.5349,
+            "bm25_score": 4.488,
+            "preview": "Streaming Streaming subscribes to a channel and yields messages as they arrive, over a single long-lived HTTP/2 connection. Use it for tailing a channel; use `Client.fetch()` for bounded historical reads.",
+            "contains_answer_span": false
+          }
+        ]
+      }
+    ],
+    "refusals": [
+      {
+        "id": "X1",
+        "question": "What is the per-minute rate limit on the /v3/messages endpoint?",
+        "why_absent": "RELAY_429 is documented as a code in v3/errors.md, but no numeric rate limit appears anywhere in the corpus.",
+        "answer": "I cannot answer that from the indexed documentation.",
+        "refused": true,
+        "gated_before_model": false,
+        "best_cosine_distance": 0.5201,
+        "top_chunk_ids": [
+          "v3:streaming:structural:4",
+          "v2:migrating-to-v3:structural:1",
+          "v3:client:structural:3",
+          "v2:migrating-to-v3:structural:3",
+          "v3:streaming:structural:1"
+        ]
+      },
+      {
+        "id": "X2",
+        "question": "Which TLS cipher suites does the Relay broker accept?",
+        "why_absent": "No page in the corpus discusses transport security or cipher negotiation.",
+        "answer": "I cannot answer that from the indexed documentation.",
+        "refused": true,
+        "gated_before_model": true,
+        "best_cosine_distance": 0.6117,
+        "top_chunk_ids": [
+          "v3:errors:structural:2",
+          "v3:errors:structural:1",
+          "v3:webhooks:structural:1",
+          "v2:errors:structural:1",
+          "v3:errors:structural:4"
+        ]
+      },
+      {
+        "id": "X3",
+        "question": "What does the urgent priority tier cost per message?",
+        "why_absent": "v3/client.md says urgent messages are 'billed at a higher rate' but states no price. A tempting near-miss: relevant context exists, the fact does not.",
+        "answer": "I cannot answer that from the indexed documentation.",
+        "refused": true,
+        "gated_before_model": true,
+        "best_cosine_distance": 0.6046,
+        "top_chunk_ids": [
+          "v3:client:structural:3",
+          "v3:streaming:structural:4",
+          "v3:streaming:structural:1",
+          "v3:errors:structural:4",
+          "v2:migrating-to-v3:structural:3"
+        ]
+      }
+    ]
+  }
+}
