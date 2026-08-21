@@ -11,6 +11,21 @@ _FENCE_RE = re.compile(
     r"^(`{3,}|~{3,}).*?$.*?^\1\s*$",
     re.MULTILINE | re.DOTALL
 )
+
+# A markdown table: a header row, a delimiter row of dashes/colons, then any
+# number of data rows. Matched as one span so the table can be treated as an
+# atomic unit rather than as ordinary prose.
+_TABLE_RE = re.compile(
+    r"^[ \t]*\|.*\|[ \t]*$\n"
+    r"^[ \t]*\|[ \t:\-|]+\|[ \t]*$"
+    r"(?:\n^[ \t]*\|.*\|[ \t]*$)*",
+    re.MULTILINE,
+)
+
+BASELINE = "baseline"
+STRUCTURAL = "structural"
+
+
 @dataclass
 class Chunk:
     text: str
@@ -18,17 +33,22 @@ class Chunk:
 
 
 def chunk_document(
-    text: str, suffix: str, chunk_size: int = CHUNK_SIZE, chunk_overlap: int = CHUNK_OVERLAP
+    text: str,
+    suffix: str,
+    strategy: str = STRUCTURAL,
+    chunk_size: int = CHUNK_SIZE,
+    chunk_overlap: int = CHUNK_OVERLAP,
 ) -> list[Chunk]:
-    """Chunk a document, dispatching by file suffix.
+    """Chunk a document under an explicit strategy.
 
-    Markdown gets header/code-fence-aware chunking (see _chunk_markdown).
-    Everything else (.txt, .pdf) falls back to the plain paragraph/sentence
-    chunker, since non-markdown text carries no reliable header structure.
+    `suffix` decides what is *possible* (only markdown carries reliable header
+    structure); `strategy` decides what is *used*. The baseline strategy is the
+    plain fixed-size paragraph/sentence chunker, applied even to markdown, so
+    the two strategies can be measured over identical input.
     """
-    if suffix == ".md":
-        return _chunk_markdown(text, chunk_size, chunk_overlap)
-    return [Chunk(text=t) for t in chunk_text(text, chunk_size, chunk_overlap)]
+    if strategy == BASELINE or suffix != ".md":
+        return [Chunk(text=t) for t in chunk_text(text, chunk_size, chunk_overlap)]
+    return _chunk_markdown(text, chunk_size, chunk_overlap)
 
 
 def _chunk_markdown(text: str, chunk_size: int, chunk_overlap: int) -> list[Chunk]:
@@ -116,15 +136,24 @@ def _split_by_bold_labels(body: str) -> list[tuple[str | None, str]]:
 
 
 def _pack_section(body: str, chunk_size: int, chunk_overlap: int) -> list[str]:
-    """Greedily pack a section's units into chunks. Code-fence units are
-    never split, even when a single one exceeds chunk_size."""
-    units = _units_from_text(body, chunk_size)
+    """Greedily pack a section's units into chunks. Code-fence and table units
+    are never split mid-unit, even when one exceeds chunk_size; an oversized
+    table is divided on row boundaries instead, carrying its header row into
+    every part."""
+    units: list[tuple[str, str]] = []
+    for unit_text, kind in _units_from_text(body, chunk_size):
+        if kind == "table" and len(unit_text) > chunk_size:
+            units.extend((part, "table") for part in _split_table_by_rows(unit_text, chunk_size))
+        else:
+            units.append((unit_text, kind))
+
     if not units:
         return []
 
     chunks: list[str] = []
     current = ""
-    for unit_text, is_code in units:
+    for unit_text, kind in units:
+        atomic = kind != "plain"
         candidate = f"{current}\n\n{unit_text}" if current else unit_text
         if len(candidate) <= chunk_size:
             current = candidate
@@ -134,7 +163,7 @@ def _pack_section(body: str, chunk_size: int, chunk_overlap: int) -> list[str]:
             chunks.append(current)
             tail = _overlap_tail(current, chunk_overlap)
             current = f"{tail}\n\n{unit_text}" if tail else unit_text
-            if len(current) > chunk_size and not is_code:
+            if len(current) > chunk_size and not atomic:
                 current = unit_text
         else:
             current = unit_text
@@ -145,29 +174,73 @@ def _pack_section(body: str, chunk_size: int, chunk_overlap: int) -> list[str]:
     return chunks
 
 
-def _units_from_text(text: str, chunk_size: int) -> list[tuple[str, bool]]:
-    """Split section text into (unit_text, is_code) pairs, in order.
-    Fenced code blocks become single atomic, unsplittable units."""
-    units: list[tuple[str, bool]] = []
+def _split_table_by_rows(table: str, chunk_size: int) -> list[str]:
+    """Split an oversized markdown table on row boundaries, repeating the
+    header and delimiter rows into every part.
+
+    The header row carries the column semantics. A fragment reading
+    `| retry_backoff_ms | int | 2000 | no |` with no header is retrievable but
+    not interpretable — 2000 could be milliseconds, bytes or a rate. Repeating
+    ~80 characters of header turns each part into a self-contained fact.
+    """
+    lines = [ln for ln in table.splitlines() if ln.strip()]
+    if len(lines) < 3:
+        return [table]
+
+    header, delim, rows = lines[0], lines[1], lines[2:]
+    prefix = f"{header}\n{delim}"
+
+    parts: list[str] = []
+    current: list[str] = []
+    for row in rows:
+        candidate = "\n".join([prefix, *current, row])
+        if current and len(candidate) > chunk_size:
+            parts.append("\n".join([prefix, *current]))
+            current = [row]
+        else:
+            current.append(row)
+
+    if current:
+        parts.append("\n".join([prefix, *current]))
+
+    return parts or [table]
+
+
+def _units_from_text(text: str, chunk_size: int) -> list[tuple[str, str]]:
+    """Split section text into (unit_text, kind) pairs, in order, where kind is
+    one of "code", "table" or "plain". Code fences and tables become single
+    atomic units; a table found inside a fence is left as part of the fence."""
+    fence_spans = [(m.start(), m.end(), "code", m.group()) for m in _FENCE_RE.finditer(text)]
+
+    def in_fence(pos: int) -> bool:
+        return any(start <= pos < end for start, end, _, _ in fence_spans)
+
+    table_spans = [
+        (m.start(), m.end(), "table", m.group())
+        for m in _TABLE_RE.finditer(text)
+        if not in_fence(m.start())
+    ]
+
+    units: list[tuple[str, str]] = []
     pos = 0
-    for m in _FENCE_RE.finditer(text):
-        if m.start() > pos:
-            units.extend(_plain_units(text[pos : m.start()], chunk_size))
-        units.append((m.group(), True))
-        pos = m.end()
+    for start, end, kind, raw in sorted(fence_spans + table_spans):
+        if start > pos:
+            units.extend(_plain_units(text[pos:start], chunk_size))
+        units.append((raw, kind))
+        pos = end
     if pos < len(text):
         units.extend(_plain_units(text[pos:], chunk_size))
     return units
 
 
-def _plain_units(text: str, chunk_size: int) -> list[tuple[str, bool]]:
+def _plain_units(text: str, chunk_size: int) -> list[tuple[str, str]]:
     paragraphs = [p.strip() for p in re.split(r"\n\s*\n", text) if p.strip()]
-    units: list[tuple[str, bool]] = []
+    units: list[tuple[str, str]] = []
     for para in paragraphs:
         if len(para) <= chunk_size:
-            units.append((para, False))
+            units.append((para, "plain"))
         else:
-            units.extend((u, False) for u in _split_long_unit(para, chunk_size))
+            units.extend((u, "plain") for u in _split_long_unit(para, chunk_size))
     return units
 
 

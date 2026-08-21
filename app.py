@@ -46,9 +46,10 @@ async def ingest(file: UploadFile = File(...)):
     with dest.open("wb") as f:
         shutil.copyfileobj(file.file, f)
 
-    # Web uploads replace the whole index: only the latest upload is searchable,
-    # so answers never cite chunks from previously uploaded documents.
-    pipeline.reset()
+    # Uploads are additive. Wiping the index on every upload would make it
+    # impossible to hold more than one document version at a time, which is
+    # exactly what the sdk_version filter exists to disambiguate. Re-ingesting
+    # the same path still replaces that file's own chunks.
     result = pipeline.ingest_path(str(dest))
     return {**result, "chunks_indexed_total": pipeline.document_count()}
 
@@ -64,6 +65,13 @@ async def ask(payload: AskRequest):
 
 
 if __name__ == "__main__":
+    import argparse
+
     import uvicorn
 
-    uvicorn.run("app:app", host="127.0.0.1", port=8000, reload=True)
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--port", type=int, default=8000)
+    parser.add_argument("--host", default="127.0.0.1")
+    args = parser.parse_args()
+
+    uvicorn.run("app:app", host=args.host, port=args.port, reload=True)

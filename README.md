@@ -36,10 +36,23 @@ python cli.py ingest path/to/some_file.pdf
 # Ask a question
 python cli.py ask "What does the document say about X?"
 
+# Retrieve only — no LLM call, prints chunk_ids and all three scores
+python cli.py search "default retry backoff for Client.send()" --k 5
+
+# Restrict retrieval to one documentation version
+python cli.py search "default retry backoff" --k 5 --sdk-version v3
+
+# Work against the baseline chunker's index instead of the structure-aware one
+python cli.py search "default retry backoff" --strategy baseline
+
 # Check index size / clear it
 python cli.py status
 python cli.py reset
 ```
+
+`search` never calls the LLM, so nothing it prints can be invented. Every
+command takes `--strategy` (`structural`, the default, or `baseline`), which
+selects the collection to read or write.
 
 Re-ingesting a file (same path) always replaces that file's chunks in the
 index, so editing a doc and re-running `ingest` never leaves stale content
@@ -85,7 +98,37 @@ below it instead.
    generic-sounding chunk.
 4. **Generate** (`rag/generator.py`) — the retrieved chunks are placed in the
    system/user prompt and a Groq-hosted model (`llama-3.3-70b-versatile` by
-   default, free tier) answers using only that context, citing sources.
+   default, free tier) answers using only that context. Refusal is enforced in
+   two independent layers: a retrieval gate that refuses before any model call
+   when the closest chunk's raw cosine distance exceeds a calibrated threshold,
+   and a system prompt that mandates an exact refusal sentence with no
+   "use your best judgement" escape hatch. Every factual sentence must carry a
+   `[chunk: <chunk_id>]` citation, and `verify_citations()` checks each cited
+   id was actually retrieved — a fabricated id is a hallucinated citation.
+
+## Metadata and chunk ids
+
+Documents may carry front matter, which is parsed strictly by
+`rag/frontmatter.py` (deliberately not YAML: `required: no` would resolve to
+boolean `False` under YAML 1.1):
+
+```markdown
+---
+page_id: client
+sdk_version: v3
+page_type: reference
+---
+```
+
+Every chunk is tagged with `source_file`, `page_id`, `sdk_version`,
+`page_type`, `strategy`, `heading_path` and `anchor`. `source_file` is derived
+from the path and is therefore never absent, so `v2/client.md` and
+`v3/client.md` stay distinguishable. Chunk ids are readable rather than hashed
+— `v3:client:structural:7` — so a citation can be resolved by hand.
+
+Retrieval accepts a `where` filter (e.g. `{"sdk_version": "v3"}`) applied to
+**both** the dense and BM25 legs. Filtering only the dense leg would let an
+excluded chunk re-enter the results through the keyword leg.
 
 ## Configuration
 
@@ -97,17 +140,45 @@ All settings are environment variables (see `.env.example`), read via
 
 ```
 rag/
-  config.py      settings
-  loaders.py     .txt / .md / .pdf -> text
-  chunking.py    text -> overlapping chunks
-  store.py       ChromaDB wrapper (embed + upsert + query)
-  generator.py   Groq LLM calls (sync + async streaming)
-  pipeline.py    ties ingest/retrieve/generate together
-cli.py           command-line interface
-app.py           FastAPI web app
-templates/       chat UI
-data/documents/  drop files here to ingest via CLI
-tests/           pytest unit tests (chunking, pipeline, generator)
+  config.py       settings, collection names, refusal message + threshold
+  frontmatter.py  strict `key: value` front matter parsing and validation
+  loaders.py      .txt / .md / .pdf -> text
+  chunking.py     text -> chunks, under a baseline or structure-aware strategy
+  store.py        ChromaDB wrapper (embed + upsert + filtered hybrid query)
+  generator.py    Groq LLM calls, refusal gate, citation verification
+  pipeline.py     ties ingest/retrieve/generate together
+eval/
+  questions.json  the 8 eval + 3 out-of-corpus + 5 calibration questions
+  metrics.py      hit scoring under both metrics
+  run_eval.py     builds both indexes and produces every artifact
+  report.py       renders results.md from raw/artifacts.json
+  raw/            machine-readable output of the last run
+cli.py            command-line interface
+app.py            FastAPI web app
+templates/        chat UI
+data/documents/   v2/ and v3/ SDK reference corpus
+tests/            pytest suite
+results.md        generated write-up — do not edit by hand
 ```
 
 Run tests with `pytest` (`pip install pytest` / already in `requirements.txt` under the dev section).
+
+## Week 3 evaluation
+
+```bash
+python -m eval.run_eval
+```
+
+Builds one index per chunking strategy, seeds the v2 pages as pre-existing
+state, ingests only the 6 new v3 reference pages, runs all 8 questions
+search-only against both strategies, searches for a query where the
+`sdk_version` filter changes top-1, calibrates the refusal threshold on
+held-out questions, then generates 3 cited answers and 3 refusals. It writes
+`eval/raw/artifacts.json` and renders `results.md` from it, so the write-up and
+the measured data cannot disagree.
+
+Retrieval measurement needs no API key. The generation section is skipped with
+a notice when `GROQ_API_KEY` is unset and filled in on a later run.
+
+`results.md` is generated. Edit `eval/report.py` and re-run, never the
+markdown.

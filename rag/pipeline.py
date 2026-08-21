@@ -1,32 +1,58 @@
-import hashlib
+import re
 from pathlib import Path
 
-from rag.chunking import chunk_document
-from rag.config import TOP_K
+from rag.chunking import BASELINE, STRUCTURAL, chunk_document
+from rag.config import (
+    COLLECTION_BASELINE,
+    COLLECTION_STRUCTURAL,
+    DOCUMENTS_DIR,
+    TOP_K,
+)
+from rag.frontmatter import FrontMatterError, parse_front_matter
 from rag.generator import answer_question, sources_from_chunks
 from rag.loaders import iter_documents
 from rag.store import VectorStore
 
+UNKNOWN = "unknown"
+
+_SLUG_STRIP_RE = re.compile(r"[^a-z0-9 \-]")
+
 
 class RAGPipeline:
-    def __init__(self, store: VectorStore | None = None):
-        self.store = store or VectorStore()
+    def __init__(
+        self,
+        store: VectorStore | None = None,
+        strategy: str = STRUCTURAL,
+        require_front_matter: bool = False,
+    ):
+        self.store = (
+            store if store is not None else VectorStore(collection_name=collection_for(strategy))
+        )
+        self.strategy = strategy
+        self.require_front_matter = require_front_matter
 
     def ingest_path(self, path: str) -> dict:
-        """Ingest a single file or a directory of files. Returns a summary dict."""
+        """Ingest a single file or a directory of files. Returns a summary dict.
+
+        Every chunk is tagged with source_file, page_id, sdk_version and
+        page_type. source_file is derived from the path and is therefore always
+        present; the other three come from front matter, which is mandatory
+        when require_front_matter is set.
+        """
         p = Path(path)
         if not p.exists():
             raise FileNotFoundError(f"No such file or directory: {path}")
 
         files_ingested = 0
         chunks_ingested = 0
+        source_files: list[str] = []
 
-        for file_path, text in iter_documents(p):
-            # Canonicalize so the same file is recognized as one source
-            # regardless of whether it's referenced via a relative or
-            # absolute path across different ingest calls.
+        for file_path, raw_text in iter_documents(p):
             source = str(file_path.resolve())
-            chunks = chunk_document(text, file_path.suffix.lower())
+            source_file = _source_file(file_path)
+            meta, text = self._read_front_matter(raw_text, file_path)
+
+            chunks = chunk_document(text, file_path.suffix.lower(), strategy=self.strategy)
 
             # Re-ingesting a source should reflect only its current content,
             # so drop whatever chunks it previously contributed first.
@@ -34,31 +60,59 @@ class RAGPipeline:
             if not chunks:
                 continue
 
+            sdk_version = meta.get("sdk_version", UNKNOWN)
+            page_id = meta.get("page_id") or file_path.stem
+
             texts, metadatas, ids = [], [], []
             for i, chunk in enumerate(chunks):
-                chunk_id = hashlib.sha256(f"{source}:{i}".encode()).hexdigest()
+                heading_path = " > ".join(chunk.heading_path)
                 texts.append(chunk.text)
                 metadatas.append(
                     {
+                        "source_file": source_file,
+                        "page_id": page_id,
+                        "sdk_version": sdk_version,
+                        "page_type": meta.get("page_type", UNKNOWN),
+                        "strategy": self.strategy,
+                        "heading_path": heading_path,
+                        "anchor": _anchor(chunk.heading_path),
+                        "chunk_index": i,
                         "source": file_path.name,
                         "path": source,
-                        "chunk_index": i,
-                        "heading_path": " > ".join(chunk.heading_path),
                     }
                 )
-                ids.append(chunk_id)
+                ids.append(f"{sdk_version}:{page_id}:{self.strategy}:{i}")
 
             self.store.add_texts(texts, metadatas, ids)
             files_ingested += 1
             chunks_ingested += len(chunks)
+            source_files.append(source_file)
 
-        return {"files_ingested": files_ingested, "chunks_ingested": chunks_ingested}
+        return {
+            "files_ingested": files_ingested,
+            "chunks_ingested": chunks_ingested,
+            "source_files": source_files,
+        }
 
-    def retrieve(self, question: str, k: int = TOP_K) -> list[dict]:
-        return self.store.query(question, k)
+    def _read_front_matter(self, raw_text: str, file_path: Path) -> tuple[dict, str]:
+        """Return (metadata, body).
 
-    def ask(self, question: str, k: int = TOP_K) -> dict:
-        chunks = self.retrieve(question, k)
+        A block that is present but malformed always raises, in both modes —
+        silently accepting a half-parsed sdk_version would corrupt the version
+        filter invisibly. Only a wholly absent block is tolerated, and only
+        when require_front_matter is off.
+        """
+        if raw_text.lstrip().startswith("---"):
+            return parse_front_matter(raw_text)
+        if self.require_front_matter:
+            raise FrontMatterError(f"{file_path} has no front matter block")
+        return {}, raw_text
+
+    def retrieve(self, question: str, k: int = TOP_K, where: dict | None = None) -> list[dict]:
+        return self.store.query(question, k, where=where)
+
+    def ask(self, question: str, k: int = TOP_K, where: dict | None = None) -> dict:
+        chunks = self.retrieve(question, k, where=where)
         answer = answer_question(question, chunks)
         return {"answer": answer, "sources": sources_from_chunks(chunks)}
 
@@ -67,3 +121,29 @@ class RAGPipeline:
 
     def document_count(self) -> int:
         return self.store.count()
+
+
+def collection_for(strategy: str) -> str:
+    """Each strategy owns a collection so their BM25 corpus statistics stay
+    independent — sharing one would double every source sentence's document
+    frequency and corrupt both strategies' scores at once."""
+    return COLLECTION_BASELINE if strategy == BASELINE else COLLECTION_STRUCTURAL
+
+
+def _source_file(file_path: Path) -> str:
+    """Path relative to the documents root, so v2/client.md and v3/client.md
+    stay distinguishable. Files outside that root fall back to their name."""
+    resolved = file_path.resolve()
+    try:
+        return resolved.relative_to(Path(DOCUMENTS_DIR).resolve()).as_posix()
+    except ValueError:
+        return resolved.name
+
+
+def _anchor(heading_path: list[str]) -> str:
+    """GitHub-style anchor for the deepest heading, so a citation resolves to a
+    position on the page rather than just the page."""
+    if not heading_path:
+        return ""
+    slug = _SLUG_STRIP_RE.sub("", heading_path[-1].lower()).strip()
+    return "#" + re.sub(r"[\s\-]+", "-", slug) if slug else ""
