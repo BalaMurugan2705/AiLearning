@@ -6,11 +6,13 @@ from rag.config import (
     COLLECTION_BASELINE,
     COLLECTION_STRUCTURAL,
     DOCUMENTS_DIR,
+    RERANK_POOL_SIZE,
     TOP_K,
 )
 from rag.frontmatter import FrontMatterError, parse_front_matter
 from rag.generator import answer_question, sources_from_chunks
 from rag.loaders import iter_documents
+from rag.reranker import CrossEncoderReranker
 from rag.store import VectorStore
 
 UNKNOWN = "unknown"
@@ -30,6 +32,7 @@ class RAGPipeline:
         )
         self.strategy = strategy
         self.require_front_matter = require_front_matter
+        self._reranker: CrossEncoderReranker | None = None
 
     def ingest_path(self, path: str) -> dict:
         """Ingest a single file or a directory of files. Returns a summary dict.
@@ -108,8 +111,23 @@ class RAGPipeline:
             raise FrontMatterError(f"{file_path} has no front matter block")
         return {}, raw_text
 
-    def retrieve(self, question: str, k: int = TOP_K, where: dict | None = None) -> list[dict]:
-        return self.store.query(question, k, where=where)
+    def retrieve(
+        self, question: str, k: int = TOP_K, where: dict | None = None, rerank: bool = False
+    ) -> list[dict]:
+        if not rerank:
+            return self.store.query(question, k, where=where)
+
+        # Rerank only ever sees a shortlist the cheap hybrid retriever already
+        # narrowed down to RERANK_POOL_SIZE candidates — never the whole
+        # corpus, since a cross-encoder call costs one model pass per
+        # candidate.
+        pool = self.store.query(question, RERANK_POOL_SIZE, where=where)
+        return self._get_reranker().rerank(question, pool, top_k=k)
+
+    def _get_reranker(self) -> CrossEncoderReranker:
+        if self._reranker is None:
+            self._reranker = CrossEncoderReranker()
+        return self._reranker
 
     def ask(self, question: str, k: int = TOP_K, where: dict | None = None) -> dict:
         chunks = self.retrieve(question, k, where=where)
