@@ -35,6 +35,14 @@ REFUSAL_MESSAGE = "I cannot answer that from the indexed documentation."
 # against the 8 reported questions. Cosine distance, so bounded in [0, 2].
 REFUSAL_DISTANCE_THRESHOLD = float(os.environ.get("REFUSAL_DISTANCE_THRESHOLD", "0.85"))
 
+# A cross-encoder reads the query and one candidate chunk together, so it can
+# recognize a paraphrase (chunk says "HMAC-SHA256", query says "hashing
+# algorithm") that keyword overlap alone would rank low. Too slow to run over
+# a whole corpus, so it only ever sees a short list already narrowed down by
+# the cheaper hybrid retriever.
+RERANK_MODEL = os.environ.get("RERANK_MODEL", "cross-encoder/ms-marco-TinyBERT-L-2-v2")
+RERANK_POOL_SIZE = int(os.environ.get("RERANK_POOL_SIZE", "25"))
+
 DOCUMENTS_DIR = str(BASE_DIR / "data" / "documents")
 
 SUPPORTED_EXTENSIONS = {".txt", ".md", ".pdf"}

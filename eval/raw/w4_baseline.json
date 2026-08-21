@@ -1,0 +1,478 @@
+{
+  "k": 3,
+  "rerank": false,
+  "hits": 11,
+  "total": 12,
+  "hit_rate": 0.9166666666666666,
+  "p50_latency_ms": 11.5,
+  "rows": [
+    {
+      "id": "Q1",
+      "question": "What is the default value of retry_backoff_ms for Client.send() in the v3 SDK?",
+      "expected_chunk_id": "v3:client:structural:2",
+      "answer_span": "2000",
+      "evidence_type": "symbol",
+      "hit": true,
+      "hit_rank": 2,
+      "latency_ms": 17.8,
+      "retrieved": [
+        {
+          "rank": 1,
+          "chunk_id": "v2:client:structural:3",
+          "rrf_score": 0.032787,
+          "cosine_distance": 0.3543,
+          "bm25_score": 13.687,
+          "contains_answer_span": false,
+          "preview": "Client > Client.send() > Default retry backoff The default retry backoff for `Client.send()` is 500 ms. Retries use a fixed delay: every attempt waits the same `retry_backoff_ms` interval, with no mul"
+        },
+        {
+          "rank": 2,
+          "chunk_id": "v3:client:structural:2",
+          "rrf_score": 0.031754,
+          "cosine_distance": 0.4203,
+          "bm25_score": 11.911,
+          "contains_answer_span": true,
+          "preview": "Client > Client.send() > Parameters | Parameter | Type | Default | Required | Description | |---|---|---|---|---| | `message` | `str` | — | yes | Body of the message. Must be valid UTF-8 and at most 2"
+        },
+        {
+          "rank": 3,
+          "chunk_id": "v2:client:structural:2",
+          "rrf_score": 0.031514,
+          "cosine_distance": 0.3771,
+          "bm25_score": 10.451,
+          "contains_answer_span": false,
+          "preview": "Client > Client.send() > Parameters | Parameter | Type | Default | Required | Description | |---|---|---|---|---| | `message` | `str` | — | yes | Body of the message. Must be valid UTF-8 and at most 6"
+        }
+      ]
+    },
+    {
+      "id": "Q2",
+      "question": "What's the maximum accepted value for dedupe_window_ms on Client.send()?",
+      "expected_chunk_id": "v3:client:structural:3",
+      "answer_span": "86400000",
+      "evidence_type": "symbol",
+      "hit": true,
+      "hit_rank": 1,
+      "latency_ms": 10.89,
+      "retrieved": [
+        {
+          "rank": 1,
+          "chunk_id": "v3:client:structural:3",
+          "rrf_score": 0.032787,
+          "cosine_distance": 0.4307,
+          "bm25_score": 12.068,
+          "contains_answer_span": true,
+          "preview": "Client > Client.send() > Parameters tempt. A value of `1.0` produces constant-delay retries. | | `retry_max_attempts` | `int` | `4` | no | Total number of delivery attempts, including the first. Set t"
+        },
+        {
+          "rank": 2,
+          "chunk_id": "v3:client:structural:2",
+          "rrf_score": 0.032258,
+          "cosine_distance": 0.4443,
+          "bm25_score": 8.971,
+          "contains_answer_span": false,
+          "preview": "Client > Client.send() > Parameters | Parameter | Type | Default | Required | Description | |---|---|---|---|---| | `message` | `str` | — | yes | Body of the message. Must be valid UTF-8 and at most 2"
+        },
+        {
+          "rank": 3,
+          "chunk_id": "v2:changelog:structural:0",
+          "rrf_score": 0.030777,
+          "cosine_distance": 0.4999,
+          "bm25_score": 6.185,
+          "contains_answer_span": false,
+          "preview": "Changelog > 2.7.0 Added `idempotency_key` to `Client.send()`. Reusing a key within 60 seconds returns the original receipt instead of sending again. Raised the maximum message body from 32 KiB to 64 K"
+        }
+      ]
+    },
+    {
+      "id": "Q3",
+      "question": "Which error code means the bearer token is past its expiry?",
+      "expected_chunk_id": "v3:errors:structural:1",
+      "answer_span": "AUTH_TOKEN_EXPIRED",
+      "evidence_type": "error_code",
+      "hit": true,
+      "hit_rank": 1,
+      "latency_ms": 10.35,
+      "retrieved": [
+        {
+          "rank": 1,
+          "chunk_id": "v3:errors:structural:1",
+          "rrf_score": 0.032787,
+          "cosine_distance": 0.4896,
+          "bm25_score": 15.663,
+          "contains_answer_span": true,
+          "preview": "Errors > Error codes | Code | HTTP | Retryable | Meaning | |---|---|---|---| | `RELAY_400` | 400 | no | Malformed request. The payload failed schema validation before reaching the broker. | | `AUTH_TO"
+        },
+        {
+          "rank": 2,
+          "chunk_id": "v2:auth:structural:1",
+          "rrf_score": 0.032002,
+          "cosine_distance": 0.5401,
+          "bm25_score": 8.544,
+          "contains_answer_span": true,
+          "preview": "Authentication > API keys | Parameter | Type | Default | Required | Description | |---|---|---|---|---| | `api_key` | `str` | — | yes | Long-lived key beginning `rk_live_` or `rk_test_`. Sent as a bea"
+        },
+        {
+          "rank": 3,
+          "chunk_id": "v3:auth:structural:1",
+          "rrf_score": 0.031754,
+          "cosine_distance": 0.5369,
+          "bm25_score": 7.434,
+          "contains_answer_span": false,
+          "preview": "Authentication > Token lifecycle An access token issued by `POST /v3/auth/token` is valid for 3600 seconds. The SDK refreshes it when 80% of its lifetime has elapsed, so a healthy client refreshes rou"
+        }
+      ]
+    },
+    {
+      "id": "Q4",
+      "question": "What error code does an expired pagination cursor raise?",
+      "expected_chunk_id": "v3:pagination:structural:2",
+      "answer_span": "RELAY_410",
+      "evidence_type": "error_code",
+      "hit": true,
+      "hit_rank": 1,
+      "latency_ms": 9.96,
+      "retrieved": [
+        {
+          "rank": 1,
+          "chunk_id": "v3:pagination:structural:2",
+          "rrf_score": 0.032787,
+          "cosine_distance": 0.3182,
+          "bm25_score": 9.58,
+          "contains_answer_span": true,
+          "preview": "Pagination > Cursor stability A cursor remains valid for 7 days. Using an expired cursor raises `RELAY_410` and requires restarting from the first page. Cursors are scoped to the channel and direction"
+        },
+        {
+          "rank": 2,
+          "chunk_id": "v3:pagination:structural:0",
+          "rrf_score": 0.031514,
+          "cosine_distance": 0.3892,
+          "bm25_score": 5.882,
+          "contains_answer_span": false,
+          "preview": "Pagination List endpoints return cursor-paginated results. Cursors are opaque strings encoding a position in a stable sort order; do not parse or construct them. Offset pagination was removed in v3."
+        },
+        {
+          "rank": 3,
+          "chunk_id": "v3:pagination:structural:1",
+          "rrf_score": 0.030579,
+          "cosine_distance": 0.5551,
+          "bm25_score": 4.887,
+          "contains_answer_span": false,
+          "preview": "Pagination > Client.fetch() | Parameter | Type | Default | Required | Description | |---|---|---|---|---| | `channel` | `str` | — | yes | Channel to read from. | | `page_size` | `int` | `50` | no | Me"
+        }
+      ]
+    },
+    {
+      "id": "Q5",
+      "question": "Which changelog version added the idempotency_key parameter to Client.send()?",
+      "expected_chunk_id": "v2:changelog:structural:0",
+      "answer_span": "2.7.0",
+      "evidence_type": "version_string",
+      "hit": true,
+      "hit_rank": 1,
+      "latency_ms": 10.22,
+      "retrieved": [
+        {
+          "rank": 1,
+          "chunk_id": "v2:changelog:structural:0",
+          "rrf_score": 0.032787,
+          "cosine_distance": 0.3901,
+          "bm25_score": 12.532,
+          "contains_answer_span": true,
+          "preview": "Changelog > 2.7.0 Added `idempotency_key` to `Client.send()`. Reusing a key within 60 seconds returns the original receipt instead of sending again. Raised the maximum message body from 32 KiB to 64 K"
+        },
+        {
+          "rank": 2,
+          "chunk_id": "v2:changelog:structural:2",
+          "rrf_score": 0.032002,
+          "cosine_distance": 0.5552,
+          "bm25_score": 10.548,
+          "contains_answer_span": false,
+          "preview": "Changelog > 2.6.0 Added `timeout_ms` to `Client.send()`, defaulting to 10000. Previously the call had no client-side deadline and could block indefinitely on a hung connection."
+        },
+        {
+          "rank": 3,
+          "chunk_id": "v3:client:structural:3",
+          "rrf_score": 0.030777,
+          "cosine_distance": 0.5631,
+          "bm25_score": 5.426,
+          "contains_answer_span": false,
+          "preview": "Client > Client.send() > Parameters tempt. A value of `1.0` produces constant-delay retries. | | `retry_max_attempts` | `int` | `4` | no | Total number of delivery attempts, including the first. Set t"
+        }
+      ]
+    },
+    {
+      "id": "Q6",
+      "question": "How do I verify a Relay webhook signature in v3, given the raw request body and secret?",
+      "expected_chunk_id": "v3:webhooks:structural:2",
+      "answer_span": "SignatureMismatch",
+      "evidence_type": "code_fence",
+      "hit": true,
+      "hit_rank": 2,
+      "latency_ms": 12.98,
+      "retrieved": [
+        {
+          "rank": 1,
+          "chunk_id": "v3:webhooks:structural:1",
+          "rrf_score": 0.032522,
+          "cosine_distance": 0.2364,
+          "bm25_score": 19.601,
+          "contains_answer_span": false,
+          "preview": "Webhooks > Signature verification Each request carries the signature in the `X-Relay-Signature-V3` header. The signature is computed as HMAC-SHA256 over the concatenation of the request timestamp, a l"
+        },
+        {
+          "rank": 2,
+          "chunk_id": "v3:webhooks:structural:2",
+          "rrf_score": 0.032522,
+          "cosine_distance": 0.2729,
+          "bm25_score": 26.255,
+          "contains_answer_span": true,
+          "preview": "Webhooks > Signature verification etries of the same event. | Verification must be done against the **raw** request body. Parsing the JSON and re-serialising it will change byte ordering and whitespac"
+        },
+        {
+          "rank": 3,
+          "chunk_id": "v3:webhooks:structural:0",
+          "rrf_score": 0.031746,
+          "cosine_distance": 0.373,
+          "bm25_score": 11.257,
+          "contains_answer_span": false,
+          "preview": "Webhooks Relay delivers asynchronous delivery outcomes to the `callback_url` registered on a send. Every webhook request is signed so that receivers can verify it originated from Relay and has not bee"
+        }
+      ]
+    },
+    {
+      "id": "Q7",
+      "question": "What hashing algorithm does Relay use to sign webhook requests?",
+      "expected_chunk_id": "v3:webhooks:structural:1",
+      "answer_span": "HMAC-SHA256",
+      "evidence_type": "prose",
+      "hit": false,
+      "hit_rank": null,
+      "latency_ms": 9.94,
+      "retrieved": [
+        {
+          "rank": 1,
+          "chunk_id": "v3:webhooks:structural:0",
+          "rrf_score": 0.031778,
+          "cosine_distance": 0.3208,
+          "bm25_score": 3.765,
+          "contains_answer_span": false,
+          "preview": "Webhooks Relay delivers asynchronous delivery outcomes to the `callback_url` registered on a send. Every webhook request is signed so that receivers can verify it originated from Relay and has not bee"
+        },
+        {
+          "rank": 2,
+          "chunk_id": "v3:webhooks:structural:3",
+          "rrf_score": 0.03101,
+          "cosine_distance": 0.5584,
+          "bm25_score": 4.076,
+          "contains_answer_span": false,
+          "preview": "Webhooks > Retry schedule A webhook endpoint that does not return a 2xx status within 10 seconds is retried. Relay makes at most 6 delivery attempts spread over 24 hours, at intervals of 30 seconds, 5"
+        },
+        {
+          "rank": 3,
+          "chunk_id": "v3:webhooks:structural:2",
+          "rrf_score": 0.030798,
+          "cosine_distance": 0.4015,
+          "bm25_score": 3.236,
+          "contains_answer_span": false,
+          "preview": "Webhooks > Signature verification etries of the same event. | Verification must be done against the **raw** request body. Parsing the JSON and re-serialising it will change byte ordering and whitespac"
+        }
+      ]
+    },
+    {
+      "id": "Q8",
+      "question": "How long is a v3 access token valid before it needs to be refreshed?",
+      "expected_chunk_id": "v3:auth:structural:1",
+      "answer_span": "3600 seconds",
+      "evidence_type": "prose",
+      "hit": true,
+      "hit_rank": 1,
+      "latency_ms": 10.07,
+      "retrieved": [
+        {
+          "rank": 1,
+          "chunk_id": "v3:auth:structural:1",
+          "rrf_score": 0.032787,
+          "cosine_distance": 0.3991,
+          "bm25_score": 12.6,
+          "contains_answer_span": true,
+          "preview": "Authentication > Token lifecycle An access token issued by `POST /v3/auth/token` is valid for 3600 seconds. The SDK refreshes it when 80% of its lifetime has elapsed, so a healthy client refreshes rou"
+        },
+        {
+          "rank": 2,
+          "chunk_id": "v2:migrating-to-v3:structural:1",
+          "rrf_score": 0.031514,
+          "cosine_distance": 0.6101,
+          "bm25_score": 9.502,
+          "contains_answer_span": false,
+          "preview": "Migrating from v2 to v3 > Breaking changes Channel identifiers gained a segment. A v2 channel `org/topic` becomes `org/team/topic` in v3, and the v3 broker rejects two-segment identifiers with `RELAY_"
+        },
+        {
+          "rank": 3,
+          "chunk_id": "v2:auth:structural:1",
+          "rrf_score": 0.031258,
+          "cosine_distance": 0.5646,
+          "bm25_score": 5.686,
+          "contains_answer_span": false,
+          "preview": "Authentication > API keys | Parameter | Type | Default | Required | Description | |---|---|---|---|---| | `api_key` | `str` | — | yes | Long-lived key beginning `rk_live_` or `rk_test_`. Sent as a bea"
+        }
+      ]
+    },
+    {
+      "id": "Q9",
+      "question": "What argument do I pass to Client.subscribe() to get messages as they arrive instead of a buffered list?",
+      "expected_chunk_id": "v3:streaming:structural:2",
+      "answer_span": "stream=True",
+      "evidence_type": "code_fence",
+      "hit": true,
+      "hit_rank": 1,
+      "latency_ms": 12.62,
+      "retrieved": [
+        {
+          "rank": 1,
+          "chunk_id": "v3:streaming:structural:2",
+          "rrf_score": 0.032522,
+          "cosine_distance": 0.3852,
+          "bm25_score": 14.551,
+          "contains_answer_span": true,
+          "preview": "Streaming > Client.subscribe() frames. Set to `0` to disable, at the cost of slower dead-connection detection. | | `max_messages` | `int` | `None` | no | Stop after this many messages. `None` streams "
+        },
+        {
+          "rank": 2,
+          "chunk_id": "v3:streaming:structural:0",
+          "rrf_score": 0.032266,
+          "cosine_distance": 0.4369,
+          "bm25_score": 16.542,
+          "contains_answer_span": false,
+          "preview": "Streaming Streaming subscribes to a channel and yields messages as they arrive, over a single long-lived HTTP/2 connection. Use it for tailing a channel; use `Client.fetch()` for bounded historical re"
+        },
+        {
+          "rank": 3,
+          "chunk_id": "v3:streaming:structural:1",
+          "rrf_score": 0.031754,
+          "cosine_distance": 0.4001,
+          "bm25_score": 9.528,
+          "contains_answer_span": false,
+          "preview": "Streaming > Client.subscribe() Opens a stream and returns an iterator. The iterator blocks between messages and terminates when the server closes the stream or `max_messages` is reached. | Parameter |"
+        }
+      ]
+    },
+    {
+      "id": "Q10",
+      "question": "How many delivery attempts will Relay make for a webhook before marking it exhausted?",
+      "expected_chunk_id": "v3:webhooks:structural:3",
+      "answer_span": "6 delivery attempts",
+      "evidence_type": "prose",
+      "hit": true,
+      "hit_rank": 1,
+      "latency_ms": 12.1,
+      "retrieved": [
+        {
+          "rank": 1,
+          "chunk_id": "v3:webhooks:structural:3",
+          "rrf_score": 0.032787,
+          "cosine_distance": 0.1941,
+          "bm25_score": 9.481,
+          "contains_answer_span": true,
+          "preview": "Webhooks > Retry schedule A webhook endpoint that does not return a 2xx status within 10 seconds is retried. Relay makes at most 6 delivery attempts spread over 24 hours, at intervals of 30 seconds, 5"
+        },
+        {
+          "rank": 2,
+          "chunk_id": "v3:webhooks:structural:0",
+          "rrf_score": 0.031754,
+          "cosine_distance": 0.4001,
+          "bm25_score": 6.865,
+          "contains_answer_span": false,
+          "preview": "Webhooks Relay delivers asynchronous delivery outcomes to the `callback_url` registered on a send. Every webhook request is signed so that receivers can verify it originated from Relay and has not bee"
+        },
+        {
+          "rank": 3,
+          "chunk_id": "v3:webhooks:structural:1",
+          "rrf_score": 0.031025,
+          "cosine_distance": 0.4489,
+          "bm25_score": 6.498,
+          "contains_answer_span": false,
+          "preview": "Webhooks > Signature verification Each request carries the signature in the `X-Relay-Signature-V3` header. The signature is computed as HMAC-SHA256 over the concatenation of the request timestamp, a l"
+        }
+      ]
+    },
+    {
+      "id": "Q11",
+      "question": "Is it safe to call Client.close() twice in the v3 SDK?",
+      "expected_chunk_id": "v3:client:structural:6",
+      "answer_span": "Calling `close()` twice is safe",
+      "evidence_type": "prose",
+      "hit": true,
+      "hit_rank": 2,
+      "latency_ms": 13.46,
+      "retrieved": [
+        {
+          "rank": 1,
+          "chunk_id": "v2:client:structural:5",
+          "rrf_score": 0.032258,
+          "cosine_distance": 0.5302,
+          "bm25_score": 9.451,
+          "contains_answer_span": false,
+          "preview": "Client > Client.close() Releases the connection pool. v2 has no background flush loop, so `close()` returns immediately and there is nothing to drain. ```python client.close() ```"
+        },
+        {
+          "rank": 2,
+          "chunk_id": "v3:client:structural:6",
+          "rrf_score": 0.032018,
+          "cosine_distance": 0.6218,
+          "bm25_score": 13.521,
+          "contains_answer_span": true,
+          "preview": "Client > Client.close() Shuts the client down. `close()` flushes any messages still buffered in the background loop, waits up to `drain_timeout_ms` for in-flight sends to settle, and then releases the"
+        },
+        {
+          "rank": 3,
+          "chunk_id": "v3:client:structural:1",
+          "rrf_score": 0.030536,
+          "cosine_distance": 0.6664,
+          "bm25_score": 7.247,
+          "contains_answer_span": false,
+          "preview": "Client > Client.send() Dispatches a single message to a channel and returns a `Receipt`. The call is synchronous by default: it returns once the broker has durably accepted the message, not once the r"
+        }
+      ]
+    },
+    {
+      "id": "Q12",
+      "question": "What's the maximum page_size I can request from Client.fetch()?",
+      "expected_chunk_id": "v3:pagination:structural:1",
+      "answer_span": "250",
+      "evidence_type": "symbol",
+      "hit": true,
+      "hit_rank": 1,
+      "latency_ms": 13.18,
+      "retrieved": [
+        {
+          "rank": 1,
+          "chunk_id": "v3:pagination:structural:1",
+          "rrf_score": 0.032787,
+          "cosine_distance": 0.4194,
+          "bm25_score": 15.363,
+          "contains_answer_span": true,
+          "preview": "Pagination > Client.fetch() | Parameter | Type | Default | Required | Description | |---|---|---|---|---| | `channel` | `str` | — | yes | Channel to read from. | | `page_size` | `int` | `50` | no | Me"
+        },
+        {
+          "rank": 2,
+          "chunk_id": "v2:changelog:structural:0",
+          "rrf_score": 0.03125,
+          "cosine_distance": 0.6867,
+          "bm25_score": 5.967,
+          "contains_answer_span": false,
+          "preview": "Changelog > 2.7.0 Added `idempotency_key` to `Client.send()`. Reusing a key within 60 seconds returns the original receipt instead of sending again. Raised the maximum message body from 32 KiB to 64 K"
+        },
+        {
+          "rank": 3,
+          "chunk_id": "v3:streaming:structural:0",
+          "rrf_score": 0.030214,
+          "cosine_distance": 0.6459,
+          "bm25_score": 4.728,
+          "contains_answer_span": false,
+          "preview": "Streaming Streaming subscribes to a channel and yields messages as they arrive, over a single long-lived HTTP/2 connection. Use it for tailing a channel; use `Client.fetch()` for bounded historical re"
+        }
+      ]
+    }
+  ]
+}

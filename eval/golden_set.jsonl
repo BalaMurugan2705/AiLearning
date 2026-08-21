@@ -1,0 +1,12 @@
+{"id": "Q1", "question": "What is the default value of retry_backoff_ms for Client.send() in the v3 SDK?", "chunk_id": "v3:client:structural:2", "answer_span": "2000", "evidence_type": "symbol"}
+{"id": "Q2", "question": "What's the maximum accepted value for dedupe_window_ms on Client.send()?", "chunk_id": "v3:client:structural:3", "answer_span": "86400000", "evidence_type": "symbol"}
+{"id": "Q3", "question": "Which error code means the bearer token is past its expiry?", "chunk_id": "v3:errors:structural:1", "answer_span": "AUTH_TOKEN_EXPIRED", "evidence_type": "error_code"}
+{"id": "Q4", "question": "What error code does an expired pagination cursor raise?", "chunk_id": "v3:pagination:structural:2", "answer_span": "RELAY_410", "evidence_type": "error_code"}
+{"id": "Q5", "question": "Which changelog version added the idempotency_key parameter to Client.send()?", "chunk_id": "v2:changelog:structural:0", "answer_span": "2.7.0", "evidence_type": "version_string"}
+{"id": "Q6", "question": "How do I verify a Relay webhook signature in v3, given the raw request body and secret?", "chunk_id": "v3:webhooks:structural:2", "answer_span": "SignatureMismatch", "evidence_type": "code_fence"}
+{"id": "Q7", "question": "What hashing algorithm does Relay use to sign webhook requests?", "chunk_id": "v3:webhooks:structural:1", "answer_span": "HMAC-SHA256", "evidence_type": "prose"}
+{"id": "Q8", "question": "How long is a v3 access token valid before it needs to be refreshed?", "chunk_id": "v3:auth:structural:1", "answer_span": "3600 seconds", "evidence_type": "prose"}
+{"id": "Q9", "question": "What argument do I pass to Client.subscribe() to get messages as they arrive instead of a buffered list?", "chunk_id": "v3:streaming:structural:2", "answer_span": "stream=True", "evidence_type": "code_fence"}
+{"id": "Q10", "question": "How many delivery attempts will Relay make for a webhook before marking it exhausted?", "chunk_id": "v3:webhooks:structural:3", "answer_span": "6 delivery attempts", "evidence_type": "prose"}
+{"id": "Q11", "question": "Is it safe to call Client.close() twice in the v3 SDK?", "chunk_id": "v3:client:structural:6", "answer_span": "Calling `close()` twice is safe", "evidence_type": "prose"}
+{"id": "Q12", "question": "What's the maximum page_size I can request from Client.fetch()?", "chunk_id": "v3:pagination:structural:1", "answer_span": "250", "evidence_type": "symbol"}
