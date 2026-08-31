@@ -1,3 +1,4 @@
+import hashlib
 import re
 from collections.abc import Iterator
 
@@ -28,6 +29,11 @@ the documentation.
 - Never infer, estimate, round, or extrapolate a value that is not written in the \
 context. A plausible-looking default is still an invention.
 - Be concise and direct."""
+
+# Only the current SYSTEM_PROMPT text is ever kept — an older version's exact
+# wording isn't archived anywhere, so a trace logging this tag can prove which
+# prompt *changed* but can't reconstruct one after SYSTEM_PROMPT moves on.
+PROMPT_VERSION = "sysprompt-" + hashlib.sha256(SYSTEM_PROMPT.encode()).hexdigest()[:10]
 
 _CITATION_RE = re.compile(r"\[chunk:\s*([^\]\s|]+)")
 

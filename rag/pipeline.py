@@ -1,4 +1,5 @@
 import re
+import time
 from pathlib import Path
 
 from rag.chunking import BASELINE, STRUCTURAL, chunk_document
@@ -14,6 +15,7 @@ from rag.generator import answer_question, sources_from_chunks
 from rag.loaders import iter_documents
 from rag.reranker import CrossEncoderReranker
 from rag.store import VectorStore
+from rag.tracing import append_trace, build_trace, new_trace_id
 
 UNKNOWN = "unknown"
 
@@ -129,10 +131,36 @@ class RAGPipeline:
             self._reranker = CrossEncoderReranker()
         return self._reranker
 
-    def ask(self, question: str, k: int = TOP_K, where: dict | None = None) -> dict:
-        chunks = self.retrieve(question, k, where=where)
+    def ask(
+        self,
+        question: str,
+        k: int = TOP_K,
+        where: dict | None = None,
+        rerank: bool = False,
+        log: bool = True,
+    ) -> dict:
+        trace_id = new_trace_id()
+        started = time.monotonic()
+        chunks = self.retrieve(question, k, where=where, rerank=rerank)
         answer = answer_question(question, chunks)
-        return {"answer": answer, "sources": sources_from_chunks(chunks)}
+        latency_ms = (time.monotonic() - started) * 1000
+
+        if log:
+            append_trace(
+                build_trace(
+                    trace_id=trace_id,
+                    question=question,
+                    chunks=chunks,
+                    answer=answer,
+                    k=k,
+                    where=where,
+                    rerank=rerank,
+                    strategy=self.strategy,
+                    latency_ms=latency_ms,
+                )
+            )
+
+        return {"answer": answer, "sources": sources_from_chunks(chunks), "trace_id": trace_id}
 
     def reset(self) -> None:
         self.store.reset()
