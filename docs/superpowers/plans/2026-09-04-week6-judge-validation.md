@@ -933,7 +933,15 @@ TRACE = {
     "rerank": False,
     "model": "openai/gpt-oss-120b",
     "model_params": {"max_tokens": 2048},
-    "retrieved": [{"chunk_id": "v2:client:structural:3"}],
+    "retrieved": [
+        {
+            "chunk_id": "v2:client:structural:3",
+            "dense_distance": 0.5132670402526855,
+            "bm25_score": 19.004,
+            "rrf_score": 0.0327,
+            "rerank_score": None,
+        }
+    ],
 }
 
 
@@ -943,6 +951,27 @@ def test_case_from_trace_copies_every_execution_parameter():
     assert case["retrieval"] == {"k": 4, "where": None, "strategy": "structural", "rerank": False}
     assert case["generation"] == {"model": "openai/gpt-oss-120b", "model_params": {"max_tokens": 2048}}
     assert case["origin"] == {"kind": "replay", "trace_id": "b84fe53eb006"}
+
+
+def test_case_from_trace_carries_the_logged_retrieval_scores():
+    """Not just the chunk ids. should_refuse() treats a chunk with no
+    dense_distance as no evidence, so a case that kept only the ids would
+    answer with the refusal string instead of reproducing its failure -- which
+    would quietly void every regression case in the set."""
+    case = case_from_trace(TRACE, "W6-07", "version-ambiguity", True, "note")
+    assert case["replay_retrieved"][0]["chunk_id"] == "v2:client:structural:3"
+    assert case["replay_retrieved"][0]["dense_distance"] == 0.5132670402526855
+    assert case["replay_retrieved"][0]["bm25_score"] == 19.004
+
+
+def test_every_replay_case_has_at_least_one_scored_chunk():
+    for case in load_cases():
+        if case["origin"]["kind"] != "replay":
+            continue
+        scored = [
+            r for r in case["replay_retrieved"] if r["dense_distance"] is not None
+        ]
+        assert scored, f"{case['case_id']} would refuse for lack of dense scores"
 
 
 def test_there_are_at_least_25_cases():
@@ -1053,7 +1082,21 @@ def case_from_trace(
             "rerank": trace["rerank"],
         },
         "generation": {"model": trace["model"], "model_params": trace["model_params"]},
-        "replay_chunk_ids": [r["chunk_id"] for r in trace["retrieved"]],
+        # The full logged records, not just the ids. rag.generator.should_refuse
+        # treats a chunk with no dense_distance as no evidence and refuses, so
+        # dropping the scores here would make every replay case answer with the
+        # refusal string instead of reproducing its failure. eval/replay.py does
+        # the same thing for the same reason.
+        "replay_retrieved": [
+            {
+                "chunk_id": r["chunk_id"],
+                "dense_distance": r["dense_distance"],
+                "bm25_score": r["bm25_score"],
+                "rrf_score": r["rrf_score"],
+                "rerank_score": r.get("rerank_score"),
+            }
+            for r in trace["retrieved"]
+        ],
         "notes": notes,
     }
 
@@ -1123,27 +1166,27 @@ two PDFs; the `unexplained-refusal` questions are answerable from
 
 ```bash
 cat >> eval/week6/cases.jsonl <<'CASES'
-{"case_id": "W6-02", "question": "What's the maximum accepted value for dedupe_window_ms on Client.send()?", "mode": "citation-format", "origin": {"kind": "authored", "basis": "golden_set:Q2"}, "version_sensitive": true, "sdk_version_intent": "v3", "retrieval": {"k": 4, "where": null, "strategy": "structural", "rerank": false}, "generation": {"model": "openai/gpt-oss-120b", "model_params": {"max_tokens": 2048}}, "replay_chunk_ids": null, "notes": "Parameter-limit lookup; the mode under test is citation shape, not the value."}
-{"case_id": "W6-03", "question": "Which error code means the bearer token is past its expiry?", "mode": "citation-format", "origin": {"kind": "authored", "basis": "golden_set:Q3"}, "version_sensitive": true, "sdk_version_intent": "v3", "retrieval": {"k": 4, "where": null, "strategy": "structural", "rerank": false}, "generation": {"model": "openai/gpt-oss-120b", "model_params": {"max_tokens": 2048}}, "replay_chunk_ids": null, "notes": "Single error-code lookup that must be cited to one chunk."}
-{"case_id": "W6-04", "question": "What hashing algorithm does Relay use to sign webhook requests?", "mode": "citation-format", "origin": {"kind": "authored", "basis": "golden_set:Q7"}, "version_sensitive": true, "sdk_version_intent": "v3", "retrieval": {"k": 4, "where": null, "strategy": "structural", "rerank": false}, "generation": {"model": "openai/gpt-oss-120b", "model_params": {"max_tokens": 2048}}, "replay_chunk_ids": null, "notes": "One-fact prose answer; a citation is the only thing that can go wrong."}
-{"case_id": "W6-05", "question": "What's the maximum page_size I can request from Client.fetch()?", "mode": "citation-format", "origin": {"kind": "authored", "basis": "golden_set:Q12"}, "version_sensitive": true, "sdk_version_intent": "v3", "retrieval": {"k": 4, "where": null, "strategy": "structural", "rerank": false}, "generation": {"model": "openai/gpt-oss-120b", "model_params": {"max_tokens": 2048}}, "replay_chunk_ids": null, "notes": "Parameter-table limit; v3-only page, so no version confusion is available."}
-{"case_id": "W6-07", "question": "What format does a channel identifier take?", "mode": "version-ambiguity", "origin": {"kind": "authored", "basis": "v2/migrating-to-v3.md (org/topic -> org/team/topic)"}, "version_sensitive": true, "sdk_version_intent": "unspecified", "retrieval": {"k": 4, "where": null, "strategy": "structural", "rerank": false}, "generation": {"model": "openai/gpt-oss-120b", "model_params": {"max_tokens": 2048}}, "replay_chunk_ids": null, "notes": "v2 takes org/topic, v3 rejects it with RELAY_400. Version left unstated on purpose."}
-{"case_id": "W6-08", "question": "How do I page through a long list of results?", "mode": "version-ambiguity", "origin": {"kind": "authored", "basis": "v2/migrating-to-v3.md (offset removed in favour of cursors)"}, "version_sensitive": true, "sdk_version_intent": "unspecified", "retrieval": {"k": 4, "where": null, "strategy": "structural", "rerank": false}, "generation": {"model": "openai/gpt-oss-120b", "model_params": {"max_tokens": 2048}}, "replay_chunk_ids": null, "notes": "v2 used offsets, v3 removed them entirely for cursors."}
-{"case_id": "W6-09", "question": "How does authentication work in the Relay SDK?", "mode": "version-ambiguity", "origin": {"kind": "authored", "basis": "v2/auth.md vs v3/auth.md"}, "version_sensitive": true, "sdk_version_intent": "unspecified", "retrieval": {"k": 4, "where": null, "strategy": "structural", "rerank": false}, "generation": {"model": "openai/gpt-oss-120b", "model_params": {"max_tokens": 2048}}, "replay_chunk_ids": null, "notes": "v2 sends a long-lived key per request; v3 exchanges it for a short-lived token."}
-{"case_id": "W6-10", "question": "How many delivery attempts does a failed send get by default?", "mode": "version-ambiguity", "origin": {"kind": "authored", "basis": "v3/client.md retry_max_attempts vs v2/CHANGELOG.md 2.5.0"}, "version_sensitive": true, "sdk_version_intent": "unspecified", "retrieval": {"k": 4, "where": null, "strategy": "structural", "rerank": false}, "generation": {"model": "openai/gpt-oss-120b", "model_params": {"max_tokens": 2048}}, "replay_chunk_ids": null, "notes": "v3 defaults to 4 attempts with exponential backoff; v2 was fixed at 3, 500 ms apart."}
-{"case_id": "W6-12", "question": "How should I handle errors in the SDK?", "mode": "cross-product-bleed", "origin": {"kind": "authored", "basis": "generic phrasing over a multi-product index"}, "version_sensitive": true, "sdk_version_intent": "unspecified", "retrieval": {"k": 4, "where": null, "strategy": "structural", "rerank": false}, "generation": {"model": "openai/gpt-oss-120b", "model_params": {"max_tokens": 2048}}, "replay_chunk_ids": null, "notes": "The index also holds OMNUMI_SDK_IOS_DOCUMENTATION.md and two PDFs."}
-{"case_id": "W6-13", "question": "How do I initialise a client in the SDK?", "mode": "cross-product-bleed", "origin": {"kind": "authored", "basis": "generic phrasing over a multi-product index"}, "version_sensitive": true, "sdk_version_intent": "unspecified", "retrieval": {"k": 4, "where": null, "strategy": "structural", "rerank": false}, "generation": {"model": "openai/gpt-oss-120b", "model_params": {"max_tokens": 2048}}, "replay_chunk_ids": null, "notes": "Both products document a client constructor, so the question is genuinely ambiguous."}
-{"case_id": "W6-14", "question": "What is the default timeout in the SDK?", "mode": "cross-product-bleed", "origin": {"kind": "authored", "basis": "generic phrasing over a multi-product index"}, "version_sensitive": true, "sdk_version_intent": "unspecified", "retrieval": {"k": 4, "where": null, "strategy": "structural", "rerank": false}, "generation": {"model": "openai/gpt-oss-120b", "model_params": {"max_tokens": 2048}}, "replay_chunk_ids": null, "notes": "timeout_ms is a Relay parameter; the other product has its own unrelated default."}
-{"case_id": "W6-15", "question": "How does the SDK retry failed requests?", "mode": "cross-product-bleed", "origin": {"kind": "authored", "basis": "generic phrasing over a multi-product index"}, "version_sensitive": true, "sdk_version_intent": "unspecified", "retrieval": {"k": 4, "where": null, "strategy": "structural", "rerank": false}, "generation": {"model": "openai/gpt-oss-120b", "model_params": {"max_tokens": 2048}}, "replay_chunk_ids": null, "notes": "Retry semantics differ between the two products AND between Relay v2 and v3."}
-{"case_id": "W6-17", "question": "What happens if a subscriber cannot keep up with incoming messages?", "mode": "unexplained-refusal", "origin": {"kind": "authored", "basis": "v3/streaming.md (Backpressure)"}, "version_sensitive": true, "sdk_version_intent": "v3", "retrieval": {"k": 4, "where": null, "strategy": "structural", "rerank": false}, "generation": {"model": "openai/gpt-oss-120b", "model_params": {"max_tokens": 2048}}, "replay_chunk_ids": null, "notes": "Answerable from the Backpressure section, but the question uses none of its wording."}
-{"case_id": "W6-18", "question": "If a paginated listing runs for a long time, can the cursor stop working?", "mode": "unexplained-refusal", "origin": {"kind": "authored", "basis": "v3/pagination.md (Cursor stability)"}, "version_sensitive": true, "sdk_version_intent": "v3", "retrieval": {"k": 4, "where": null, "strategy": "structural", "rerank": false}, "generation": {"model": "openai/gpt-oss-120b", "model_params": {"max_tokens": 2048}}, "replay_chunk_ids": null, "notes": "Answerable from Cursor stability; phrased as a scenario rather than a term."}
-{"case_id": "W6-19", "question": "How does the client behave when a stream connection drops mid-subscription?", "mode": "unexplained-refusal", "origin": {"kind": "authored", "basis": "v3/streaming.md (Reconnection)"}, "version_sensitive": true, "sdk_version_intent": "v3", "retrieval": {"k": 4, "where": null, "strategy": "structural", "rerank": false}, "generation": {"model": "openai/gpt-oss-120b", "model_params": {"max_tokens": 2048}}, "replay_chunk_ids": null, "notes": "Answerable from Reconnection; the word 'reconnection' never appears in the question."}
-{"case_id": "W6-20", "question": "How do I restrict what a token is allowed to do?", "mode": "unexplained-refusal", "origin": {"kind": "authored", "basis": "v3/auth.md (Scopes)"}, "version_sensitive": true, "sdk_version_intent": "v3", "retrieval": {"k": 4, "where": null, "strategy": "structural", "rerank": false}, "generation": {"model": "openai/gpt-oss-120b", "model_params": {"max_tokens": 2048}}, "replay_chunk_ids": null, "notes": "Answerable from Scopes; asks for the capability rather than naming it."}
-{"case_id": "W6-21", "question": "What is the default value of retry_backoff_ms for Client.send() in the v3 SDK?", "mode": "clean", "origin": {"kind": "authored", "basis": "golden_set:Q1"}, "version_sensitive": true, "sdk_version_intent": "v3", "retrieval": {"k": 4, "where": null, "strategy": "structural", "rerank": false}, "generation": {"model": "openai/gpt-oss-120b", "model_params": {"max_tokens": 2048}}, "replay_chunk_ids": null, "notes": "Version named in the question; single-chunk answer."}
-{"case_id": "W6-22", "question": "How long is a v3 access token valid before it needs to be refreshed?", "mode": "clean", "origin": {"kind": "authored", "basis": "golden_set:Q8"}, "version_sensitive": true, "sdk_version_intent": "v3", "retrieval": {"k": 4, "where": null, "strategy": "structural", "rerank": false}, "generation": {"model": "openai/gpt-oss-120b", "model_params": {"max_tokens": 2048}}, "replay_chunk_ids": null, "notes": "Version named; one number on one page."}
-{"case_id": "W6-23", "question": "What argument do I pass to Client.subscribe() to get messages as they arrive instead of a buffered list?", "mode": "clean", "origin": {"kind": "authored", "basis": "golden_set:Q9"}, "version_sensitive": true, "sdk_version_intent": "v3", "retrieval": {"k": 4, "where": null, "strategy": "structural", "rerank": false}, "generation": {"model": "openai/gpt-oss-120b", "model_params": {"max_tokens": 2048}}, "replay_chunk_ids": null, "notes": "v3-only page, unambiguous parameter."}
-{"case_id": "W6-24", "question": "Is it safe to call Client.close() twice in the v3 SDK?", "mode": "clean", "origin": {"kind": "authored", "basis": "golden_set:Q11"}, "version_sensitive": true, "sdk_version_intent": "v3", "retrieval": {"k": 4, "where": null, "strategy": "structural", "rerank": false}, "generation": {"model": "openai/gpt-oss-120b", "model_params": {"max_tokens": 2048}}, "replay_chunk_ids": null, "notes": "Version named; a yes/no with a stated reason."}
-{"case_id": "W6-25", "question": "How many delivery attempts will Relay make for a webhook before marking it exhausted?", "mode": "clean", "origin": {"kind": "authored", "basis": "golden_set:Q10"}, "version_sensitive": true, "sdk_version_intent": "v3", "retrieval": {"k": 4, "where": null, "strategy": "structural", "rerank": false}, "generation": {"model": "openai/gpt-oss-120b", "model_params": {"max_tokens": 2048}}, "replay_chunk_ids": null, "notes": "v3-only webhooks page; one number."}
+{"case_id": "W6-02", "question": "What's the maximum accepted value for dedupe_window_ms on Client.send()?", "mode": "citation-format", "origin": {"kind": "authored", "basis": "golden_set:Q2"}, "version_sensitive": true, "sdk_version_intent": "v3", "retrieval": {"k": 4, "where": null, "strategy": "structural", "rerank": false}, "generation": {"model": "openai/gpt-oss-120b", "model_params": {"max_tokens": 2048}}, "replay_retrieved": null, "notes": "Parameter-limit lookup; the mode under test is citation shape, not the value."}
+{"case_id": "W6-03", "question": "Which error code means the bearer token is past its expiry?", "mode": "citation-format", "origin": {"kind": "authored", "basis": "golden_set:Q3"}, "version_sensitive": true, "sdk_version_intent": "v3", "retrieval": {"k": 4, "where": null, "strategy": "structural", "rerank": false}, "generation": {"model": "openai/gpt-oss-120b", "model_params": {"max_tokens": 2048}}, "replay_retrieved": null, "notes": "Single error-code lookup that must be cited to one chunk."}
+{"case_id": "W6-04", "question": "What hashing algorithm does Relay use to sign webhook requests?", "mode": "citation-format", "origin": {"kind": "authored", "basis": "golden_set:Q7"}, "version_sensitive": true, "sdk_version_intent": "v3", "retrieval": {"k": 4, "where": null, "strategy": "structural", "rerank": false}, "generation": {"model": "openai/gpt-oss-120b", "model_params": {"max_tokens": 2048}}, "replay_retrieved": null, "notes": "One-fact prose answer; a citation is the only thing that can go wrong."}
+{"case_id": "W6-05", "question": "What's the maximum page_size I can request from Client.fetch()?", "mode": "citation-format", "origin": {"kind": "authored", "basis": "golden_set:Q12"}, "version_sensitive": true, "sdk_version_intent": "v3", "retrieval": {"k": 4, "where": null, "strategy": "structural", "rerank": false}, "generation": {"model": "openai/gpt-oss-120b", "model_params": {"max_tokens": 2048}}, "replay_retrieved": null, "notes": "Parameter-table limit; v3-only page, so no version confusion is available."}
+{"case_id": "W6-07", "question": "What format does a channel identifier take?", "mode": "version-ambiguity", "origin": {"kind": "authored", "basis": "v2/migrating-to-v3.md (org/topic -> org/team/topic)"}, "version_sensitive": true, "sdk_version_intent": "unspecified", "retrieval": {"k": 4, "where": null, "strategy": "structural", "rerank": false}, "generation": {"model": "openai/gpt-oss-120b", "model_params": {"max_tokens": 2048}}, "replay_retrieved": null, "notes": "v2 takes org/topic, v3 rejects it with RELAY_400. Version left unstated on purpose."}
+{"case_id": "W6-08", "question": "How do I page through a long list of results?", "mode": "version-ambiguity", "origin": {"kind": "authored", "basis": "v2/migrating-to-v3.md (offset removed in favour of cursors)"}, "version_sensitive": true, "sdk_version_intent": "unspecified", "retrieval": {"k": 4, "where": null, "strategy": "structural", "rerank": false}, "generation": {"model": "openai/gpt-oss-120b", "model_params": {"max_tokens": 2048}}, "replay_retrieved": null, "notes": "v2 used offsets, v3 removed them entirely for cursors."}
+{"case_id": "W6-09", "question": "How does authentication work in the Relay SDK?", "mode": "version-ambiguity", "origin": {"kind": "authored", "basis": "v2/auth.md vs v3/auth.md"}, "version_sensitive": true, "sdk_version_intent": "unspecified", "retrieval": {"k": 4, "where": null, "strategy": "structural", "rerank": false}, "generation": {"model": "openai/gpt-oss-120b", "model_params": {"max_tokens": 2048}}, "replay_retrieved": null, "notes": "v2 sends a long-lived key per request; v3 exchanges it for a short-lived token."}
+{"case_id": "W6-10", "question": "How many delivery attempts does a failed send get by default?", "mode": "version-ambiguity", "origin": {"kind": "authored", "basis": "v3/client.md retry_max_attempts vs v2/CHANGELOG.md 2.5.0"}, "version_sensitive": true, "sdk_version_intent": "unspecified", "retrieval": {"k": 4, "where": null, "strategy": "structural", "rerank": false}, "generation": {"model": "openai/gpt-oss-120b", "model_params": {"max_tokens": 2048}}, "replay_retrieved": null, "notes": "v3 defaults to 4 attempts with exponential backoff; v2 was fixed at 3, 500 ms apart."}
+{"case_id": "W6-12", "question": "How should I handle errors in the SDK?", "mode": "cross-product-bleed", "origin": {"kind": "authored", "basis": "generic phrasing over a multi-product index"}, "version_sensitive": true, "sdk_version_intent": "unspecified", "retrieval": {"k": 4, "where": null, "strategy": "structural", "rerank": false}, "generation": {"model": "openai/gpt-oss-120b", "model_params": {"max_tokens": 2048}}, "replay_retrieved": null, "notes": "The index also holds OMNUMI_SDK_IOS_DOCUMENTATION.md and two PDFs."}
+{"case_id": "W6-13", "question": "How do I initialise a client in the SDK?", "mode": "cross-product-bleed", "origin": {"kind": "authored", "basis": "generic phrasing over a multi-product index"}, "version_sensitive": true, "sdk_version_intent": "unspecified", "retrieval": {"k": 4, "where": null, "strategy": "structural", "rerank": false}, "generation": {"model": "openai/gpt-oss-120b", "model_params": {"max_tokens": 2048}}, "replay_retrieved": null, "notes": "Both products document a client constructor, so the question is genuinely ambiguous."}
+{"case_id": "W6-14", "question": "What is the default timeout in the SDK?", "mode": "cross-product-bleed", "origin": {"kind": "authored", "basis": "generic phrasing over a multi-product index"}, "version_sensitive": true, "sdk_version_intent": "unspecified", "retrieval": {"k": 4, "where": null, "strategy": "structural", "rerank": false}, "generation": {"model": "openai/gpt-oss-120b", "model_params": {"max_tokens": 2048}}, "replay_retrieved": null, "notes": "timeout_ms is a Relay parameter; the other product has its own unrelated default."}
+{"case_id": "W6-15", "question": "How does the SDK retry failed requests?", "mode": "cross-product-bleed", "origin": {"kind": "authored", "basis": "generic phrasing over a multi-product index"}, "version_sensitive": true, "sdk_version_intent": "unspecified", "retrieval": {"k": 4, "where": null, "strategy": "structural", "rerank": false}, "generation": {"model": "openai/gpt-oss-120b", "model_params": {"max_tokens": 2048}}, "replay_retrieved": null, "notes": "Retry semantics differ between the two products AND between Relay v2 and v3."}
+{"case_id": "W6-17", "question": "What happens if a subscriber cannot keep up with incoming messages?", "mode": "unexplained-refusal", "origin": {"kind": "authored", "basis": "v3/streaming.md (Backpressure)"}, "version_sensitive": true, "sdk_version_intent": "v3", "retrieval": {"k": 4, "where": null, "strategy": "structural", "rerank": false}, "generation": {"model": "openai/gpt-oss-120b", "model_params": {"max_tokens": 2048}}, "replay_retrieved": null, "notes": "Answerable from the Backpressure section, but the question uses none of its wording."}
+{"case_id": "W6-18", "question": "If a paginated listing runs for a long time, can the cursor stop working?", "mode": "unexplained-refusal", "origin": {"kind": "authored", "basis": "v3/pagination.md (Cursor stability)"}, "version_sensitive": true, "sdk_version_intent": "v3", "retrieval": {"k": 4, "where": null, "strategy": "structural", "rerank": false}, "generation": {"model": "openai/gpt-oss-120b", "model_params": {"max_tokens": 2048}}, "replay_retrieved": null, "notes": "Answerable from Cursor stability; phrased as a scenario rather than a term."}
+{"case_id": "W6-19", "question": "How does the client behave when a stream connection drops mid-subscription?", "mode": "unexplained-refusal", "origin": {"kind": "authored", "basis": "v3/streaming.md (Reconnection)"}, "version_sensitive": true, "sdk_version_intent": "v3", "retrieval": {"k": 4, "where": null, "strategy": "structural", "rerank": false}, "generation": {"model": "openai/gpt-oss-120b", "model_params": {"max_tokens": 2048}}, "replay_retrieved": null, "notes": "Answerable from Reconnection; the word 'reconnection' never appears in the question."}
+{"case_id": "W6-20", "question": "How do I restrict what a token is allowed to do?", "mode": "unexplained-refusal", "origin": {"kind": "authored", "basis": "v3/auth.md (Scopes)"}, "version_sensitive": true, "sdk_version_intent": "v3", "retrieval": {"k": 4, "where": null, "strategy": "structural", "rerank": false}, "generation": {"model": "openai/gpt-oss-120b", "model_params": {"max_tokens": 2048}}, "replay_retrieved": null, "notes": "Answerable from Scopes; asks for the capability rather than naming it."}
+{"case_id": "W6-21", "question": "What is the default value of retry_backoff_ms for Client.send() in the v3 SDK?", "mode": "clean", "origin": {"kind": "authored", "basis": "golden_set:Q1"}, "version_sensitive": true, "sdk_version_intent": "v3", "retrieval": {"k": 4, "where": null, "strategy": "structural", "rerank": false}, "generation": {"model": "openai/gpt-oss-120b", "model_params": {"max_tokens": 2048}}, "replay_retrieved": null, "notes": "Version named in the question; single-chunk answer."}
+{"case_id": "W6-22", "question": "How long is a v3 access token valid before it needs to be refreshed?", "mode": "clean", "origin": {"kind": "authored", "basis": "golden_set:Q8"}, "version_sensitive": true, "sdk_version_intent": "v3", "retrieval": {"k": 4, "where": null, "strategy": "structural", "rerank": false}, "generation": {"model": "openai/gpt-oss-120b", "model_params": {"max_tokens": 2048}}, "replay_retrieved": null, "notes": "Version named; one number on one page."}
+{"case_id": "W6-23", "question": "What argument do I pass to Client.subscribe() to get messages as they arrive instead of a buffered list?", "mode": "clean", "origin": {"kind": "authored", "basis": "golden_set:Q9"}, "version_sensitive": true, "sdk_version_intent": "v3", "retrieval": {"k": 4, "where": null, "strategy": "structural", "rerank": false}, "generation": {"model": "openai/gpt-oss-120b", "model_params": {"max_tokens": 2048}}, "replay_retrieved": null, "notes": "v3-only page, unambiguous parameter."}
+{"case_id": "W6-24", "question": "Is it safe to call Client.close() twice in the v3 SDK?", "mode": "clean", "origin": {"kind": "authored", "basis": "golden_set:Q11"}, "version_sensitive": true, "sdk_version_intent": "v3", "retrieval": {"k": 4, "where": null, "strategy": "structural", "rerank": false}, "generation": {"model": "openai/gpt-oss-120b", "model_params": {"max_tokens": 2048}}, "replay_retrieved": null, "notes": "Version named; a yes/no with a stated reason."}
+{"case_id": "W6-25", "question": "How many delivery attempts will Relay make for a webhook before marking it exhausted?", "mode": "clean", "origin": {"kind": "authored", "basis": "golden_set:Q10"}, "version_sensitive": true, "sdk_version_intent": "v3", "retrieval": {"k": 4, "where": null, "strategy": "structural", "rerank": false}, "generation": {"model": "openai/gpt-oss-120b", "model_params": {"max_tokens": 2048}}, "replay_retrieved": null, "notes": "v3-only webhooks page; one number."}
 CASES
 wc -l eval/week6/cases.jsonl
 ```
@@ -1420,7 +1463,15 @@ CASES = [
         "sdk_version_intent": "unspecified",
         "retrieval": {"k": 4, "where": None, "strategy": "structural", "rerank": False},
         "generation": {"model": "openai/gpt-oss-120b", "model_params": {"max_tokens": 2048}},
-        "replay_chunk_ids": ["v2:client:structural:2"],
+        "replay_retrieved": [
+            {
+                "chunk_id": "v2:client:structural:2",
+                "dense_distance": 0.51,
+                "bm25_score": 19.0,
+                "rrf_score": 0.0327,
+                "rerank_score": None,
+            }
+        ],
         "notes": "",
     },
     {
@@ -1432,7 +1483,7 @@ CASES = [
         "sdk_version_intent": "v3",
         "retrieval": {"k": 4, "where": None, "strategy": "structural", "rerank": False},
         "generation": {"model": "openai/gpt-oss-120b", "model_params": {"max_tokens": 2048}},
-        "replay_chunk_ids": None,
+        "replay_retrieved": None,
         "notes": "",
     },
 ]
@@ -1600,12 +1651,24 @@ def resolve_chunks(case: dict) -> list[dict]:
     if case["origin"]["kind"] == "replay":
         store = VectorStore(collection_name=collection_for(strategy))
         chunks = []
-        for rank, chunk_id in enumerate(case["replay_chunk_ids"]):
-            resolved = store.get_by_id(chunk_id)
+        for rank, record in enumerate(case["replay_retrieved"]):
+            resolved = store.get_by_id(record["chunk_id"])
             if resolved is None:
                 continue
-            chunks.append({**resolved, "rank": rank, "dense_distance": None,
-                           "bm25_score": None, "rrf_score": None, "rerank_score": None})
+            # The trace's own scores are reattached, not recomputed. Leaving
+            # dense_distance as None would trip should_refuse(), which treats a
+            # chunk carrying no dense distance as no evidence -- every replay
+            # case would return the refusal string and reproduce nothing.
+            chunks.append(
+                {
+                    **resolved,
+                    "rank": rank,
+                    "dense_distance": record["dense_distance"],
+                    "bm25_score": record["bm25_score"],
+                    "rrf_score": record["rrf_score"],
+                    "rerank_score": record.get("rerank_score"),
+                }
+            )
         return chunks
 
     pipeline = RAGPipeline(strategy=strategy)
@@ -1715,9 +1778,11 @@ if __name__ == "__main__":
 
 - [ ] **Step 6: Run tests to verify they pass**
 
-Run: `venv/bin/python -m pytest tests/test_week6_snapshot.py tests/test_generator.py -v`
-Expected: 7 new PASS, and the existing generator tests still PASS (the `model`
-parameter is additive and defaults to the old behaviour).
+Run: `venv/bin/python -m pytest tests/test_week6_snapshot.py tests/test_generator.py tests/test_generator_grounding.py -v`
+Expected: 7 new PASS, and both existing generator test files still PASS.
+`tests/test_generator_grounding.py:69` calls `answer_question` positionally, so
+the new `model=None` parameter must be appended last — demonstrate that rather
+than assuming it.
 
 - [ ] **Step 7: Commit**
 
@@ -3115,6 +3180,9 @@ empty = [a['case_id'] for a in s['answers'] if not a['raw_output'].strip()]
 print('empty answers:', empty)
 nochunks = [a['case_id'] for a in s['answers'] if not a['retrieved']]
 print('cases with no retrieved chunks:', nochunks)
+replay_refusals = [a['case_id'] for a in s['answers']
+                   if a['origin']['kind'] == 'replay' and a['refused']]
+print('replay cases that refused:', replay_refusals)
 from collections import Counter
 print('by mode:', Counter(a['mode'] for a in s['answers']))
 "
@@ -3123,6 +3191,11 @@ print('by mode:', Counter(a['mode'] for a in s['answers']))
 Expected: 25 answers, no empty answers, five per mode. A case with no
 retrieved chunks means a replay chunk_id no longer resolves in the index —
 fix that before labeling, because relabeling later is not an option.
+
+`replay cases that refused` should list at most `W6-16` (trace `132709d13774`
+refused originally too, so a refusal there is faithful reproduction). If the
+other three replay cases refuse, their logged `dense_distance` values are not
+reaching `should_refuse` — check `resolve_chunks`, do not lower the threshold.
 
 - [ ] **Step 6: Run the assertion half with no judge**
 
