@@ -9,11 +9,11 @@ Frozen answer set: `b35510d75e8b9804…` over 25 cases.
 
 | Mode | n | assertions ok | judge pass | overall |
 |---|---|---|---|---|
-| `citation-format` | 5 | 1/5 | — | — |
-| `version-ambiguity` | 5 | 2/5 | — | — |
-| `cross-product-bleed` | 5 | 1/5 | — | — |
-| `unexplained-refusal` | 5 | 0/5 | — | — |
-| `clean` | 5 | 3/5 | — | — |
+| `citation-format` | 5 | 1/5 | 5/5 | 1/5 (20%) |
+| `version-ambiguity` | 5 | 2/5 | 5/5 | 2/5 (40%) |
+| `cross-product-bleed` | 5 | 1/5 | 3/5 | 0/5 (0%) |
+| `unexplained-refusal` | 5 | 0/5 | 5/5 | 0/5 (0%) |
+| `clean` | 5 | 3/5 | 5/5 | 3/5 (60%) |
 
 Reported per mode and never pooled: an average hides a total regression
 on one mode while another carries the number.
@@ -23,6 +23,26 @@ on one mode while another carries the number.
 - deterministic assertions: **5**
 - judged criteria: **1**
 - judge_v0 judged **6** criteria before the split
+
+## Judge agreement with the 25 blind human labels
+
+### agreement_before — `judge_v1`
+
+- agreement: **84%** (21/25)
+- Cohen's kappa: **0.43**
+- human PASS rate: 76%
+- confusion (human as reference): {'tp': 19, 'fn': 0, 'fp': 4, 'tn': 2}
+- unparsed verdicts: 0
+- labels commit (ordering proof): `55bc482069faaccad18a56341c45738b91df3039`
+- labels sha256: `70f12088274966e5…`
+- judge model: `qwen/qwen3.8-27b`
+
+Disagreements:
+
+- `W6-06` (`version-ambiguity`) — human FAIL, judge PASS
+- `W6-07` (`version-ambiguity`) — human FAIL, judge PASS
+- `W6-11` (`cross-product-bleed`) — human FAIL, judge PASS
+- `W6-12` (`cross-product-bleed`) — human FAIL, judge PASS
 
 ## Caveats on these numbers
 

@@ -8,8 +8,8 @@
     "citation-format": {
       "n": 5,
       "assertions_ok": 1,
-      "judge_pass": null,
-      "overall": null,
+      "judge_pass": 5,
+      "overall": 1,
       "assertion_pass_counts": {
         "A1_code_parses": 0,
         "A2_symbols_exist": 5,
@@ -28,8 +28,8 @@
     "version-ambiguity": {
       "n": 5,
       "assertions_ok": 2,
-      "judge_pass": null,
-      "overall": null,
+      "judge_pass": 5,
+      "overall": 2,
       "assertion_pass_counts": {
         "A1_code_parses": 1,
         "A2_symbols_exist": 2,
@@ -48,8 +48,8 @@
     "cross-product-bleed": {
       "n": 5,
       "assertions_ok": 1,
-      "judge_pass": null,
-      "overall": null,
+      "judge_pass": 3,
+      "overall": 0,
       "assertion_pass_counts": {
         "A1_code_parses": 1,
         "A2_symbols_exist": 1,
@@ -68,8 +68,8 @@
     "unexplained-refusal": {
       "n": 5,
       "assertions_ok": 0,
-      "judge_pass": null,
-      "overall": null,
+      "judge_pass": 5,
+      "overall": 0,
       "assertion_pass_counts": {
         "A1_code_parses": 0,
         "A2_symbols_exist": 4,
@@ -88,8 +88,8 @@
     "clean": {
       "n": 5,
       "assertions_ok": 3,
-      "judge_pass": null,
-      "overall": null,
+      "judge_pass": 5,
+      "overall": 3,
       "assertion_pass_counts": {
         "A1_code_parses": 0,
         "A2_symbols_exist": 3,
@@ -908,6 +908,82 @@
       "assertions_ok": false
     }
   ],
-  "judge_runs": {},
-  "agreement": {}
+  "judge_runs": {
+    "v1": {
+      "judge_prompt": "/Users/balamurugan/Documents/Projects/pythom/AiLearning/results/week6/judge_v1.txt",
+      "judge_model": "qwen/qwen3.8-27b",
+      "labels_commit": "55bc482069faaccad18a56341c45738b91df3039",
+      "labels_sha256": "70f12088274966e559239181e13cbe0922dee3efc5d3f74881c509b8feb733be",
+      "run_at": "2026-09-04T15:53:27+00:00"
+    }
+  },
+  "agreement": {
+    "v1": {
+      "n": 25,
+      "matches": 21,
+      "agreement": 0.84,
+      "confusion": {
+        "tp": 19,
+        "fn": 0,
+        "fp": 4,
+        "tn": 2
+      },
+      "kappa": 0.43181818181818166,
+      "human_pass_rate": 0.76,
+      "unparsed": 0,
+      "disagreements": [
+        {
+          "case_id": "W6-06",
+          "mode": "version-ambiguity",
+          "human": false,
+          "judge": "PASS"
+        },
+        {
+          "case_id": "W6-07",
+          "mode": "version-ambiguity",
+          "human": false,
+          "judge": "PASS"
+        },
+        {
+          "case_id": "W6-11",
+          "mode": "cross-product-bleed",
+          "human": false,
+          "judge": "PASS"
+        },
+        {
+          "case_id": "W6-12",
+          "mode": "cross-product-bleed",
+          "human": false,
+          "judge": "PASS"
+        }
+      ],
+      "by_mode": {
+        "citation-format": {
+          "n": 5,
+          "matches": 5,
+          "agreement": 1.0
+        },
+        "clean": {
+          "n": 5,
+          "matches": 5,
+          "agreement": 1.0
+        },
+        "cross-product-bleed": {
+          "n": 5,
+          "matches": 3,
+          "agreement": 0.6
+        },
+        "unexplained-refusal": {
+          "n": 5,
+          "matches": 5,
+          "agreement": 1.0
+        },
+        "version-ambiguity": {
+          "n": 5,
+          "matches": 3,
+          "agreement": 0.6
+        }
+      }
+    }
+  }
 }
