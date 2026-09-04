@@ -1,0 +1,436 @@
+{
+  "generated_by": "eval/spec/build_symbols.py",
+  "generated_at": "2026-09-04T11:35:30+00:00",
+  "symbols": {
+    "AUTH_SCOPE_DENIED": {
+      "kind": "error_code",
+      "versions": [
+        "v3"
+      ],
+      "sources": [
+        "v3/auth.md",
+        "v3/errors.md"
+      ]
+    },
+    "AUTH_TOKEN_EXPIRED": {
+      "kind": "error_code",
+      "versions": [
+        "v2",
+        "v3"
+      ],
+      "sources": [
+        "v2/auth.md",
+        "v3/errors.md"
+      ]
+    },
+    "Client.close()": {
+      "kind": "method",
+      "versions": [
+        "v2",
+        "v3"
+      ],
+      "sources": [
+        "v2/client.md",
+        "v3/client.md"
+      ]
+    },
+    "Client.fetch()": {
+      "kind": "method",
+      "versions": [
+        "v3"
+      ],
+      "sources": [
+        "v3/pagination.md",
+        "v3/streaming.md"
+      ]
+    },
+    "Client.rotate_key()": {
+      "kind": "method",
+      "versions": [
+        "v3"
+      ],
+      "sources": [
+        "v3/auth.md"
+      ]
+    },
+    "Client.send()": {
+      "kind": "method",
+      "versions": [
+        "v2",
+        "v3"
+      ],
+      "sources": [
+        "v2/CHANGELOG.md",
+        "v2/client.md",
+        "v3/client.md",
+        "v3/streaming.md"
+      ]
+    },
+    "Client.subscribe()": {
+      "kind": "method",
+      "versions": [
+        "v3"
+      ],
+      "sources": [
+        "v3/streaming.md"
+      ]
+    },
+    "MemoryCache": {
+      "kind": "class",
+      "versions": [
+        "v3"
+      ],
+      "sources": [
+        "v3/auth.md"
+      ]
+    },
+    "RELAY_400": {
+      "kind": "error_code",
+      "versions": [
+        "v2",
+        "v3"
+      ],
+      "sources": [
+        "v2/errors.md",
+        "v2/migrating-to-v3.md",
+        "v3/client.md",
+        "v3/errors.md",
+        "v3/pagination.md"
+      ]
+    },
+    "RELAY_401": {
+      "kind": "error_code",
+      "versions": [
+        "v2"
+      ],
+      "sources": [
+        "v2/errors.md"
+      ]
+    },
+    "RELAY_404": {
+      "kind": "error_code",
+      "versions": [
+        "v2",
+        "v3"
+      ],
+      "sources": [
+        "v2/errors.md",
+        "v3/errors.md"
+      ]
+    },
+    "RELAY_409": {
+      "kind": "error_code",
+      "versions": [
+        "v3"
+      ],
+      "sources": [
+        "v3/errors.md"
+      ]
+    },
+    "RELAY_410": {
+      "kind": "error_code",
+      "versions": [
+        "v3"
+      ],
+      "sources": [
+        "v3/pagination.md"
+      ]
+    },
+    "RELAY_413": {
+      "kind": "error_code",
+      "versions": [
+        "v3"
+      ],
+      "sources": [
+        "v3/errors.md"
+      ]
+    },
+    "RELAY_429": {
+      "kind": "error_code",
+      "versions": [
+        "v2",
+        "v3"
+      ],
+      "sources": [
+        "v2/CHANGELOG.md",
+        "v2/client.md",
+        "v2/errors.md",
+        "v3/client.md",
+        "v3/errors.md"
+      ]
+    },
+    "RELAY_503": {
+      "kind": "error_code",
+      "versions": [
+        "v2",
+        "v3"
+      ],
+      "sources": [
+        "v2/client.md",
+        "v2/errors.md",
+        "v2/migrating-to-v3.md",
+        "v3/client.md",
+        "v3/errors.md"
+      ]
+    },
+    "RELAY_504": {
+      "kind": "error_code",
+      "versions": [
+        "v3"
+      ],
+      "sources": [
+        "v3/errors.md"
+      ]
+    },
+    "RedisTokenCache": {
+      "kind": "class",
+      "versions": [
+        "v3"
+      ],
+      "sources": [
+        "v3/auth.md"
+      ]
+    },
+    "RelayClosed": {
+      "kind": "class",
+      "versions": [
+        "v3"
+      ],
+      "sources": [
+        "v3/client.md"
+      ]
+    },
+    "RelayError": {
+      "kind": "class",
+      "versions": [
+        "v2",
+        "v3"
+      ],
+      "sources": [
+        "v2/errors.md",
+        "v3/errors.md"
+      ]
+    },
+    "RelayTimeout": {
+      "kind": "class",
+      "versions": [
+        "v3"
+      ],
+      "sources": [
+        "v3/client.md",
+        "v3/errors.md"
+      ]
+    },
+    "SignatureExpired": {
+      "kind": "class",
+      "versions": [
+        "v3"
+      ],
+      "sources": [
+        "v3/webhooks.md"
+      ]
+    },
+    "SignatureMismatch": {
+      "kind": "class",
+      "versions": [
+        "v3"
+      ],
+      "sources": [
+        "v3/webhooks.md"
+      ]
+    },
+    "StreamLagged": {
+      "kind": "class",
+      "versions": [
+        "v3"
+      ],
+      "sources": [
+        "v3/streaming.md"
+      ]
+    },
+    "TokenCache": {
+      "kind": "class",
+      "versions": [
+        "v3"
+      ],
+      "sources": [
+        "v3/auth.md"
+      ]
+    },
+    "api_key": {
+      "kind": "parameter",
+      "versions": [
+        "v2",
+        "v3"
+      ],
+      "sources": [
+        "v2/auth.md",
+        "v3/auth.md"
+      ]
+    },
+    "callback_url": {
+      "kind": "parameter",
+      "versions": [
+        "v3"
+      ],
+      "sources": [
+        "v3/client.md",
+        "v3/webhooks.md"
+      ]
+    },
+    "dedupe_window_ms": {
+      "kind": "parameter",
+      "versions": [
+        "v3"
+      ],
+      "sources": [
+        "v3/client.md"
+      ]
+    },
+    "drain_timeout_ms": {
+      "kind": "parameter",
+      "versions": [
+        "v3"
+      ],
+      "sources": [
+        "v3/client.md"
+      ]
+    },
+    "from_cursor": {
+      "kind": "parameter",
+      "versions": [
+        "v3"
+      ],
+      "sources": [
+        "v3/streaming.md"
+      ]
+    },
+    "heartbeat_ms": {
+      "kind": "parameter",
+      "versions": [
+        "v3"
+      ],
+      "sources": [
+        "v3/streaming.md"
+      ]
+    },
+    "idempotency_key": {
+      "kind": "parameter",
+      "versions": [
+        "v2",
+        "v3"
+      ],
+      "sources": [
+        "v2/CHANGELOG.md",
+        "v2/client.md",
+        "v3/client.md",
+        "v3/errors.md"
+      ]
+    },
+    "max_messages": {
+      "kind": "parameter",
+      "versions": [
+        "v3"
+      ],
+      "sources": [
+        "v3/streaming.md"
+      ]
+    },
+    "next_cursor": {
+      "kind": "parameter",
+      "versions": [
+        "v2",
+        "v3"
+      ],
+      "sources": [
+        "v2/migrating-to-v3.md",
+        "v3/pagination.md"
+      ]
+    },
+    "page_size": {
+      "kind": "parameter",
+      "versions": [
+        "v3"
+      ],
+      "sources": [
+        "v3/pagination.md"
+      ]
+    },
+    "refresh_margin": {
+      "kind": "parameter",
+      "versions": [
+        "v2",
+        "v3"
+      ],
+      "sources": [
+        "v2/auth.md",
+        "v3/auth.md"
+      ]
+    },
+    "retry_backoff_factor": {
+      "kind": "parameter",
+      "versions": [
+        "v3"
+      ],
+      "sources": [
+        "v3/client.md"
+      ]
+    },
+    "retry_backoff_ms": {
+      "kind": "parameter",
+      "versions": [
+        "v2",
+        "v3"
+      ],
+      "sources": [
+        "v2/CHANGELOG.md",
+        "v2/client.md",
+        "v2/migrating-to-v3.md",
+        "v3/client.md"
+      ]
+    },
+    "retry_max_attempts": {
+      "kind": "parameter",
+      "versions": [
+        "v2",
+        "v3"
+      ],
+      "sources": [
+        "v2/CHANGELOG.md",
+        "v2/client.md",
+        "v3/client.md"
+      ]
+    },
+    "timeout_ms": {
+      "kind": "parameter",
+      "versions": [
+        "v2",
+        "v3"
+      ],
+      "sources": [
+        "v2/CHANGELOG.md",
+        "v2/client.md",
+        "v3/client.md",
+        "v3/errors.md"
+      ]
+    },
+    "token_cache": {
+      "kind": "parameter",
+      "versions": [
+        "v3"
+      ],
+      "sources": [
+        "v3/auth.md"
+      ]
+    },
+    "tolerance_seconds": {
+      "kind": "parameter",
+      "versions": [
+        "v3"
+      ],
+      "sources": [
+        "v3/webhooks.md"
+      ]
+    }
+  }
+}

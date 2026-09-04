@@ -1,0 +1,16 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Relay HTTP API (documented surface only)",
+    "version": "v3",
+    "description": "Derived strictly from the indexed corpus. The only endpoint path stated anywhere in data/documents is POST /v3/auth/token (data/documents/v3/auth.md:15). No path here was invented: assertion A3 exists to catch fabricated endpoints, so its authority must itself be traceable to a documented line."
+  },
+  "paths": {
+    "/v3/auth/token": {
+      "post": {
+        "summary": "Exchange a long-lived API key for a short-lived bearer token.",
+        "x-source": "data/documents/v3/auth.md:15"
+      }
+    }
+  }
+}
