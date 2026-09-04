@@ -26,9 +26,26 @@ A5 = "A5_deprecation_has_migration_note"
 
 ASSERTION_IDS = (A1, A2, A3, A4, A5)
 
-_PY_FENCE_RE = re.compile(r"```(?:python|py)[^\n]*\n(.*?)```", re.DOTALL)
+# `\b` after the tag group rejects "pycon" (a REPL transcript, not python
+# source -- its `>>>` prompts fail ast.parse) while still admitting a fenced
+# header like ```python title="x". A bare `\s*` in place of `[^\n]*` would
+# reject both; only the word boundary tells "py" + non-word from "py" + "con".
+_PY_FENCE_OPEN_RE = re.compile(r"```(?:python|py)\b[^\n]*\n")
+_PY_FENCE_RE = re.compile(r"```(?:python|py)\b[^\n]*\n(.*?)```", re.DOTALL)
 _ANY_FENCE_RE = re.compile(r"```.*?```", re.DOTALL)
-_VERSION_RE = re.compile(r"\bv[23]\b")
+
+# Accepts "v3", "V3", "version 3", "Version 3" -- LLM prose capitalises at
+# sentence start and sometimes spells the word out, and a regex that only
+# catches the terse form manufactures false FAILs on correct answers.
+_VERSION_RE = re.compile(r"\bv(?:ersion)?\s?[23]\b", re.IGNORECASE)
+
+# Trace citations are shaped `[chunk: v3:client:structural:2]` (ASCII) or
+# `【chunk: v3:client:structural:2】` (full-width, seen in this project's
+# traces). Both embed a version tag that is metadata about *where the answer's
+# claim was retrieved from*, not the answer *stating* which version it
+# describes -- and nearly every answer carries one, so leaving it unstripped
+# would make A4 pass almost everything regardless of what the prose says.
+_CITATION_RE = re.compile(r"\[chunk:[^\]]*\]|【chunk:[^】]*】")
 
 
 def _result(assertion_id: str, status: str, detail: str) -> dict:
@@ -45,11 +62,35 @@ def strip_code_fences(answer: str) -> str:
     return _ANY_FENCE_RE.sub("\n", answer)
 
 
+def _version_scan_text(answer: str) -> str:
+    """Prose A4 scans: code fences and citation markers stripped out.
+
+    Composes `strip_code_fences` with citation removal. Without stripping
+    citations too, a chunk id like `[chunk: v2:client:structural:2]` would
+    satisfy `_VERSION_RE` even when the answer's own prose never says which
+    version it means -- exactly the failure mode A4 exists to catch.
+    """
+    return _CITATION_RE.sub(" ", strip_code_fences(answer))
+
+
 def assert_code_parses(answer: str) -> dict:
-    """A1: every python fence in the answer survives ast.parse."""
-    fences = _PY_FENCE_RE.findall(answer)
-    if not fences:
+    """A1: every closed python fence in the answer survives ast.parse.
+
+    An opening ```python line with no matching closing fence is not "no code
+    sample" -- with max_tokens=2048 in this harness, truncation mid-fence is
+    a live failure mode, and a truncated sample is exactly the broken code
+    A1 exists to catch. So opens are counted separately from closed fences:
+    more opens than closes means FAIL, not SKIPPED.
+    """
+    opens = _PY_FENCE_OPEN_RE.findall(answer)
+    if not opens:
         return _result(A1, SKIPPED, "answer contains no python fence")
+
+    fences = _PY_FENCE_RE.findall(answer)
+    if len(opens) > len(fences):
+        return _result(
+            A1, FAIL, "unterminated python fence: truncated before closing ```"
+        )
 
     offenders = []
     for index, code in enumerate(fences):
@@ -64,16 +105,23 @@ def assert_code_parses(answer: str) -> dict:
 
 
 def assert_version_stated(answer: str, version_sensitive: bool) -> dict:
-    """A4: a version-sensitive answer must name v2 or v3 explicitly.
+    """A4: a version-sensitive answer must name v2 or v3 explicitly, in prose.
 
-    Checks stated-ness only. Whether the named version is the RIGHT one is a
-    judgement and stays with the judge -- that is the seam between the
-    deterministic half and the judged half.
+    Checks stated-ness only, and only in text the reader actually reads as
+    prose -- see `_version_scan_text`. Whether the named version is the
+    RIGHT one is a judgement and stays with the judge -- that is the seam
+    between the deterministic half and the judged half.
     """
     if not version_sensitive:
         return _result(A4, SKIPPED, "case is not version-sensitive")
 
-    found = sorted(set(_VERSION_RE.findall(answer)))
+    found = _VERSION_RE.findall(_version_scan_text(answer))
     if found:
-        return _result(A4, PASS, f"states {', '.join(found)}")
+        # Dedupe case-insensitively ("v3" and "V3" are the same statement)
+        # while keeping the first-seen spelling for the detail string.
+        unique = {}
+        for match in found:
+            unique.setdefault(match.lower(), match)
+        ordered = sorted(unique.values(), key=str.lower)
+        return _result(A4, PASS, f"states {', '.join(ordered)}")
     return _result(A4, FAIL, "no v2/v3 named anywhere in the answer")
