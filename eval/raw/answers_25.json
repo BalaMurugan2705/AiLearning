@@ -1,0 +1,1897 @@
+{
+  "generated_at": "2026-09-04T15:02:38+00:00",
+  "generated_by": "eval/week6/snapshot.py",
+  "answers_sha256": "b35510d75e8b9804487f40431d6a07be3d14c3260fc8b0f0cf365c032429511d",
+  "answers": [
+    {
+      "case_id": "W6-01",
+      "question": "What happens on close() if there are still buffered messages, and can I skip the wait?",
+      "mode": "citation-format",
+      "version_sensitive": true,
+      "sdk_version_intent": "unspecified",
+      "origin": {
+        "kind": "replay",
+        "trace_id": "15f8e03f9de3"
+      },
+      "retrieved": [
+        {
+          "chunk_id": "v3:client:structural:6",
+          "rank": 0,
+          "dense_distance": 0.40706950426101685,
+          "bm25_score": 32.0015032971689,
+          "rrf_score": 0.03278688524590164,
+          "source_file": "v3/client.md",
+          "sdk_version": "v3",
+          "heading_path": "Client > Client.close()",
+          "text": "Client > Client.close()\n\nShuts the client down. `close()` flushes any messages still buffered in the\nbackground loop, waits up to `drain_timeout_ms` for in-flight sends to settle,\nand then releases the connection pool. Messages still unsent when the drain\ndeadline passes are dropped and reported through the return value.\n\n| Parameter | Type | Default | Required | Description |\n|---|---|---|---|---|\n| `drain_timeout_ms` | `int` | `5000` | no | How long to wait for buffered messages to flush before giving up. |\n| `force` | `bool` | `False` | no | Skip the drain entirely and tear the pool down immediately. Buffered messages are lost. |\n\nCalling `close()` twice is safe; the second call is a no-op. Using a client\nafter `close()` raises `RelayClosed`.\n\n```python\ndropped = client.close(drain_timeout_ms=5000)\nif dropped:\n    logger.warning(\"relay dropped %d buffered messages\", dropped)\n```\n"
+        },
+        {
+          "chunk_id": "v2:changelog:structural:1",
+          "rank": 1,
+          "dense_distance": 0.4099922180175781,
+          "bm25_score": 10.371474467114734,
+          "rrf_score": 0.03128054740957967,
+          "source_file": "v2/CHANGELOG.md",
+          "sdk_version": "v2",
+          "heading_path": "Changelog > 2.6.1",
+          "text": "Changelog > 2.6.1\n\nFixed a bug where `close()` could raise if called on a client that had never\nsent a message."
+        },
+        {
+          "chunk_id": "v2:client:structural:5",
+          "rank": 2,
+          "dense_distance": 0.5657930374145508,
+          "bm25_score": 14.086525004340862,
+          "rrf_score": 0.03128054740957967,
+          "source_file": "v2/client.md",
+          "sdk_version": "v2",
+          "heading_path": "Client > Client.close()",
+          "text": "Client > Client.close()\n\nReleases the connection pool. v2 has no background flush loop, so `close()`\nreturns immediately and there is nothing to drain.\n\n```python\nclient.close()\n```\n"
+        },
+        {
+          "chunk_id": "unknown:OMNUMI_SDK_IOS_DOCUMENTATION:structural:154",
+          "rank": 3,
+          "dense_distance": 0.7149251699447632,
+          "bm25_score": 13.706650348809667,
+          "rrf_score": 0.029910714285714284,
+          "source_file": "OMNUMI_SDK_IOS_DOCUMENTATION.md",
+          "sdk_version": "unknown",
+          "heading_path": "Omnumi SDK (iOS) - Developer Documentation > 19. FAQ > Q: What happens if the user backgrounds the app during card operations?",
+          "text": "Omnumi SDK (iOS) - Developer Documentation > 19. FAQ > Q: What happens if the user backgrounds the app during card operations?\n\n**A:** The SDK preserves state and allows users to resume where they left off. Critical operations like card issuance are completed before allowing backgrounding."
+        }
+      ],
+      "raw_output": "When `Client.close()` is called, it first tries to flush any messages that are still buffered in the background loop. It then waits up to the value given by `drain_timeout_ms` (default 5000 ms) for any in‑flight sends to finish. If the deadline passes and some messages are still unsent, those messages are dropped and the number dropped is returned to the caller [chunk: v3:client:structural:6].\n\nYou can bypass this waiting entirely by passing `force=True`. When `force` is set, the method skips the drain step, tears the connection pool down immediately, and any buffered messages are lost [chunk: v3:client:structural:6].",
+      "refused": false,
+      "citations": [
+        "v3:client:structural:6"
+      ],
+      "citation_check": {
+        "cited": [
+          "v3:client:structural:6"
+        ],
+        "unresolvable": [],
+        "ok": true
+      },
+      "prompt_version": "sysprompt-c10b763ebb",
+      "model": "openai/gpt-oss-120b",
+      "model_params": {
+        "max_tokens": 2048
+      },
+      "latency_ms": 1664.4,
+      "answer_sha256": "fea629d0a86a1e566a5371f3b06f5b1576c92638e06230b698e97737eaaa1307"
+    },
+    {
+      "case_id": "W6-06",
+      "question": "What's the max message size and how many retries does send() do by default?",
+      "mode": "version-ambiguity",
+      "version_sensitive": true,
+      "sdk_version_intent": "unspecified",
+      "origin": {
+        "kind": "replay",
+        "trace_id": "b84fe53eb006"
+      },
+      "retrieved": [
+        {
+          "chunk_id": "v2:client:structural:3",
+          "rank": 0,
+          "dense_distance": 0.5132670402526855,
+          "bm25_score": 14.724839252938674,
+          "rrf_score": 0.032018442622950824,
+          "source_file": "v2/client.md",
+          "sdk_version": "v2",
+          "heading_path": "Client > Client.send() > Default retry backoff",
+          "text": "Client > Client.send() > Default retry backoff\n\nThe default retry backoff for `Client.send()` is 500 ms. Retries use a fixed\ndelay: every attempt waits the same `retry_backoff_ms` interval, with no\nmultiplier and no jitter. With the defaults, the delays before attempts two and\nthree are both 500 ms.\n\nRetries are attempted for network errors and `RELAY_503` only. `RELAY_429` is\nnot retried automatically in v2.\n\n```python\nreceipt = client.send(\n    message=\"deployment finished\",\n    channel=\"acme/deploys\",\n    retry_backoff_ms=500,\n    retry_max_attempts=3,\n)\n```\n\n"
+        },
+        {
+          "chunk_id": "v3:client:structural:4",
+          "rank": 1,
+          "dense_distance": 0.5217198729515076,
+          "bm25_score": 13.326983284433288,
+          "rrf_score": 0.03125763125763126,
+          "source_file": "v3/client.md",
+          "sdk_version": "v3",
+          "heading_path": "Client > Client.send() > Retry behaviour",
+          "text": "Client > Client.send() > Retry behaviour\n\nRetries use exponential backoff seeded by `retry_backoff_ms` and multiplied by\n`retry_backoff_factor` after each failure. With the defaults, the delays before\nattempts two, three and four are 2000 ms, 4000 ms and 8000 ms respectively.\nJitter of up to ±10% is applied to each delay to avoid thundering herds.\n\nRetries are attempted only for transient failures — network errors, `RELAY_503`\nand `RELAY_429`. A `RELAY_400` or any authentication error fails immediately\nregardless of `retry_max_attempts`.\n\n```python\nreceipt = client.send(\n    message=\"deployment finished\",\n    channel=\"acme/platform/deploys\",\n    retry_backoff_ms=2000,\n    retry_backoff_factor=2.0,\n    retry_max_attempts=4,\n    idempotency_key=\"deploy-8817\",\n)\nprint(receipt.id, receipt.accepted_at)\n```\n\n"
+        },
+        {
+          "chunk_id": "v2:client:structural:2",
+          "rank": 2,
+          "dense_distance": 0.46636831760406494,
+          "bm25_score": 8.925553763841148,
+          "rrf_score": 0.030621785881252923,
+          "source_file": "v2/client.md",
+          "sdk_version": "v2",
+          "heading_path": "Client > Client.send() > Parameters",
+          "text": "Client > Client.send() > Parameters\n\n| Parameter | Type | Default | Required | Description |\n|---|---|---|---|---|\n| `message` | `str` | — | yes | Body of the message. Must be valid UTF-8 and at most 64 KiB. |\n| `channel` | `str` | — | yes | Target channel identifier, in the form `org/topic`. |\n| `idempotency_key` | `str` | `None` | no | Client-supplied de-duplication key. |\n| `retry_backoff_ms` | `int` | `500` | no | Base delay in milliseconds before the first retry. |\n| `retry_max_attempts` | `int` | `3` | no | Total number of delivery attempts, including the first. |\n| `timeout_ms` | `int` | `10000` | no | Total wall-clock budget for the call. |"
+        },
+        {
+          "chunk_id": "v3:streaming:structural:2",
+          "rank": 3,
+          "dense_distance": 0.54233318567276,
+          "bm25_score": 13.836127645613098,
+          "rrf_score": 0.030621785881252923,
+          "source_file": "v3/streaming.md",
+          "sdk_version": "v3",
+          "heading_path": "Streaming > Client.subscribe()",
+          "text": "Streaming > Client.subscribe()\n\n frames. Set to `0` to disable, at the cost of slower dead-connection detection. |\n| `max_messages` | `int` | `None` | no | Stop after this many messages. `None` streams until the connection closes. |\n\nEnable streaming by passing `stream=True`; the default is `False`, which\nbuffers and returns a plain list instead of an iterator.\n\n```python\nfor message in client.subscribe(\n    channel=\"acme/platform/deploys\",\n    stream=True,\n    heartbeat_ms=15000,\n):\n    print(message.id, message.body)\n```\n\n"
+        }
+      ],
+      "raw_output": "- The message body may be at most **64 KiB** in size【chunk: v2:client:structural:2】.  \n- By default, `Client.send()` makes **3 delivery attempts total** (the initial attempt plus up to **2 retries**)【chunk: v2:client:structural:2】【chunk: v2:client:structural:3】.",
+      "refused": false,
+      "citations": [],
+      "citation_check": {
+        "cited": [],
+        "unresolvable": [],
+        "ok": false
+      },
+      "prompt_version": "sysprompt-c10b763ebb",
+      "model": "openai/gpt-oss-120b",
+      "model_params": {
+        "max_tokens": 2048
+      },
+      "latency_ms": 1746.3,
+      "answer_sha256": "9191caf94fb1309eef4dc38ace77021405986434f412be3f85079917af126d9f"
+    },
+    {
+      "case_id": "W6-11",
+      "question": "How do I handle errors from the SDK?",
+      "mode": "cross-product-bleed",
+      "version_sensitive": true,
+      "sdk_version_intent": "unspecified",
+      "origin": {
+        "kind": "replay",
+        "trace_id": "e7443d69a8a9"
+      },
+      "retrieved": [
+        {
+          "chunk_id": "unknown:OMNUMI_SDK_IOS_DOCUMENTATION:structural:50",
+          "rank": 0,
+          "dense_distance": 0.4980512261390686,
+          "bm25_score": 7.2344575230632895,
+          "rrf_score": 0.031024531024531024,
+          "source_file": "OMNUMI_SDK_IOS_DOCUMENTATION.md",
+          "sdk_version": "unknown",
+          "heading_path": "Omnumi SDK (iOS) - Developer Documentation > 4. API-Only Mode (Custom UI Implementation) > 4.6 Error Handling in API-Only Mode",
+          "text": "Omnumi SDK (iOS) - Developer Documentation > 4. API-Only Mode (Custom UI Implementation) > 4.6 Error Handling in API-Only Mode\n\nHandle API errors appropriately in your custom UI:\n\n```swift\nfunc handleAPIError(_ response: Any) {\n    // Check response type and handle accordingly\n    if let errorMessage = getErrorMessage(from: response) {\n        // Check for specific error types\n        if errorMessage.contains(\"CONSENT\") {\n            // Navigate to custom consent flow\n        } else if errorMessage.contains(\"PRE_APPROVAL\") {\n            // Trigger pre-approval flow\n        } else if errorMessage.contains(\"UNAUTHORIZED\") {\n            // Refresh token and retry\n        } else {\n            // Show generic error\n            showError(errorMessage)\n        }\n    }\n}\n```\n\n"
+        },
+        {
+          "chunk_id": "unknown:OMNUMI_SDK_IOS_DOCUMENTATION:structural:151",
+          "rank": 1,
+          "dense_distance": 0.591184139251709,
+          "bm25_score": 16.04130671343026,
+          "rrf_score": 0.029906956136464335,
+          "source_file": "OMNUMI_SDK_IOS_DOCUMENTATION.md",
+          "sdk_version": "unknown",
+          "heading_path": "Omnumi SDK (iOS) - Developer Documentation > 19. FAQ > Q: How do I handle SDK dismissal?",
+          "text": "Omnumi SDK (iOS) - Developer Documentation > 19. FAQ > Q: How do I handle SDK dismissal?\n\n**A:** The SDK manages its own navigation. Users can use back buttons to exit, or you can dismiss the presented navigation controller programmatically."
+        },
+        {
+          "chunk_id": "unknown:OMNUMI_SDK_IOS_DOCUMENTATION:structural:16",
+          "rank": 2,
+          "dense_distance": 0.6325114965438843,
+          "bm25_score": 6.087307302150499,
+          "rrf_score": 0.027313266443701224,
+          "source_file": "OMNUMI_SDK_IOS_DOCUMENTATION.md",
+          "sdk_version": "unknown",
+          "heading_path": "Omnumi SDK (iOS) - Developer Documentation > 2. How Omnumi SDK Works > 2.2 Detailed Flow Description > Step 6: Consent Capture (If Required)",
+          "text": "Omnumi SDK (iOS) - Developer Documentation > 2. How Omnumi SDK Works > 2.2 Detailed Flow Description > Step 6: Consent Capture (If Required)\n\nWhen consent error is received:\n- SDK navigates to pre-built consent screen\n- Displays consent message from API error response\n- Shows card preview\n- User must check the consent checkbox\n- User clicks \"Activate the Magic\" button"
+        },
+        {
+          "chunk_id": "unknown:OMNUMI_SDK_IOS_DOCUMENTATION:structural:62",
+          "rank": 3,
+          "dense_distance": 0.4019430875778198,
+          "bm25_score": null,
+          "rrf_score": 0.01639344262295082,
+          "source_file": "OMNUMI_SDK_IOS_DOCUMENTATION.md",
+          "sdk_version": "unknown",
+          "heading_path": "Omnumi SDK (iOS) - Developer Documentation > 6. Error Handling",
+          "text": "Omnumi SDK (iOS) - Developer Documentation > 6. Error Handling\n\nThe Omnumi SDK implements comprehensive error handling with user-friendly error messages."
+        }
+      ],
+      "raw_output": "The Omnumi iOS SDK includes built‑in error handling that presents user‑friendly messages for most failures [chunk: unknown:OMNUMI_SDK_IOS_DOCUMENTATION:structural:62].  \nWhen you use API‑Only mode (i.e., a custom UI), you must inspect the API response yourself and react to the error type:  \n\n* If the error message contains **“CONSENT”**, navigate the user to your custom consent flow.  \n* If it contains **“PRE_APPROVAL”**, trigger the pre‑approval flow.  \n* If it contains **“UNAUTHORIZED”**, refresh the token and retry the request.  \n* For any other error, display a generic error message to the user.  \n\nThe example implementation shows how to parse the response and handle each case accordingly [chunk: unknown:OMNUMI_SDK_IOS_DOCUMENTATION:structural:50].",
+      "refused": false,
+      "citations": [
+        "unknown:OMNUMI_SDK_IOS_DOCUMENTATION:structural:62",
+        "unknown:OMNUMI_SDK_IOS_DOCUMENTATION:structural:50"
+      ],
+      "citation_check": {
+        "cited": [
+          "unknown:OMNUMI_SDK_IOS_DOCUMENTATION:structural:62",
+          "unknown:OMNUMI_SDK_IOS_DOCUMENTATION:structural:50"
+        ],
+        "unresolvable": [],
+        "ok": true
+      },
+      "prompt_version": "sysprompt-c10b763ebb",
+      "model": "openai/gpt-oss-120b",
+      "model_params": {
+        "max_tokens": 2048
+      },
+      "latency_ms": 1315.7,
+      "answer_sha256": "492c6450eb96236805cae2a6b41ed6881bea6fa37920115ee0a82b6add82e996"
+    },
+    {
+      "case_id": "W6-16",
+      "question": "How does the SDK handle card activation errors?",
+      "mode": "unexplained-refusal",
+      "version_sensitive": true,
+      "sdk_version_intent": "unspecified",
+      "origin": {
+        "kind": "replay",
+        "trace_id": "132709d13774"
+      },
+      "retrieved": [
+        {
+          "chunk_id": "unknown:OMNUMI_SDK_IOS_DOCUMENTATION:structural:102",
+          "rank": 0,
+          "dense_distance": 0.4394814372062683,
+          "bm25_score": 9.092295526319534,
+          "rrf_score": 0.03177805800756621,
+          "source_file": "OMNUMI_SDK_IOS_DOCUMENTATION.md",
+          "sdk_version": "unknown",
+          "heading_path": "Omnumi SDK (iOS) - Developer Documentation > 8. Card Management Features > 8.6 Activate Card > API Structure",
+          "text": "Omnumi SDK (iOS) - Developer Documentation > 8. Card Management Features > 8.6 Activate Card > API Structure\n\n```swift\n// Internally calls block/unblock with false and activation reason\nawait viewModel.lockCardTapped(lock: false, reason: \"Card Activation Requested\")\n```"
+        },
+        {
+          "chunk_id": "unknown:OMNUMI_SDK_IOS_DOCUMENTATION:structural:4",
+          "rank": 1,
+          "dense_distance": 0.4547715187072754,
+          "bm25_score": 7.361159495160493,
+          "rrf_score": 0.029957522915269395,
+          "source_file": "OMNUMI_SDK_IOS_DOCUMENTATION.md",
+          "sdk_version": "unknown",
+          "heading_path": "Omnumi SDK (iOS) - Developer Documentation > 1. Overview > Supported Card Operations",
+          "text": "Omnumi SDK (iOS) - Developer Documentation > 1. Overview > Supported Card Operations\n\n- Card request and issuance\n- Card activation\n- Temporary block/unblock\n- Lost card reporting\n- Stolen card reporting\n- Card reissue\n- Card details viewing (with masking)\n- Balance checking across multiple tokens\n\n---"
+        },
+        {
+          "chunk_id": "unknown:OMNUMI_SDK_IOS_DOCUMENTATION:structural:11",
+          "rank": 2,
+          "dense_distance": 0.4569498896598816,
+          "bm25_score": 5.321061278062405,
+          "rrf_score": 0.026875901875901876,
+          "source_file": "OMNUMI_SDK_IOS_DOCUMENTATION.md",
+          "sdk_version": "unknown",
+          "heading_path": "Omnumi SDK (iOS) - Developer Documentation > 2. How Omnumi SDK Works > 2.2 Detailed Flow Description > Step 2: Eligibility Check",
+          "text": "Omnumi SDK (iOS) - Developer Documentation > 2. How Omnumi SDK Works > 2.2 Detailed Flow Description > Step 2: Eligibility Check\n\nThe SDK automatically validates the customer's eligibility for card issuance:\n- Fetches customer details from the backend\n- Validates authentication\n- Checks if customer is eligible for card products\n- Loads customer profile and available wallets"
+        },
+        {
+          "chunk_id": "unknown:OMNUMI_SDK_IOS_DOCUMENTATION:structural:96",
+          "rank": 3,
+          "dense_distance": 0.4042935371398926,
+          "bm25_score": null,
+          "rrf_score": 0.01639344262295082,
+          "source_file": "OMNUMI_SDK_IOS_DOCUMENTATION.md",
+          "sdk_version": "unknown",
+          "heading_path": "Omnumi SDK (iOS) - Developer Documentation > 8. Card Management Features > 8.4 Report Stolen Card > Consequences",
+          "text": "Omnumi SDK (iOS) - Developer Documentation > 8. Card Management Features > 8.4 Report Stolen Card > Consequences\n\n- Card is permanently deactivated\n- Fraud protection activated\n- New card issuance required"
+        }
+      ],
+      "raw_output": "I cannot answer that from the indexed documentation.",
+      "refused": true,
+      "citations": [],
+      "citation_check": {
+        "cited": [],
+        "unresolvable": [],
+        "ok": false
+      },
+      "prompt_version": "sysprompt-c10b763ebb",
+      "model": "openai/gpt-oss-120b",
+      "model_params": {
+        "max_tokens": 2048
+      },
+      "latency_ms": 762.9,
+      "answer_sha256": "8d4afb5271de3ca64a73c91666a5761958c1196baf3f95a6dadeb051d7325283"
+    },
+    {
+      "case_id": "W6-02",
+      "question": "What's the maximum accepted value for dedupe_window_ms on Client.send()?",
+      "mode": "citation-format",
+      "version_sensitive": true,
+      "sdk_version_intent": "v3",
+      "origin": {
+        "kind": "authored",
+        "basis": "golden_set:Q2"
+      },
+      "retrieved": [
+        {
+          "chunk_id": "v3:client:structural:3",
+          "rank": 0,
+          "dense_distance": 0.430724561214447,
+          "bm25_score": 23.110902341726458,
+          "rrf_score": 0.03278688524590164,
+          "source_file": "v3/client.md",
+          "sdk_version": "v3",
+          "heading_path": "Client > Client.send() > Parameters",
+          "text": "Client > Client.send() > Parameters\n\ntempt. A value of `1.0` produces constant-delay retries. |\n| `retry_max_attempts` | `int` | `4` | no | Total number of delivery attempts, including the first. Set to `1` to disable retries entirely. |\n\n| Parameter | Type | Default | Required | Description |\n|---|---|---|---|---|\n| `timeout_ms` | `int` | `30000` | no | Total wall-clock budget for the call, covering all retry attempts. Exceeding it raises `RelayTimeout`. |\n| `priority` | `str` | `\"normal\"` | no | One of `\"low\"`, `\"normal\"`, or `\"urgent\"`. Urgent messages bypass the standard queue but are billed at a higher rate. |\n| `dedupe_window_ms` | `int` | `600000` | no | How long an `idempotency_key` is remembered by the broker. Maximum accepted value is `86400000` (24 hours). |\n| `compression` | `str` | `\"gzip\"` | no | Wire compression for the payload. One of `\"gzip\"`, `\"zstd\"`, or `\"none\"`. |\n| `metadata` | `dict` | `{}` | no | Arbitrary string-to-string map attached to the message. Keys prefixed with `relay.` are reserved and rejected. |\n| `callback_url` | `str` | `None` | no | HTTPS endpoint notified on final delivery outcome. Must be registered in the console before use. |"
+        },
+        {
+          "chunk_id": "v3:client:structural:2",
+          "rank": 1,
+          "dense_distance": 0.4443281292915344,
+          "bm25_score": 18.059253141572526,
+          "rrf_score": 0.03225806451612903,
+          "source_file": "v3/client.md",
+          "sdk_version": "v3",
+          "heading_path": "Client > Client.send() > Parameters",
+          "text": "Client > Client.send() > Parameters\n\n| Parameter | Type | Default | Required | Description |\n|---|---|---|---|---|\n| `message` | `str` | — | yes | Body of the message. Must be valid UTF-8 and at most 256 KiB after encoding. |\n| `channel` | `str` | — | yes | Target channel identifier, in the form `org/team/topic`. Case sensitive. |\n| `idempotency_key` | `str` | `None` | no | Client-supplied de-duplication key. Reusing a key within the dedupe window returns the original receipt instead of sending again. |\n| `retry_backoff_ms` | `int` | `2000` | no | Base delay in milliseconds before the first retry. Subsequent retries multiply this value by the backoff factor. |\n| `retry_backoff_factor` | `float` | `2.0` | no | Multiplier applied to the backoff delay after each failed attempt. A value of `1.0` produces constant-delay retries. |\n| `retry_max_attempts` | `int` | `4` | no | Total number of delivery attempts, including the first. Set to `1` to disable retries entirely. |"
+        },
+        {
+          "chunk_id": "v3:client:structural:5",
+          "rank": 2,
+          "dense_distance": 0.4717476963996887,
+          "bm25_score": 13.316891830675615,
+          "rrf_score": 0.031024531024531024,
+          "source_file": "v3/client.md",
+          "sdk_version": "v3",
+          "heading_path": "Client > Client.send() > Returns",
+          "text": "Client > Client.send() > Returns\n\nA `Receipt` with fields `id` (string), `accepted_at` (RFC 3339 timestamp),\n`attempts` (integer) and `deduplicated` (boolean). When `deduplicated` is true\nthe message was suppressed and the returned receipt refers to the original\nsend."
+        },
+        {
+          "chunk_id": "v2:client:structural:3",
+          "rank": 3,
+          "dense_distance": 0.6158747673034668,
+          "bm25_score": 15.217897070468485,
+          "rrf_score": 0.03057889822595705,
+          "source_file": "v2/client.md",
+          "sdk_version": "v2",
+          "heading_path": "Client > Client.send() > Default retry backoff",
+          "text": "Client > Client.send() > Default retry backoff\n\nThe default retry backoff for `Client.send()` is 500 ms. Retries use a fixed\ndelay: every attempt waits the same `retry_backoff_ms` interval, with no\nmultiplier and no jitter. With the defaults, the delays before attempts two and\nthree are both 500 ms.\n\nRetries are attempted for network errors and `RELAY_503` only. `RELAY_429` is\nnot retried automatically in v2.\n\n```python\nreceipt = client.send(\n    message=\"deployment finished\",\n    channel=\"acme/deploys\",\n    retry_backoff_ms=500,\n    retry_max_attempts=3,\n)\n```\n\n"
+        }
+      ],
+      "raw_output": "The maximum accepted value for `dedupe_window_ms` is **86400000** (24 hours)【v3:client:structural:3】.",
+      "refused": false,
+      "citations": [],
+      "citation_check": {
+        "cited": [],
+        "unresolvable": [],
+        "ok": false
+      },
+      "prompt_version": "sysprompt-c10b763ebb",
+      "model": "openai/gpt-oss-120b",
+      "model_params": {
+        "max_tokens": 2048
+      },
+      "latency_ms": 780.4,
+      "answer_sha256": "d4d4d9e13e29d45e8ab6690b75ff99078ed0e16d7dd59c42c8db4b99c9f264d8"
+    },
+    {
+      "case_id": "W6-03",
+      "question": "Which error code means the bearer token is past its expiry?",
+      "mode": "citation-format",
+      "version_sensitive": true,
+      "sdk_version_intent": "v3",
+      "origin": {
+        "kind": "authored",
+        "basis": "golden_set:Q3"
+      },
+      "retrieved": [
+        {
+          "chunk_id": "v3:errors:structural:1",
+          "rank": 0,
+          "dense_distance": 0.4896275997161865,
+          "bm25_score": 22.230597970288834,
+          "rrf_score": 0.03278688524590164,
+          "source_file": "v3/errors.md",
+          "sdk_version": "v3",
+          "heading_path": "Errors > Error codes",
+          "text": "Errors > Error codes\n\n| Code | HTTP | Retryable | Meaning |\n|---|---|---|---|\n| `RELAY_400` | 400 | no | Malformed request. The payload failed schema validation before reaching the broker. |\n| `AUTH_TOKEN_EXPIRED` | 401 | no | The bearer token is past its expiry. The SDK refreshes automatically; seeing this means the refresh loop is not running. |\n| `AUTH_SCOPE_DENIED` | 403 | no | The parent key does not hold the scope required for this call. |\n| `RELAY_404` | 404 | no | Channel does not exist, or the key's organisation cannot see it. |\n| `RELAY_409` | 409 | no | Idempotency key reused with a different payload inside the dedupe window. |\n| `RELAY_413` | 413 | no | Message body exceeds 256 KiB after encoding. |\n| `RELAY_429` | 429 | yes | Rate limit exceeded. Honour the `Retry-After` header rather than the SDK's own backoff. |\n| `RELAY_503` | 503 | yes | Broker temporarily unavailable. Safe to retry with backoff. |"
+        },
+        {
+          "chunk_id": "v2:auth:structural:1",
+          "rank": 1,
+          "dense_distance": 0.540111780166626,
+          "bm25_score": 11.112230739445177,
+          "rrf_score": 0.03125763125763126,
+          "source_file": "v2/auth.md",
+          "sdk_version": "v2",
+          "heading_path": "Authentication > API keys",
+          "text": "Authentication > API keys\n\n| Parameter | Type | Default | Required | Description |\n|---|---|---|---|---|\n| `api_key` | `str` | — | yes | Long-lived key beginning `rk_live_` or `rk_test_`. Sent as a bearer credential on each call. |\n| `region` | `str` | `\"us-east-1\"` | no | Region whose endpoint is used. |\n\n```python\nfrom relay import Client\n\nclient = Client(api_key=os.environ[\"RELAY_API_KEY\"])\n```\n\n\nBecause the key travels on every request, v2 has no concept of token expiry.\nThere is no `AUTH_TOKEN_EXPIRED` condition in v2 and no `refresh_margin`\nsetting."
+        },
+        {
+          "chunk_id": "v3:auth:structural:1",
+          "rank": 2,
+          "dense_distance": 0.5369006395339966,
+          "bm25_score": 9.289948514608222,
+          "rrf_score": 0.031009615384615385,
+          "source_file": "v3/auth.md",
+          "sdk_version": "v3",
+          "heading_path": "Authentication > Token lifecycle",
+          "text": "Authentication > Token lifecycle\n\nAn access token issued by `POST /v3/auth/token` is valid for 3600 seconds. The\nSDK refreshes it when 80% of its lifetime has elapsed, so a healthy client\nrefreshes roughly every 48 minutes. Refresh happens on a background thread and\ndoes not block calls in flight.\n\n| Parameter | Type | Default | Required | Description |\n|---|---|---|---|---|\n| `api_key` | `str` | — | yes | Long-lived key beginning `rk_live_` or `rk_test_`. Never ship a live key to a client device. |\n| `region` | `str` | `\"us-east-1\"` | no | Region whose token endpoint is used. Tokens are not portable between regions. |\n| `refresh_margin` | `float` | `0.8` | no | Fraction of token lifetime after which a refresh is attempted. Values above `0.95` are rejected. |\n| `token_cache` | `TokenCache` | `MemoryCache()` | no | Where minted tokens are stored. Supply a shared cache to avoid one refresh per process. |"
+        },
+        {
+          "chunk_id": "v3:auth:structural:4",
+          "rank": 3,
+          "dense_distance": 0.5779367685317993,
+          "bm25_score": 11.422312670670054,
+          "rrf_score": 0.030621785881252923,
+          "source_file": "v3/auth.md",
+          "sdk_version": "v3",
+          "heading_path": "Authentication > Rotation",
+          "text": "Authentication > Rotation\n\nKeys are rotated from the console or with `Client.rotate_key()`. Rotation mints\na replacement and marks the old key for expiry after a 24 hour overlap window,\nduring which both keys authenticate. Tokens already minted from the old key\nremain valid until their own expiry."
+        }
+      ],
+      "raw_output": "The error code for an expired bearer token is **`AUTH_TOKEN_EXPIRED`** [chunk: v3:errors:structural:1].",
+      "refused": false,
+      "citations": [
+        "v3:errors:structural:1"
+      ],
+      "citation_check": {
+        "cited": [
+          "v3:errors:structural:1"
+        ],
+        "unresolvable": [],
+        "ok": true
+      },
+      "prompt_version": "sysprompt-c10b763ebb",
+      "model": "openai/gpt-oss-120b",
+      "model_params": {
+        "max_tokens": 2048
+      },
+      "latency_ms": 678.5,
+      "answer_sha256": "84d78facda7ec2ff9958f5abe2e278be03ccc190f7cacee1208eaa9810d386bb"
+    },
+    {
+      "case_id": "W6-04",
+      "question": "What error code does an expired pagination cursor raise?",
+      "mode": "citation-format",
+      "version_sensitive": true,
+      "sdk_version_intent": "v3",
+      "origin": {
+        "kind": "authored",
+        "basis": "golden_set:Q4"
+      },
+      "retrieved": [
+        {
+          "chunk_id": "v3:pagination:structural:2",
+          "rank": 0,
+          "dense_distance": 0.3181845545768738,
+          "bm25_score": 15.569985326020335,
+          "rrf_score": 0.03278688524590164,
+          "source_file": "v3/pagination.md",
+          "sdk_version": "v3",
+          "heading_path": "Pagination > Cursor stability",
+          "text": "Pagination > Cursor stability\n\nA cursor remains valid for 7 days. Using an expired cursor raises `RELAY_410`\nand requires restarting from the first page. Cursors are scoped to the channel\nand direction that produced them; reusing a forward cursor on a backward read\nraises `RELAY_400`.\n\nMessages deleted between pages are skipped rather than leaving gaps, so a\nconsumer walking pages sees a consistent sequence even under concurrent\ndeletion."
+        },
+        {
+          "chunk_id": "v3:pagination:structural:0",
+          "rank": 1,
+          "dense_distance": 0.38921499252319336,
+          "bm25_score": 11.693229889915187,
+          "rrf_score": 0.03200204813108039,
+          "source_file": "v3/pagination.md",
+          "sdk_version": "v3",
+          "heading_path": "Pagination",
+          "text": "Pagination\n\nList endpoints return cursor-paginated results. Cursors are opaque strings\nencoding a position in a stable sort order; do not parse or construct them.\nOffset pagination was removed in v3."
+        },
+        {
+          "chunk_id": "v3:pagination:structural:1",
+          "rank": 2,
+          "dense_distance": 0.5550559759140015,
+          "bm25_score": 10.107831483092866,
+          "rrf_score": 0.03125763125763126,
+          "source_file": "v3/pagination.md",
+          "sdk_version": "v3",
+          "heading_path": "Pagination > Client.fetch()",
+          "text": "Pagination > Client.fetch()\n\n| Parameter | Type | Default | Required | Description |\n|---|---|---|---|---|\n| `channel` | `str` | — | yes | Channel to read from. |\n| `page_size` | `int` | `50` | no | Messages per page. The maximum accepted value is `250`; larger values are rejected with `RELAY_400` rather than silently clamped. |\n| `cursor` | `str` | `None` | no | Position returned by a previous call as `next_cursor`. Omit for the first page. |\n| `direction` | `str` | `\"forward\"` | no | `\"forward\"` reads oldest to newest; `\"backward\"` reads newest to oldest. |\n\nA page response carries `items`, `next_cursor` and `has_more`. When `has_more`\nis `False`, `next_cursor` is `None` and iteration is complete.\n\n```python\ncursor, out = None, []\nwhile True:\n    page = client.fetch(channel=ch, page_size=250, cursor=cursor)\n    out.extend(page.items)\n    if not page.has_more:\n        break\n    cursor = page.next_cursor\n```\n\n"
+        },
+        {
+          "chunk_id": "v2:migrating-to-v3:structural:1",
+          "rank": 3,
+          "dense_distance": 0.7114826440811157,
+          "bm25_score": 8.617811345086542,
+          "rrf_score": 0.029857397504456328,
+          "source_file": "v2/migrating-to-v3.md",
+          "sdk_version": "v2",
+          "heading_path": "Migrating from v2 to v3 > Breaking changes",
+          "text": "Migrating from v2 to v3 > Breaking changes\n\nChannel identifiers gained a segment. A v2 channel `org/topic` becomes\n`org/team/topic` in v3, and the v3 broker rejects two-segment identifiers with\n`RELAY_400` rather than inferring a team.\n\nAuthentication changed from long-lived keys on every request to short-lived\nbearer tokens minted from a key. Application code is unaffected — the SDK\nperforms the exchange — but network policy that pinned the v2 auth endpoint\nneeds updating.\n\nRetry semantics changed from fixed-delay to exponential backoff, and the\ndefault base delay changed. Any service that hand-tuned `retry_backoff_ms`\nagainst v2's fixed-delay behaviour should re-derive the value rather than\ncarrying it across.\n\nOffset pagination was removed entirely in favour of cursors. Code that computed\npage offsets must be rewritten to thread `next_cursor`."
+        }
+      ],
+      "raw_output": "An expired pagination cursor raises the `RELAY_410` error code. [chunk: v3:pagination:structural:2]",
+      "refused": false,
+      "citations": [
+        "v3:pagination:structural:2"
+      ],
+      "citation_check": {
+        "cited": [
+          "v3:pagination:structural:2"
+        ],
+        "unresolvable": [],
+        "ok": true
+      },
+      "prompt_version": "sysprompt-c10b763ebb",
+      "model": "openai/gpt-oss-120b",
+      "model_params": {
+        "max_tokens": 2048
+      },
+      "latency_ms": 1239.1,
+      "answer_sha256": "21d6984b8121453b09bbadc998747c169e3f8c3167686b33f8bd01ad820f155a"
+    },
+    {
+      "case_id": "W6-05",
+      "question": "What's the maximum page_size I can request from Client.fetch()?",
+      "mode": "citation-format",
+      "version_sensitive": true,
+      "sdk_version_intent": "v3",
+      "origin": {
+        "kind": "authored",
+        "basis": "golden_set:Q12"
+      },
+      "retrieved": [
+        {
+          "chunk_id": "v3:pagination:structural:1",
+          "rank": 0,
+          "dense_distance": 0.4194360375404358,
+          "bm25_score": 24.584441534672187,
+          "rrf_score": 0.03278688524590164,
+          "source_file": "v3/pagination.md",
+          "sdk_version": "v3",
+          "heading_path": "Pagination > Client.fetch()",
+          "text": "Pagination > Client.fetch()\n\n| Parameter | Type | Default | Required | Description |\n|---|---|---|---|---|\n| `channel` | `str` | — | yes | Channel to read from. |\n| `page_size` | `int` | `50` | no | Messages per page. The maximum accepted value is `250`; larger values are rejected with `RELAY_400` rather than silently clamped. |\n| `cursor` | `str` | `None` | no | Position returned by a previous call as `next_cursor`. Omit for the first page. |\n| `direction` | `str` | `\"forward\"` | no | `\"forward\"` reads oldest to newest; `\"backward\"` reads newest to oldest. |\n\nA page response carries `items`, `next_cursor` and `has_more`. When `has_more`\nis `False`, `next_cursor` is `None` and iteration is complete.\n\n```python\ncursor, out = None, []\nwhile True:\n    page = client.fetch(channel=ch, page_size=250, cursor=cursor)\n    out.extend(page.items)\n    if not page.has_more:\n        break\n    cursor = page.next_cursor\n```\n\n"
+        },
+        {
+          "chunk_id": "v2:changelog:structural:0",
+          "rank": 1,
+          "dense_distance": 0.6867048144340515,
+          "bm25_score": 11.694718834308777,
+          "rrf_score": 0.030798389007344232,
+          "source_file": "v2/CHANGELOG.md",
+          "sdk_version": "v2",
+          "heading_path": "Changelog > 2.7.0",
+          "text": "Changelog > 2.7.0\n\nAdded `idempotency_key` to `Client.send()`. Reusing a key within 60 seconds\nreturns the original receipt instead of sending again.\n\nRaised the maximum message body from 32 KiB to 64 KiB."
+        },
+        {
+          "chunk_id": "v3:streaming:structural:0",
+          "rank": 2,
+          "dense_distance": 0.6459087133407593,
+          "bm25_score": null,
+          "rrf_score": 0.016129032258064516,
+          "source_file": "v3/streaming.md",
+          "sdk_version": "v3",
+          "heading_path": "Streaming",
+          "text": "Streaming\n\nStreaming subscribes to a channel and yields messages as they arrive, over a\nsingle long-lived HTTP/2 connection. Use it for tailing a channel; use\n`Client.fetch()` for bounded historical reads."
+        },
+        {
+          "chunk_id": "unknown:authentication:structural:8",
+          "rank": 3,
+          "dense_distance": null,
+          "bm25_score": 13.39300533642119,
+          "rrf_score": 0.016129032258064516,
+          "source_file": "authentication.pdf",
+          "sdk_version": "unknown",
+          "heading_path": "",
+          "text": "1\n2\n3\n4\n5\n6\n7\ncurl --request POST \\\n--url \"https://api.github.com/applications/YOUR_CLIENT_ID/token\" \\\n--user \"YOUR_CLIENT_ID:YOUR_CLIENT_SECRET\" \\\n--header \"Accept: application/vnd.github+json\" \\\n--header \"X-GitHub-Api-Version: 2026-03-10\" \\\n--data '{\n  \"access_token\": \"ACCESS_TOKEN_TO_CHECK\"\n}'\nThe client ID and client secret are associated with the app, not with the owner of the app or a\nuser who authorized the app. They are used to perform operations on behalf of the app, such\nas creating access tokens. If you are the owner of a GitHub App or OAuth app, or if you are an app manager for a GitHub\nApp, you can find the client ID and generate a client secret on the settings page for your app. To navigate to your app's settings page:\nIn the upper-right corner of any page on GitHub, click your profile picture. Navigate to your account settings. For an app owned by a personal account, click Settings. For an app owned by an organization:\na. Click Your organizations. b."
+        }
+      ],
+      "raw_output": "The highest `page_size` accepted by `Client.fetch()` is `250` – larger values are rejected with `RELAY_400` instead of being clamped. [chunk: v3:pagination:structural:1]",
+      "refused": false,
+      "citations": [
+        "v3:pagination:structural:1"
+      ],
+      "citation_check": {
+        "cited": [
+          "v3:pagination:structural:1"
+        ],
+        "unresolvable": [],
+        "ok": true
+      },
+      "prompt_version": "sysprompt-c10b763ebb",
+      "model": "openai/gpt-oss-120b",
+      "model_params": {
+        "max_tokens": 2048
+      },
+      "latency_ms": 1359.9,
+      "answer_sha256": "bb5c0e34e41c651434ae55d7a3fa6f94b35578d33d6512e29b877f851a3e47f6"
+    },
+    {
+      "case_id": "W6-07",
+      "question": "What format does a channel identifier use when sending a message?",
+      "mode": "version-ambiguity",
+      "version_sensitive": true,
+      "sdk_version_intent": "unspecified",
+      "origin": {
+        "kind": "authored",
+        "basis": "v2/client.md channel parameter vs v3/client.md (verified live retrieval)"
+      },
+      "retrieved": [
+        {
+          "chunk_id": "v2:client:structural:2",
+          "rank": 0,
+          "dense_distance": 0.6682561635971069,
+          "bm25_score": 9.105376449427169,
+          "rrf_score": 0.03007688828584351,
+          "source_file": "v2/client.md",
+          "sdk_version": "v2",
+          "heading_path": "Client > Client.send() > Parameters",
+          "text": "Client > Client.send() > Parameters\n\n| Parameter | Type | Default | Required | Description |\n|---|---|---|---|---|\n| `message` | `str` | — | yes | Body of the message. Must be valid UTF-8 and at most 64 KiB. |\n| `channel` | `str` | — | yes | Target channel identifier, in the form `org/topic`. |\n| `idempotency_key` | `str` | `None` | no | Client-supplied de-duplication key. |\n| `retry_backoff_ms` | `int` | `500` | no | Base delay in milliseconds before the first retry. |\n| `retry_max_attempts` | `int` | `3` | no | Total number of delivery attempts, including the first. |\n| `timeout_ms` | `int` | `10000` | no | Total wall-clock budget for the call. |"
+        },
+        {
+          "chunk_id": "v2:client:structural:1",
+          "rank": 1,
+          "dense_distance": 0.6309530735015869,
+          "bm25_score": 7.91605554915846,
+          "rrf_score": 0.029709507042253523,
+          "source_file": "v2/client.md",
+          "sdk_version": "v2",
+          "heading_path": "Client > Client.send()",
+          "text": "Client > Client.send()\n\nDispatches a single message to a channel and returns a `Receipt`."
+        },
+        {
+          "chunk_id": "unknown:OMNUMI_SDK_IOS_DOCUMENTATION:structural:141",
+          "rank": 2,
+          "dense_distance": 0.6523767709732056,
+          "bm25_score": 6.649832270675075,
+          "rrf_score": 0.028205128205128206,
+          "source_file": "OMNUMI_SDK_IOS_DOCUMENTATION.md",
+          "sdk_version": "unknown",
+          "heading_path": "Omnumi SDK (iOS) - Developer Documentation > 16. Appendix > 16.1 Glossary",
+          "text": "Omnumi SDK (iOS) - Developer Documentation > 16. Appendix > 16.1 Glossary\n\n- **Card Product**: A specific type of card offering (e.g., Virtual Visa, Physical Mastercard)\n- **Customer Account ID**: Unique identifier for a customer in the Rain system\n- **Custom Namespace**: Partner-specific identifier for wallet/user\n- **Domain Namespace**: Public domain-based identifier (e.g., ENS name)\n- **Pre-Approval**: Blockchain transaction approval required before card issuance\n- **Token Symbol**: Cryptocurrency symbol (e.g., USDC, USDT, ETH)\n- **Wallet Address**: Ethereum-compatible blockchain address"
+        },
+        {
+          "chunk_id": "v3:client:structural:1",
+          "rank": 3,
+          "dense_distance": 0.6906323432922363,
+          "bm25_score": 7.311917799698843,
+          "rrf_score": 0.02817460317460317,
+          "source_file": "v3/client.md",
+          "sdk_version": "v3",
+          "heading_path": "Client > Client.send()",
+          "text": "Client > Client.send()\n\nDispatches a single message to a channel and returns a `Receipt`. The call is\nsynchronous by default: it returns once the broker has durably accepted the\nmessage, not once the recipient has read it."
+        }
+      ],
+      "raw_output": "The channel identifier must be given in the form `org/topic` [chunk: v2:client:structural:2].",
+      "refused": false,
+      "citations": [
+        "v2:client:structural:2"
+      ],
+      "citation_check": {
+        "cited": [
+          "v2:client:structural:2"
+        ],
+        "unresolvable": [],
+        "ok": true
+      },
+      "prompt_version": "sysprompt-c10b763ebb",
+      "model": "openai/gpt-oss-120b",
+      "model_params": {
+        "max_tokens": 2048
+      },
+      "latency_ms": 965.7,
+      "answer_sha256": "fc551121f9c8fc8f8f1b5a41d0f201b32f939179bbb8a16798da3f23b3315b8d"
+    },
+    {
+      "case_id": "W6-08",
+      "question": "How do I page through a long list of results?",
+      "mode": "version-ambiguity",
+      "version_sensitive": true,
+      "sdk_version_intent": "unspecified",
+      "origin": {
+        "kind": "authored",
+        "basis": "v2/migrating-to-v3.md (offset removed in favour of cursors)"
+      },
+      "retrieved": [
+        {
+          "chunk_id": "v3:pagination:structural:0",
+          "rank": 0,
+          "dense_distance": 0.6580991744995117,
+          "bm25_score": 13.105606759777391,
+          "rrf_score": 0.03252247488101534,
+          "source_file": "v3/pagination.md",
+          "sdk_version": "v3",
+          "heading_path": "Pagination",
+          "text": "Pagination\n\nList endpoints return cursor-paginated results. Cursors are opaque strings\nencoding a position in a stable sort order; do not parse or construct them.\nOffset pagination was removed in v3."
+        },
+        {
+          "chunk_id": "v3:pagination:structural:1",
+          "rank": 1,
+          "dense_distance": 0.5403044819831848,
+          "bm25_score": 8.098241757607113,
+          "rrf_score": 0.032018442622950824,
+          "source_file": "v3/pagination.md",
+          "sdk_version": "v3",
+          "heading_path": "Pagination > Client.fetch()",
+          "text": "Pagination > Client.fetch()\n\n| Parameter | Type | Default | Required | Description |\n|---|---|---|---|---|\n| `channel` | `str` | — | yes | Channel to read from. |\n| `page_size` | `int` | `50` | no | Messages per page. The maximum accepted value is `250`; larger values are rejected with `RELAY_400` rather than silently clamped. |\n| `cursor` | `str` | `None` | no | Position returned by a previous call as `next_cursor`. Omit for the first page. |\n| `direction` | `str` | `\"forward\"` | no | `\"forward\"` reads oldest to newest; `\"backward\"` reads newest to oldest. |\n\nA page response carries `items`, `next_cursor` and `has_more`. When `has_more`\nis `False`, `next_cursor` is `None` and iteration is complete.\n\n```python\ncursor, out = None, []\nwhile True:\n    page = client.fetch(channel=ch, page_size=250, cursor=cursor)\n    out.extend(page.items)\n    if not page.has_more:\n        break\n    cursor = page.next_cursor\n```\n\n"
+        },
+        {
+          "chunk_id": "unknown:apiguide-readthedocs-io-en-latest:structural:46",
+          "rank": 2,
+          "dense_distance": 0.7712475061416626,
+          "bm25_score": 10.358352893881962,
+          "rrf_score": 0.030798389007344232,
+          "source_file": "apiguide-readthedocs-io-en-latest.pdf",
+          "sdk_version": "unknown",
+          "heading_path": "",
+          "text": "For example:\n{\n\"developerMessage\" : \"Verbose, plain language description of the problem. Provide developers suggestions about how to solve their problems here\n˓→\",\n\"userMessage\" : \"This is a message that can be passed along to end-users, if\n˓→needed.\",\n\"errorCode\" : \"444444\",\n\"moreInfo\" : \"http://api.example.gov/v1/documentation/errors/444444.html\"\n}\n4.3 Use versions\nNever release an API without a version number. Versions should be integers, not decimal numbers, preﬁxed with ‘v’. For example:\nGood: v1, v2, v3\nBad: v-1.1, v1.2, 1.3\nMaintain APIs at least one version back. 4.4 Batching results\nIf no limit is speciﬁed, return results with a default limit. To get records 51 through 75 do this:\nGET /magazines?limit=25&offset=50 HTTP /1.1\nHost: example.gov.au\nAccept: application/json, text/javascript\noffset=50 means, ‘skip the ﬁrst 50 records’\nlimit=25 means, ‘return a maximum of 25 records’\nInformation about record limits and total available count should also be included in the response."
+        },
+        {
+          "chunk_id": "unknown:apiguide-readthedocs-io-en-latest:structural:49",
+          "rank": 3,
+          "dense_distance": 0.8056113719940186,
+          "bm25_score": 7.978500859987852,
+          "rrf_score": 0.029877369007803793,
+          "source_file": "apiguide-readthedocs-io-en-latest.pdf",
+          "sdk_version": "unknown",
+          "heading_path": "",
+          "text": "applications that reuse\nan API. When supplying client libraries or reference implementations for use with an API, mocking features can\nbe implemented at that layer as an alternative to the API itself.\n\n4.5.1 Example 1 - GET mock list of magazines\nRequest mock list of magazines\nGET /api/v1/magazines.json?mock=True HTTP /1.1\nHost: example.gov.au\nAccept: application/json, text/javascript\nResponse list of mock magazines\nHTTP/1.1 200 OK\nVary: Accept\nContent-Type: text/javascript\n{\n\"metadata\": {\n\"resultset\": {\n\"count\": 123,\n\"offset\": 0,\n\"limit\": 10\n}\n},\n\"results\": [\n{\n\"id\": \"1234\",\n\"type\": \"magazine\",\n\"title\": \"Public Water Systems\",\n\"tags\": [\n{\"id\": \"125\", \"name\": \"Environment\", “url”: “http://api.example.gov.au/v1/\n˓→tags/125”},\n{\"id\": \"834\", \"name\": \"Water Quality\"}\n],\n4.5. Mock behaviour 21"
+        }
+      ],
+      "raw_output": "To page through a long list of results you use the cursor‑based pagination that the v3 API provides.  \nList endpoints return an opaque cursor that encodes the position in a stable sort order; you must not parse or construct the cursor yourself and offset pagination is no longer available [chunk: v3:pagination:structural:0].  \n\nUse the client’s `fetch()` method, supplying the channel and optionally a `page_size` (default 50, max 250), a `cursor` from the previous page, and a `direction` (`\"forward\"` reads oldest‑to‑newest, `\"backward\"` reads newest‑to‑oldest) [chunk: v3:pagination:structural:1].  \n\nA typical loop looks like:\n\n```python\ncursor, out = None, []\nwhile True:\n    page = client.fetch(channel=ch, page_size=250, cursor=cursor)\n    out.extend(page.items)\n    if not page.has_more:\n        break\n    cursor = page.next_cursor\n```\n\nEach page’s response contains `items`, `next_cursor`, and `has_more`; when `has_more` is `False`, `next_cursor` is `None` and pagination is complete [chunk: v3:pagination:structural:1].",
+      "refused": false,
+      "citations": [
+        "v3:pagination:structural:0",
+        "v3:pagination:structural:1"
+      ],
+      "citation_check": {
+        "cited": [
+          "v3:pagination:structural:0",
+          "v3:pagination:structural:1"
+        ],
+        "unresolvable": [],
+        "ok": true
+      },
+      "prompt_version": "sysprompt-c10b763ebb",
+      "model": "openai/gpt-oss-120b",
+      "model_params": {
+        "max_tokens": 2048
+      },
+      "latency_ms": 8435.6,
+      "answer_sha256": "7152fd97b7962bea06a1891c22083144b6bafe6b2e67db033091bdf852f6ae32"
+    },
+    {
+      "case_id": "W6-09",
+      "question": "How does authentication work in the Relay SDK?",
+      "mode": "version-ambiguity",
+      "version_sensitive": true,
+      "sdk_version_intent": "unspecified",
+      "origin": {
+        "kind": "authored",
+        "basis": "v2/auth.md vs v3/auth.md"
+      },
+      "retrieved": [
+        {
+          "chunk_id": "v3:auth:structural:0",
+          "rank": 0,
+          "dense_distance": 0.183527410030365,
+          "bm25_score": 10.48064648857535,
+          "rrf_score": 0.03252247488101534,
+          "source_file": "v3/auth.md",
+          "sdk_version": "v3",
+          "heading_path": "Authentication",
+          "text": "Authentication\n\nRelay authenticates with short-lived bearer tokens minted from a long-lived API\nkey. The SDK handles the exchange transparently; you supply the key and the\nclient refreshes tokens in the background."
+        },
+        {
+          "chunk_id": "v2:auth:structural:0",
+          "rank": 1,
+          "dense_distance": 0.3918471932411194,
+          "bm25_score": 8.019785142335788,
+          "rrf_score": 0.03128054740957967,
+          "source_file": "v2/auth.md",
+          "sdk_version": "v2",
+          "heading_path": "Authentication",
+          "text": "Authentication\n\nRelay v2 authenticates with the API key sent directly on every request. There\nis no token exchange and no refresh loop."
+        },
+        {
+          "chunk_id": "v3:errors:structural:1",
+          "rank": 2,
+          "dense_distance": 0.5731391906738281,
+          "bm25_score": 10.69908000338001,
+          "rrf_score": 0.031099324975891997,
+          "source_file": "v3/errors.md",
+          "sdk_version": "v3",
+          "heading_path": "Errors > Error codes",
+          "text": "Errors > Error codes\n\n| Code | HTTP | Retryable | Meaning |\n|---|---|---|---|\n| `RELAY_400` | 400 | no | Malformed request. The payload failed schema validation before reaching the broker. |\n| `AUTH_TOKEN_EXPIRED` | 401 | no | The bearer token is past its expiry. The SDK refreshes automatically; seeing this means the refresh loop is not running. |\n| `AUTH_SCOPE_DENIED` | 403 | no | The parent key does not hold the scope required for this call. |\n| `RELAY_404` | 404 | no | Channel does not exist, or the key's organisation cannot see it. |\n| `RELAY_409` | 409 | no | Idempotency key reused with a different payload inside the dedupe window. |\n| `RELAY_413` | 413 | no | Message body exceeds 256 KiB after encoding. |\n| `RELAY_429` | 429 | yes | Rate limit exceeded. Honour the `Retry-After` header rather than the SDK's own backoff. |\n| `RELAY_503` | 503 | yes | Broker temporarily unavailable. Safe to retry with backoff. |"
+        },
+        {
+          "chunk_id": "v3:webhooks:structural:2",
+          "rank": 3,
+          "dense_distance": 0.6005448698997498,
+          "bm25_score": 8.21842055967852,
+          "rrf_score": 0.02967032967032967,
+          "source_file": "v3/webhooks.md",
+          "sdk_version": "v3",
+          "heading_path": "Webhooks > Signature verification",
+          "text": "Webhooks > Signature verification\n\netries of the same event. |\n\nVerification must be done against the **raw** request body. Parsing the JSON\nand re-serialising it will change byte ordering and whitespace, and the digest\nwill not match.\n\n```python\nfrom relay.webhooks import verify\n\nverify(\n    body=request.raw_body,\n    signature=request.headers[\"X-Relay-Signature-V3\"],\n    timestamp=request.headers[\"X-Relay-Timestamp\"],\n    secret=WEBHOOK_SECRET,\n    tolerance_seconds=300,\n)\n```\n\n\n`verify()` raises `SignatureMismatch` when the digest does not match and\n`SignatureExpired` when the timestamp is outside `tolerance_seconds`. The\ndefault tolerance is 300 seconds; widening it beyond 900 is rejected."
+        }
+      ],
+      "raw_output": "In Relay v3 the SDK exchanges a long‑lived API key for short‑lived bearer tokens and automatically refreshes those tokens in the background, so you only provide the key once and the client handles the token lifecycle transparently【v3:auth:structural:0】.  \nIn Relay v2 there is no token exchange; the API key is sent directly with every request and the SDK does not perform any refresh loop【v2:auth:structural:0】.",
+      "refused": false,
+      "citations": [],
+      "citation_check": {
+        "cited": [],
+        "unresolvable": [],
+        "ok": false
+      },
+      "prompt_version": "sysprompt-c10b763ebb",
+      "model": "openai/gpt-oss-120b",
+      "model_params": {
+        "max_tokens": 2048
+      },
+      "latency_ms": 9967.7,
+      "answer_sha256": "5e34a984c57fef9af2d1c628cb93f2b4be9ab56b7fbebe2bea40c53b5e3265a4"
+    },
+    {
+      "case_id": "W6-10",
+      "question": "How many delivery attempts does a failed send get by default?",
+      "mode": "version-ambiguity",
+      "version_sensitive": true,
+      "sdk_version_intent": "unspecified",
+      "origin": {
+        "kind": "authored",
+        "basis": "v3/client.md retry_max_attempts vs v2/CHANGELOG.md 2.5.0"
+      },
+      "retrieved": [
+        {
+          "chunk_id": "v3:webhooks:structural:3",
+          "rank": 0,
+          "dense_distance": 0.48281151056289673,
+          "bm25_score": 11.360891470274511,
+          "rrf_score": 0.03177805800756621,
+          "source_file": "v3/webhooks.md",
+          "sdk_version": "v3",
+          "heading_path": "Webhooks > Retry schedule",
+          "text": "Webhooks > Retry schedule\n\nA webhook endpoint that does not return a 2xx status within 10 seconds is\nretried. Relay makes at most 6 delivery attempts spread over 24 hours, at\nintervals of 30 seconds, 5 minutes, 30 minutes, 2 hours, 6 hours and 18 hours.\nAfter the final attempt the delivery is marked `exhausted` and no further\nnotification is sent.\n\nEndpoints must be idempotent. `X-Relay-Delivery-Id` is stable across retries of\nthe same event and is the correct key to deduplicate on."
+        },
+        {
+          "chunk_id": "v3:client:structural:3",
+          "rank": 1,
+          "dense_distance": 0.5480389595031738,
+          "bm25_score": 13.883023027578156,
+          "rrf_score": 0.031544957774465976,
+          "source_file": "v3/client.md",
+          "sdk_version": "v3",
+          "heading_path": "Client > Client.send() > Parameters",
+          "text": "Client > Client.send() > Parameters\n\ntempt. A value of `1.0` produces constant-delay retries. |\n| `retry_max_attempts` | `int` | `4` | no | Total number of delivery attempts, including the first. Set to `1` to disable retries entirely. |\n\n| Parameter | Type | Default | Required | Description |\n|---|---|---|---|---|\n| `timeout_ms` | `int` | `30000` | no | Total wall-clock budget for the call, covering all retry attempts. Exceeding it raises `RelayTimeout`. |\n| `priority` | `str` | `\"normal\"` | no | One of `\"low\"`, `\"normal\"`, or `\"urgent\"`. Urgent messages bypass the standard queue but are billed at a higher rate. |\n| `dedupe_window_ms` | `int` | `600000` | no | How long an `idempotency_key` is remembered by the broker. Maximum accepted value is `86400000` (24 hours). |\n| `compression` | `str` | `\"gzip\"` | no | Wire compression for the payload. One of `\"gzip\"`, `\"zstd\"`, or `\"none\"`. |\n| `metadata` | `dict` | `{}` | no | Arbitrary string-to-string map attached to the message. Keys prefixed with `relay.` are reserved and rejected. |\n| `callback_url` | `str` | `None` | no | HTTPS endpoint notified on final delivery outcome. Must be registered in the console before use. |"
+        },
+        {
+          "chunk_id": "v2:client:structural:2",
+          "rank": 2,
+          "dense_distance": 0.5133718848228455,
+          "bm25_score": 12.095546338303706,
+          "rrf_score": 0.03149801587301587,
+          "source_file": "v2/client.md",
+          "sdk_version": "v2",
+          "heading_path": "Client > Client.send() > Parameters",
+          "text": "Client > Client.send() > Parameters\n\n| Parameter | Type | Default | Required | Description |\n|---|---|---|---|---|\n| `message` | `str` | — | yes | Body of the message. Must be valid UTF-8 and at most 64 KiB. |\n| `channel` | `str` | — | yes | Target channel identifier, in the form `org/topic`. |\n| `idempotency_key` | `str` | `None` | no | Client-supplied de-duplication key. |\n| `retry_backoff_ms` | `int` | `500` | no | Base delay in milliseconds before the first retry. |\n| `retry_max_attempts` | `int` | `3` | no | Total number of delivery attempts, including the first. |\n| `timeout_ms` | `int` | `10000` | no | Total wall-clock budget for the call. |"
+        },
+        {
+          "chunk_id": "v3:errors:structural:4",
+          "rank": 3,
+          "dense_distance": 0.5076771974563599,
+          "bm25_score": 9.740685884078074,
+          "rrf_score": 0.031054405392392875,
+          "source_file": "v3/errors.md",
+          "sdk_version": "v3",
+          "heading_path": "Errors > Timeouts",
+          "text": "Errors > Timeouts\n\n`RelayTimeout` is raised when the total budget set by `timeout_ms` is exhausted\nacross all retry attempts. It is not an error code returned by the broker — it\nis raised client-side and carries `attempts`, the number of tries made before\nthe budget ran out.\n\nA timeout does not mean the message was not delivered. If the broker accepted\nthe message but the acknowledgement was lost, retrying with the same\n`idempotency_key` returns the original receipt rather than sending twice."
+        }
+      ],
+      "raw_output": "A failed send is retried according to the client’s `retry_max_attempts` setting, which defaults to 4 attempts (including the first) in the v3 SDK [chunk: v3:client:structural:3] and defaults to 3 attempts (including the first) in the v2 SDK [chunk: v2:client:structural:2].",
+      "refused": false,
+      "citations": [
+        "v3:client:structural:3",
+        "v2:client:structural:2"
+      ],
+      "citation_check": {
+        "cited": [
+          "v3:client:structural:3",
+          "v2:client:structural:2"
+        ],
+        "unresolvable": [],
+        "ok": true
+      },
+      "prompt_version": "sysprompt-c10b763ebb",
+      "model": "openai/gpt-oss-120b",
+      "model_params": {
+        "max_tokens": 2048
+      },
+      "latency_ms": 1995.2,
+      "answer_sha256": "f528c5bd8fcfb12370485ae0463f95452ff54e3430a5e5f7dba56d0dbdfa7a18"
+    },
+    {
+      "case_id": "W6-12",
+      "question": "How should I handle errors in the SDK?",
+      "mode": "cross-product-bleed",
+      "version_sensitive": true,
+      "sdk_version_intent": "unspecified",
+      "origin": {
+        "kind": "authored",
+        "basis": "generic phrasing over a multi-product index"
+      },
+      "retrieved": [
+        {
+          "chunk_id": "unknown:OMNUMI_SDK_IOS_DOCUMENTATION:structural:151",
+          "rank": 0,
+          "dense_distance": 0.6022339463233948,
+          "bm25_score": 15.287116362414785,
+          "rrf_score": 0.029906956136464335,
+          "source_file": "OMNUMI_SDK_IOS_DOCUMENTATION.md",
+          "sdk_version": "unknown",
+          "heading_path": "Omnumi SDK (iOS) - Developer Documentation > 19. FAQ > Q: How do I handle SDK dismissal?",
+          "text": "Omnumi SDK (iOS) - Developer Documentation > 19. FAQ > Q: How do I handle SDK dismissal?\n\n**A:** The SDK manages its own navigation. Users can use back buttons to exit, or you can dismiss the presented navigation controller programmatically."
+        },
+        {
+          "chunk_id": "unknown:OMNUMI_SDK_IOS_DOCUMENTATION:structural:50",
+          "rank": 1,
+          "dense_distance": 0.5211202502250671,
+          "bm25_score": 7.839732896450147,
+          "rrf_score": 0.028991596638655463,
+          "source_file": "OMNUMI_SDK_IOS_DOCUMENTATION.md",
+          "sdk_version": "unknown",
+          "heading_path": "Omnumi SDK (iOS) - Developer Documentation > 4. API-Only Mode (Custom UI Implementation) > 4.6 Error Handling in API-Only Mode",
+          "text": "Omnumi SDK (iOS) - Developer Documentation > 4. API-Only Mode (Custom UI Implementation) > 4.6 Error Handling in API-Only Mode\n\nHandle API errors appropriately in your custom UI:\n\n```swift\nfunc handleAPIError(_ response: Any) {\n    // Check response type and handle accordingly\n    if let errorMessage = getErrorMessage(from: response) {\n        // Check for specific error types\n        if errorMessage.contains(\"CONSENT\") {\n            // Navigate to custom consent flow\n        } else if errorMessage.contains(\"PRE_APPROVAL\") {\n            // Trigger pre-approval flow\n        } else if errorMessage.contains(\"UNAUTHORIZED\") {\n            // Refresh token and retry\n        } else {\n            // Show generic error\n            showError(errorMessage)\n        }\n    }\n}\n```\n\n"
+        },
+        {
+          "chunk_id": "unknown:OMNUMI_SDK_IOS_DOCUMENTATION:structural:119",
+          "rank": 2,
+          "dense_distance": 0.6156145334243774,
+          "bm25_score": 7.801543250176586,
+          "rrf_score": 0.02690501986276634,
+          "source_file": "OMNUMI_SDK_IOS_DOCUMENTATION.md",
+          "sdk_version": "unknown",
+          "heading_path": "Omnumi SDK (iOS) - Developer Documentation > 10. Best Practices > 10.2 User Experience",
+          "text": "Omnumi SDK (iOS) - Developer Documentation > 10. Best Practices > 10.2 User Experience\n\n1. **Navigation**\n   - Present SDK in full-screen modal\n   - Allow users to exit at any point (except during critical operations)\n   - Preserve navigation stack for back navigation\n   - Handle device rotation gracefully\n\n2. **Error Handling**\n   - Show clear, actionable error messages\n   - Provide retry options for recoverable errors\n   - Guide users to resolution steps\n   - Log errors for debugging (without sensitive data)\n\n3. **Performance**\n   - Load card images asynchronously\n   - Cache frequently accessed data\n   - Minimize API calls\n   - Show loading indicators for long operations"
+        },
+        {
+          "chunk_id": "unknown:OMNUMI_SDK_IOS_DOCUMENTATION:structural:62",
+          "rank": 3,
+          "dense_distance": 0.4067155718803406,
+          "bm25_score": null,
+          "rrf_score": 0.01639344262295082,
+          "source_file": "OMNUMI_SDK_IOS_DOCUMENTATION.md",
+          "sdk_version": "unknown",
+          "heading_path": "Omnumi SDK (iOS) - Developer Documentation > 6. Error Handling",
+          "text": "Omnumi SDK (iOS) - Developer Documentation > 6. Error Handling\n\nThe Omnumi SDK implements comprehensive error handling with user-friendly error messages."
+        }
+      ],
+      "raw_output": "The Omnumi SDK implements comprehensive error handling with user‑friendly error messages【chunk: unknown:OMNUMI_SDK_IOS_DOCUMENTATION:structural:62】.  \n\nWhen using API‑Only mode, inspect the API response and handle specific error types (e.g., “CONSENT”, “PRE_APPROVAL”, “UNAUTHORIZED”) by navigating to the appropriate custom flow or showing a generic error message if none match【chunk: unknown:OMNUMI_SDK_IOS_DOCUMENTATION:structural:50】.  \n\nIn all cases follow the best‑practice guidelines: display clear, actionable error messages, provide retry options for recoverable errors, guide users to resolution steps, and log errors for debugging without including sensitive data【chunk: unknown:OMNUMI_SDK_IOS_DOCUMENTATION:structural:119】.",
+      "refused": false,
+      "citations": [],
+      "citation_check": {
+        "cited": [],
+        "unresolvable": [],
+        "ok": false
+      },
+      "prompt_version": "sysprompt-c10b763ebb",
+      "model": "openai/gpt-oss-120b",
+      "model_params": {
+        "max_tokens": 2048
+      },
+      "latency_ms": 7669.9,
+      "answer_sha256": "f308987a420941cc3706a9051e93343e916e384757b00fc579855e09c6064615"
+    },
+    {
+      "case_id": "W6-13",
+      "question": "How do I initialise a client in the SDK?",
+      "mode": "cross-product-bleed",
+      "version_sensitive": true,
+      "sdk_version_intent": "unspecified",
+      "origin": {
+        "kind": "authored",
+        "basis": "generic phrasing over a multi-product index"
+      },
+      "retrieved": [
+        {
+          "chunk_id": "unknown:OMNUMI_SDK_IOS_DOCUMENTATION:structural:149",
+          "rank": 0,
+          "dense_distance": 0.6208895444869995,
+          "bm25_score": 9.132945081143383,
+          "rrf_score": 0.031009615384615385,
+          "source_file": "OMNUMI_SDK_IOS_DOCUMENTATION.md",
+          "sdk_version": "unknown",
+          "heading_path": "Omnumi SDK (iOS) - Developer Documentation > 19. FAQ > Q: Can I use the SDK without a wallet address?",
+          "text": "Omnumi SDK (iOS) - Developer Documentation > 19. FAQ > Q: Can I use the SDK without a wallet address?\n\n**A:** Yes, you can use `customerAccountId` directly without providing any wallet parameters."
+        },
+        {
+          "chunk_id": "unknown:OMNUMI_SDK_IOS_DOCUMENTATION:structural:7",
+          "rank": 1,
+          "dense_distance": 0.5685878992080688,
+          "bm25_score": 7.305799910800252,
+          "rrf_score": 0.03021353930031804,
+          "source_file": "OMNUMI_SDK_IOS_DOCUMENTATION.md",
+          "sdk_version": "unknown",
+          "heading_path": "Omnumi SDK (iOS) - Developer Documentation > 2. How Omnumi SDK Works > 2.2 Detailed Flow Description > Step 1: SDK Initialization",
+          "text": "Omnumi SDK (iOS) - Developer Documentation > 2. How Omnumi SDK Works > 2.2 Detailed Flow Description > Step 1: SDK Initialization\n\nThe partner app initializes the SDK by calling `RainSDK.createMainController()` with required configuration parameters. The SDK validates parameters and initializes the Rain API connection."
+        },
+        {
+          "chunk_id": "v3:client:structural:0",
+          "rank": 2,
+          "dense_distance": 0.6267620325088501,
+          "bm25_score": 7.4677190486404115,
+          "rrf_score": 0.029857397504456328,
+          "source_file": "v3/client.md",
+          "sdk_version": "v3",
+          "heading_path": "Client",
+          "text": "Client\n\nThe `Client` is the entry point to the Relay SDK. A client owns a connection\npool, a retry policy, and a background flush loop. Construct one per process\nand share it; constructing a client per request defeats connection reuse and\nwill exhaust local ports under load.\n\n```python\nfrom relay import Client\n\nclient = Client(api_key=\"rk_live_...\", region=\"eu-west-1\")\n```\n\n"
+        },
+        {
+          "chunk_id": "unknown:OMNUMI_SDK_IOS_DOCUMENTATION:structural:156",
+          "rank": 3,
+          "dense_distance": 0.6653262972831726,
+          "bm25_score": 9.361888422453639,
+          "rrf_score": 0.028693528693528692,
+          "source_file": "OMNUMI_SDK_IOS_DOCUMENTATION.md",
+          "sdk_version": "unknown",
+          "heading_path": "Omnumi SDK (iOS) - Developer Documentation > 19. FAQ > Q: Can I test the SDK in a sandbox environment?",
+          "text": "Omnumi SDK (iOS) - Developer Documentation > 19. FAQ > Q: Can I test the SDK in a sandbox environment?\n\n**A:** Yes, use sandbox auth tokens provided by Rain Card. The SDK automatically connects to the appropriate environment based on the token.\n\n---\n\n**Document Version:** 1.0.0\n**Last Updated:** 2025-01-15\n**Omnumi SDK Version:** 1.0.0\n\n© 2025 Omnumi. All rights reserved."
+        }
+      ],
+      "raw_output": "To initialise a client, create an instance of the `Client` class with your API key and region, e.g.:\n\n```python\nfrom relay import Client\n\nclient = Client(api_key=\"rk_live_...\", region=\"eu-west-1\")\n``` \n\nConstruct one client per process and share it; creating a client for each request wastes connections and can exhaust local ports under load. [chunk: v3:client:structural:0]",
+      "refused": false,
+      "citations": [
+        "v3:client:structural:0"
+      ],
+      "citation_check": {
+        "cited": [
+          "v3:client:structural:0"
+        ],
+        "unresolvable": [],
+        "ok": true
+      },
+      "prompt_version": "sysprompt-c10b763ebb",
+      "model": "openai/gpt-oss-120b",
+      "model_params": {
+        "max_tokens": 2048
+      },
+      "latency_ms": 10397.0,
+      "answer_sha256": "6516c99e644b6bd2ff5281ca35b4fda015392c474483774188c2a3edcbb02835"
+    },
+    {
+      "case_id": "W6-14",
+      "question": "How do I refresh an expired token in the SDK?",
+      "mode": "cross-product-bleed",
+      "version_sensitive": true,
+      "sdk_version_intent": "unspecified",
+      "origin": {
+        "kind": "authored",
+        "basis": "generic phrasing over a multi-product index"
+      },
+      "retrieved": [
+        {
+          "chunk_id": "unknown:OMNUMI_SDK_IOS_DOCUMENTATION:structural:27",
+          "rank": 0,
+          "dense_distance": 0.41334402561187744,
+          "bm25_score": 14.838955812893989,
+          "rrf_score": 0.03225806451612903,
+          "source_file": "OMNUMI_SDK_IOS_DOCUMENTATION.md",
+          "sdk_version": "unknown",
+          "heading_path": "Omnumi SDK (iOS) - Developer Documentation > 3. SDK Integration Steps > Step 3: Implement Token Refresh Callback",
+          "text": "Omnumi SDK (iOS) - Developer Documentation > 3. SDK Integration Steps > Step 3: Implement Token Refresh Callback\n\nThe SDK requires a token refresh callback to handle expired authentication tokens:\n\n```swift\nfunc getRefreshedToken() -> String {\n    // Your logic to refresh and return a new auth token\n    // This is called automatically when the token expires\n    return refreshedAuthToken\n}\n```\n\n"
+        },
+        {
+          "chunk_id": "unknown:OMNUMI_SDK_IOS_DOCUMENTATION:structural:74",
+          "rank": 1,
+          "dense_distance": 0.46624618768692017,
+          "bm25_score": 12.038838035896338,
+          "rrf_score": 0.031746031746031744,
+          "source_file": "OMNUMI_SDK_IOS_DOCUMENTATION.md",
+          "sdk_version": "unknown",
+          "heading_path": "Omnumi SDK (iOS) - Developer Documentation > 7. Callbacks and Event Hooks > 7.1 Required Callbacks > Token Refresh Callback > When Called",
+          "text": "Omnumi SDK (iOS) - Developer Documentation > 7. Callbacks and Event Hooks > 7.1 Required Callbacks > Token Refresh Callback > When Called\n\n- On any 401 Unauthorized API response\n- Before token expiration (if detected)\n- On SDK initialization if token is expired"
+        },
+        {
+          "chunk_id": "v3:auth:structural:1",
+          "rank": 2,
+          "dense_distance": 0.41140633821487427,
+          "bm25_score": 9.762679702598774,
+          "rrf_score": 0.031099324975891997,
+          "source_file": "v3/auth.md",
+          "sdk_version": "v3",
+          "heading_path": "Authentication > Token lifecycle",
+          "text": "Authentication > Token lifecycle\n\nAn access token issued by `POST /v3/auth/token` is valid for 3600 seconds. The\nSDK refreshes it when 80% of its lifetime has elapsed, so a healthy client\nrefreshes roughly every 48 minutes. Refresh happens on a background thread and\ndoes not block calls in flight.\n\n| Parameter | Type | Default | Required | Description |\n|---|---|---|---|---|\n| `api_key` | `str` | — | yes | Long-lived key beginning `rk_live_` or `rk_test_`. Never ship a live key to a client device. |\n| `region` | `str` | `\"us-east-1\"` | no | Region whose token endpoint is used. Tokens are not portable between regions. |\n| `refresh_margin` | `float` | `0.8` | no | Fraction of token lifetime after which a refresh is attempted. Values above `0.95` are rejected. |\n| `token_cache` | `TokenCache` | `MemoryCache()` | no | Where minted tokens are stored. Supply a shared cache to avoid one refresh per process. |"
+        },
+        {
+          "chunk_id": "unknown:OMNUMI_SDK_IOS_DOCUMENTATION:structural:122",
+          "rank": 3,
+          "dense_distance": 0.5260411500930786,
+          "bm25_score": 11.991245592746811,
+          "rrf_score": 0.030776515151515152,
+          "source_file": "OMNUMI_SDK_IOS_DOCUMENTATION.md",
+          "sdk_version": "unknown",
+          "heading_path": "Omnumi SDK (iOS) - Developer Documentation > 11. Troubleshooting > 11.1 Common Issues > Issue: Token refresh not working",
+          "text": "Omnumi SDK (iOS) - Developer Documentation > 11. Troubleshooting > 11.1 Common Issues > Issue: Token refresh not working\n\n**Cause:** tokenRefreshCallback returning invalid or expired token\n**Solution:** Ensure callback returns a valid, fresh auth token"
+        }
+      ],
+      "raw_output": "To refresh an expired token you supply a **token‑refresh callback** that returns a fresh authentication token.  \n\n```swift\nfunc getRefreshedToken() -> String {\n    // Your logic to refresh and return a new auth token\n    // This is called automatically when the token expires\n    return refreshedAuthToken\n}\n```  \n[chunk: unknown:OMNUMI_SDK_IOS_DOCUMENTATION:structural:27]\n\nThe SDK invokes this callback in three situations:  \n\n* when any API call returns **401 Unauthorized**,  \n* shortly before the token’s expiry (if the SDK detects it), and  \n* on SDK initialization if the stored token is already expired.  \n[chunk: unknown:OMNUMI_SDK_IOS_DOCUMENTATION:structural:74]\n\nAn access token obtained from `POST /v3/auth/token` is valid for **3600 seconds**; the SDK attempts a refresh after **80 %** of that lifetime (≈ 48 minutes) on a background thread so active calls are not blocked.  \n[chunk: v3:auth:structural:1]\n\nIf the callback returns an invalid or expired token the refresh will fail; ensure the function returns a valid, fresh token.  \n[chunk: unknown:OMNUMI_SDK_IOS_DOCUMENTATION:structural:122]",
+      "refused": false,
+      "citations": [
+        "unknown:OMNUMI_SDK_IOS_DOCUMENTATION:structural:27",
+        "unknown:OMNUMI_SDK_IOS_DOCUMENTATION:structural:74",
+        "v3:auth:structural:1",
+        "unknown:OMNUMI_SDK_IOS_DOCUMENTATION:structural:122"
+      ],
+      "citation_check": {
+        "cited": [
+          "unknown:OMNUMI_SDK_IOS_DOCUMENTATION:structural:27",
+          "unknown:OMNUMI_SDK_IOS_DOCUMENTATION:structural:74",
+          "v3:auth:structural:1",
+          "unknown:OMNUMI_SDK_IOS_DOCUMENTATION:structural:122"
+        ],
+        "unresolvable": [],
+        "ok": true
+      },
+      "prompt_version": "sysprompt-c10b763ebb",
+      "model": "openai/gpt-oss-120b",
+      "model_params": {
+        "max_tokens": 2048
+      },
+      "latency_ms": 10251.0,
+      "answer_sha256": "211bcc5baba3a36bce368796f50ca64354e01049118100dad1703073e699285b"
+    },
+    {
+      "case_id": "W6-15",
+      "question": "How does the SDK retry failed requests?",
+      "mode": "cross-product-bleed",
+      "version_sensitive": true,
+      "sdk_version_intent": "unspecified",
+      "origin": {
+        "kind": "authored",
+        "basis": "generic phrasing over a multi-product index"
+      },
+      "retrieved": [
+        {
+          "chunk_id": "v3:errors:structural:1",
+          "rank": 0,
+          "dense_distance": 0.39718377590179443,
+          "bm25_score": 11.67724683080086,
+          "rrf_score": 0.03252247488101534,
+          "source_file": "v3/errors.md",
+          "sdk_version": "v3",
+          "heading_path": "Errors > Error codes",
+          "text": "Errors > Error codes\n\n| Code | HTTP | Retryable | Meaning |\n|---|---|---|---|\n| `RELAY_400` | 400 | no | Malformed request. The payload failed schema validation before reaching the broker. |\n| `AUTH_TOKEN_EXPIRED` | 401 | no | The bearer token is past its expiry. The SDK refreshes automatically; seeing this means the refresh loop is not running. |\n| `AUTH_SCOPE_DENIED` | 403 | no | The parent key does not hold the scope required for this call. |\n| `RELAY_404` | 404 | no | Channel does not exist, or the key's organisation cannot see it. |\n| `RELAY_409` | 409 | no | Idempotency key reused with a different payload inside the dedupe window. |\n| `RELAY_413` | 413 | no | Message body exceeds 256 KiB after encoding. |\n| `RELAY_429` | 429 | yes | Rate limit exceeded. Honour the `Retry-After` header rather than the SDK's own backoff. |\n| `RELAY_503` | 503 | yes | Broker temporarily unavailable. Safe to retry with backoff. |"
+        },
+        {
+          "chunk_id": "v3:errors:structural:2",
+          "rank": 1,
+          "dense_distance": 0.38017022609710693,
+          "bm25_score": 7.684313693427621,
+          "rrf_score": 0.031544957774465976,
+          "source_file": "v3/errors.md",
+          "sdk_version": "v3",
+          "heading_path": "Errors > Error codes",
+          "text": "Errors > Error codes\n\nY_429` | 429 | yes | Rate limit exceeded. Honour the `Retry-After` header rather than the SDK's own backoff. |\n| `RELAY_503` | 503 | yes | Broker temporarily unavailable. Safe to retry with backoff. |\n\n| Code | HTTP | Retryable | Meaning |\n|---|---|---|---|\n| `RELAY_504` | 504 | yes | Broker accepted the request but did not settle it within the deadline. Retry with the same idempotency key. |"
+        },
+        {
+          "chunk_id": "unknown:OMNUMI_SDK_IOS_DOCUMENTATION:structural:72",
+          "rank": 2,
+          "dense_distance": 0.4976685643196106,
+          "bm25_score": 10.605847624130144,
+          "rrf_score": 0.030621785881252923,
+          "source_file": "OMNUMI_SDK_IOS_DOCUMENTATION.md",
+          "sdk_version": "unknown",
+          "heading_path": "Omnumi SDK (iOS) - Developer Documentation > 6. Error Handling > 6.4 Error Recovery",
+          "text": "Omnumi SDK (iOS) - Developer Documentation > 6. Error Handling > 6.4 Error Recovery\n\nThe SDK implements automatic error recovery where possible:\n\n1. **Token Expiration**: Automatically calls refresh callback\n2. **Network Retry**: Allows users to retry failed operations\n3. **State Preservation**: Maintains user progress on recoverable errors\n4. **Graceful Degradation**: Falls back to default values for optional features\n\n---"
+        },
+        {
+          "chunk_id": "v3:errors:structural:4",
+          "rank": 3,
+          "dense_distance": 0.4924817681312561,
+          "bm25_score": 7.218714249995282,
+          "rrf_score": 0.029418126757516764,
+          "source_file": "v3/errors.md",
+          "sdk_version": "v3",
+          "heading_path": "Errors > Timeouts",
+          "text": "Errors > Timeouts\n\n`RelayTimeout` is raised when the total budget set by `timeout_ms` is exhausted\nacross all retry attempts. It is not an error code returned by the broker — it\nis raised client-side and carries `attempts`, the number of tries made before\nthe budget ran out.\n\nA timeout does not mean the message was not delivered. If the broker accepted\nthe message but the acknowledgement was lost, retrying with the same\n`idempotency_key` returns the original receipt rather than sending twice."
+        }
+      ],
+      "raw_output": "The SDK automatically retries operations that return a **retry‑able error code** – for example `RELAY_429` (rate‑limit exceeded), `RELAY_503` (broker temporarily unavailable) and `RELAY_504` (broker did not settle in time) – using the guidance in each code’s description (honour the `Retry‑After` header for 429 and apply back‑off for 503/504) [chunk: v3:errors:structural:1].  \n\nRetries are performed until the client‑side timeout budget (`timeout_ms`) is exhausted; each attempt is counted in the `RelayTimeout` error, and retries use the same `idempotency_key` so that a successful earlier delivery is not duplicated [chunk: v3:errors:structural:4].  \n\nAdditionally, the SDK’s error‑recovery layer includes a **Network Retry** capability that lets users retry failed operations [chunk: unknown:OMNUMI_SDK_IOS_DOCUMENTATION:structural:72].",
+      "refused": false,
+      "citations": [
+        "v3:errors:structural:1",
+        "v3:errors:structural:4",
+        "unknown:OMNUMI_SDK_IOS_DOCUMENTATION:structural:72"
+      ],
+      "citation_check": {
+        "cited": [
+          "v3:errors:structural:1",
+          "v3:errors:structural:4",
+          "unknown:OMNUMI_SDK_IOS_DOCUMENTATION:structural:72"
+        ],
+        "unresolvable": [],
+        "ok": true
+      },
+      "prompt_version": "sysprompt-c10b763ebb",
+      "model": "openai/gpt-oss-120b",
+      "model_params": {
+        "max_tokens": 2048
+      },
+      "latency_ms": 5789.0,
+      "answer_sha256": "95d91f27de7f5a42b49c6e4d7e0de303c94fbfd9aa23feef091377a3cec4eba0"
+    },
+    {
+      "case_id": "W6-17",
+      "question": "What happens if a subscriber cannot keep up with incoming messages?",
+      "mode": "unexplained-refusal",
+      "version_sensitive": true,
+      "sdk_version_intent": "v3",
+      "origin": {
+        "kind": "authored",
+        "basis": "v3/streaming.md (Backpressure)"
+      },
+      "retrieved": [
+        {
+          "chunk_id": "v3:streaming:structural:4",
+          "rank": 0,
+          "dense_distance": 0.47852933406829834,
+          "bm25_score": 11.525795796258194,
+          "rrf_score": 0.03225806451612903,
+          "source_file": "v3/streaming.md",
+          "sdk_version": "v3",
+          "heading_path": "Streaming > Backpressure",
+          "text": "Streaming > Backpressure\n\nIf a consumer reads slower than the channel produces, the server buffers up to\n2000 messages per subscription and then begins dropping the oldest. Dropped\nmessages are reported as a `StreamLagged` event carrying the number of messages\nlost, which is delivered inline in the iterator."
+        },
+        {
+          "chunk_id": "v3:streaming:structural:1",
+          "rank": 1,
+          "dense_distance": 0.4760379195213318,
+          "bm25_score": 4.885608151980259,
+          "rrf_score": 0.03047794966520434,
+          "source_file": "v3/streaming.md",
+          "sdk_version": "v3",
+          "heading_path": "Streaming > Client.subscribe()",
+          "text": "Streaming > Client.subscribe()\n\nOpens a stream and returns an iterator. The iterator blocks between messages\nand terminates when the server closes the stream or `max_messages` is reached.\n\n| Parameter | Type | Default | Required | Description |\n|---|---|---|---|---|\n| `channel` | `str` | — | yes | Channel to tail, in the form `org/team/topic`. |\n| `stream` | `bool` | `False` | no | Must be `True` to receive incremental messages. When `False` the call buffers the whole response and returns a list. |\n| `from_cursor` | `str` | `None` | no | Resume position. When omitted the stream starts at the newest message and does not replay history. |\n| `heartbeat_ms` | `int` | `15000` | no | Interval at which the server emits keepalive frames. Set to `0` to disable, at the cost of slower dead-connection detection. |\n| `max_messages` | `int` | `None` | no | Stop after this many messages. `None` streams until the connection closes. |"
+        },
+        {
+          "chunk_id": "v3:client:structural:6",
+          "rank": 2,
+          "dense_distance": 0.6850724816322327,
+          "bm25_score": 10.310994525984572,
+          "rrf_score": 0.029957522915269395,
+          "source_file": "v3/client.md",
+          "sdk_version": "v3",
+          "heading_path": "Client > Client.close()",
+          "text": "Client > Client.close()\n\nShuts the client down. `close()` flushes any messages still buffered in the\nbackground loop, waits up to `drain_timeout_ms` for in-flight sends to settle,\nand then releases the connection pool. Messages still unsent when the drain\ndeadline passes are dropped and reported through the return value.\n\n| Parameter | Type | Default | Required | Description |\n|---|---|---|---|---|\n| `drain_timeout_ms` | `int` | `5000` | no | How long to wait for buffered messages to flush before giving up. |\n| `force` | `bool` | `False` | no | Skip the drain entirely and tear the pool down immediately. Buffered messages are lost. |\n\nCalling `close()` twice is safe; the second call is a no-op. Using a client\nafter `close()` raises `RelayClosed`.\n\n```python\ndropped = client.close(drain_timeout_ms=5000)\nif dropped:\n    logger.warning(\"relay dropped %d buffered messages\", dropped)\n```\n"
+        },
+        {
+          "chunk_id": "v3:streaming:structural:2",
+          "rank": 3,
+          "dense_distance": 0.4943479895591736,
+          "bm25_score": 4.120570718258421,
+          "rrf_score": 0.029030910609857977,
+          "source_file": "v3/streaming.md",
+          "sdk_version": "v3",
+          "heading_path": "Streaming > Client.subscribe()",
+          "text": "Streaming > Client.subscribe()\n\n frames. Set to `0` to disable, at the cost of slower dead-connection detection. |\n| `max_messages` | `int` | `None` | no | Stop after this many messages. `None` streams until the connection closes. |\n\nEnable streaming by passing `stream=True`; the default is `False`, which\nbuffers and returns a plain list instead of an iterator.\n\n```python\nfor message in client.subscribe(\n    channel=\"acme/platform/deploys\",\n    stream=True,\n    heartbeat_ms=15000,\n):\n    print(message.id, message.body)\n```\n\n"
+        }
+      ],
+      "raw_output": "If a subscriber reads slower than the channel produces, the server will buffer up to 2000 messages for that subscription and then start dropping the oldest messages. Each drop is reported as a `StreamLagged` event that includes the count of lost messages and is delivered inline in the iterator [chunk: v3:streaming:structural:4].",
+      "refused": false,
+      "citations": [
+        "v3:streaming:structural:4"
+      ],
+      "citation_check": {
+        "cited": [
+          "v3:streaming:structural:4"
+        ],
+        "unresolvable": [],
+        "ok": true
+      },
+      "prompt_version": "sysprompt-c10b763ebb",
+      "model": "openai/gpt-oss-120b",
+      "model_params": {
+        "max_tokens": 2048
+      },
+      "latency_ms": 12669.9,
+      "answer_sha256": "8a33dbc38f3981a7d4d1de77af3c676be69e096b876b8dc54e3ed609c30905d0"
+    },
+    {
+      "case_id": "W6-18",
+      "question": "If a paginated listing runs for a long time, can the cursor stop working?",
+      "mode": "unexplained-refusal",
+      "version_sensitive": true,
+      "sdk_version_intent": "v3",
+      "origin": {
+        "kind": "authored",
+        "basis": "v3/pagination.md (Cursor stability)"
+      },
+      "retrieved": [
+        {
+          "chunk_id": "v3:pagination:structural:0",
+          "rank": 0,
+          "dense_distance": 0.44133156538009644,
+          "bm25_score": 12.85230507482142,
+          "rrf_score": 0.03225806451612903,
+          "source_file": "v3/pagination.md",
+          "sdk_version": "v3",
+          "heading_path": "Pagination",
+          "text": "Pagination\n\nList endpoints return cursor-paginated results. Cursors are opaque strings\nencoding a position in a stable sort order; do not parse or construct them.\nOffset pagination was removed in v3."
+        },
+        {
+          "chunk_id": "v3:pagination:structural:2",
+          "rank": 1,
+          "dense_distance": 0.29076749086380005,
+          "bm25_score": 9.742097328483734,
+          "rrf_score": 0.032018442622950824,
+          "source_file": "v3/pagination.md",
+          "sdk_version": "v3",
+          "heading_path": "Pagination > Cursor stability",
+          "text": "Pagination > Cursor stability\n\nA cursor remains valid for 7 days. Using an expired cursor raises `RELAY_410`\nand requires restarting from the first page. Cursors are scoped to the channel\nand direction that produced them; reusing a forward cursor on a backward read\nraises `RELAY_400`.\n\nMessages deleted between pages are skipped rather than leaving gaps, so a\nconsumer walking pages sees a consistent sequence even under concurrent\ndeletion."
+        },
+        {
+          "chunk_id": "v3:streaming:structural:3",
+          "rank": 2,
+          "dense_distance": 0.7692447900772095,
+          "bm25_score": 13.016984153699084,
+          "rrf_score": 0.03177805800756621,
+          "source_file": "v3/streaming.md",
+          "sdk_version": "v3",
+          "heading_path": "Streaming > Reconnection",
+          "text": "Streaming > Reconnection\n\nThe SDK reconnects automatically when the connection drops, resuming from the\ncursor of the last message it yielded. Reconnection uses the same exponential\nbackoff policy as `Client.send()`, capped at 60 seconds between attempts.\n\nMessages are delivered at least once. A reconnect can replay the most recent\nmessage if it was yielded but its cursor had not yet been acknowledged, so\nconsumers must tolerate duplicates.\n\n```python\ncursor = None\nfor message in client.subscribe(channel=ch, stream=True, from_cursor=cursor):\n    process(message)\n    cursor = message.cursor\n```\n\n"
+        },
+        {
+          "chunk_id": "v3:pagination:structural:1",
+          "rank": 3,
+          "dense_distance": 0.5050762891769409,
+          "bm25_score": 10.359124549218775,
+          "rrf_score": 0.031746031746031744,
+          "source_file": "v3/pagination.md",
+          "sdk_version": "v3",
+          "heading_path": "Pagination > Client.fetch()",
+          "text": "Pagination > Client.fetch()\n\n| Parameter | Type | Default | Required | Description |\n|---|---|---|---|---|\n| `channel` | `str` | — | yes | Channel to read from. |\n| `page_size` | `int` | `50` | no | Messages per page. The maximum accepted value is `250`; larger values are rejected with `RELAY_400` rather than silently clamped. |\n| `cursor` | `str` | `None` | no | Position returned by a previous call as `next_cursor`. Omit for the first page. |\n| `direction` | `str` | `\"forward\"` | no | `\"forward\"` reads oldest to newest; `\"backward\"` reads newest to oldest. |\n\nA page response carries `items`, `next_cursor` and `has_more`. When `has_more`\nis `False`, `next_cursor` is `None` and iteration is complete.\n\n```python\ncursor, out = None, []\nwhile True:\n    page = client.fetch(channel=ch, page_size=250, cursor=cursor)\n    out.extend(page.items)\n    if not page.has_more:\n        break\n    cursor = page.next_cursor\n```\n\n"
+        }
+      ],
+      "raw_output": "Yes. A cursor is only valid for 7 days; after that it expires and using it raises `RELAY_410`, so you must restart the pagination from the first page. [chunk: v3:pagination:structural:2]",
+      "refused": false,
+      "citations": [
+        "v3:pagination:structural:2"
+      ],
+      "citation_check": {
+        "cited": [
+          "v3:pagination:structural:2"
+        ],
+        "unresolvable": [],
+        "ok": true
+      },
+      "prompt_version": "sysprompt-c10b763ebb",
+      "model": "openai/gpt-oss-120b",
+      "model_params": {
+        "max_tokens": 2048
+      },
+      "latency_ms": 7145.1,
+      "answer_sha256": "d69e6954527e3b6eba90bcb0ecaca8aed09121ef14bb240952b4a3f04fc18f00"
+    },
+    {
+      "case_id": "W6-19",
+      "question": "How does the client behave when a stream connection drops mid-subscription?",
+      "mode": "unexplained-refusal",
+      "version_sensitive": true,
+      "sdk_version_intent": "v3",
+      "origin": {
+        "kind": "authored",
+        "basis": "v3/streaming.md (Reconnection)"
+      },
+      "retrieved": [
+        {
+          "chunk_id": "v3:streaming:structural:1",
+          "rank": 0,
+          "dense_distance": 0.4239117503166199,
+          "bm25_score": 18.997964246118034,
+          "rrf_score": 0.032266458495966696,
+          "source_file": "v3/streaming.md",
+          "sdk_version": "v3",
+          "heading_path": "Streaming > Client.subscribe()",
+          "text": "Streaming > Client.subscribe()\n\nOpens a stream and returns an iterator. The iterator blocks between messages\nand terminates when the server closes the stream or `max_messages` is reached.\n\n| Parameter | Type | Default | Required | Description |\n|---|---|---|---|---|\n| `channel` | `str` | — | yes | Channel to tail, in the form `org/team/topic`. |\n| `stream` | `bool` | `False` | no | Must be `True` to receive incremental messages. When `False` the call buffers the whole response and returns a list. |\n| `from_cursor` | `str` | `None` | no | Resume position. When omitted the stream starts at the newest message and does not replay history. |\n| `heartbeat_ms` | `int` | `15000` | no | Interval at which the server emits keepalive frames. Set to `0` to disable, at the cost of slower dead-connection detection. |\n| `max_messages` | `int` | `None` | no | Stop after this many messages. `None` streams until the connection closes. |"
+        },
+        {
+          "chunk_id": "v3:streaming:structural:3",
+          "rank": 1,
+          "dense_distance": 0.4457818269729614,
+          "bm25_score": 18.43115305200226,
+          "rrf_score": 0.031754032258064516,
+          "source_file": "v3/streaming.md",
+          "sdk_version": "v3",
+          "heading_path": "Streaming > Reconnection",
+          "text": "Streaming > Reconnection\n\nThe SDK reconnects automatically when the connection drops, resuming from the\ncursor of the last message it yielded. Reconnection uses the same exponential\nbackoff policy as `Client.send()`, capped at 60 seconds between attempts.\n\nMessages are delivered at least once. A reconnect can replay the most recent\nmessage if it was yielded but its cursor had not yet been acknowledged, so\nconsumers must tolerate duplicates.\n\n```python\ncursor = None\nfor message in client.subscribe(channel=ch, stream=True, from_cursor=cursor):\n    process(message)\n    cursor = message.cursor\n```\n\n"
+        },
+        {
+          "chunk_id": "v3:streaming:structural:2",
+          "rank": 2,
+          "dense_distance": 0.499969482421875,
+          "bm25_score": 15.306115239686587,
+          "rrf_score": 0.03125763125763126,
+          "source_file": "v3/streaming.md",
+          "sdk_version": "v3",
+          "heading_path": "Streaming > Client.subscribe()",
+          "text": "Streaming > Client.subscribe()\n\n frames. Set to `0` to disable, at the cost of slower dead-connection detection. |\n| `max_messages` | `int` | `None` | no | Stop after this many messages. `None` streams until the connection closes. |\n\nEnable streaming by passing `stream=True`; the default is `False`, which\nbuffers and returns a plain list instead of an iterator.\n\n```python\nfor message in client.subscribe(\n    channel=\"acme/platform/deploys\",\n    stream=True,\n    heartbeat_ms=15000,\n):\n    print(message.id, message.body)\n```\n\n"
+        },
+        {
+          "chunk_id": "v3:streaming:structural:4",
+          "rank": 3,
+          "dense_distance": 0.3538939356803894,
+          "bm25_score": 8.955754178246917,
+          "rrf_score": 0.030886196246139225,
+          "source_file": "v3/streaming.md",
+          "sdk_version": "v3",
+          "heading_path": "Streaming > Backpressure",
+          "text": "Streaming > Backpressure\n\nIf a consumer reads slower than the channel produces, the server buffers up to\n2000 messages per subscription and then begins dropping the oldest. Dropped\nmessages are reported as a `StreamLagged` event carrying the number of messages\nlost, which is delivered inline in the iterator."
+        }
+      ],
+      "raw_output": "When the connection drops, the SDK automatically attempts to reconnect, using the same exponential‑backoff policy as `Client.send()` (capped at 60 seconds between attempts) and resumes the subscription from the cursor of the last message it yielded. Because the cursor may not have been acknowledged yet, the reconnect can replay the most‑recent message, so consumers must be prepared to handle duplicate deliveries. [chunk: v3:streaming:structural:3]",
+      "refused": false,
+      "citations": [
+        "v3:streaming:structural:3"
+      ],
+      "citation_check": {
+        "cited": [
+          "v3:streaming:structural:3"
+        ],
+        "unresolvable": [],
+        "ok": true
+      },
+      "prompt_version": "sysprompt-c10b763ebb",
+      "model": "openai/gpt-oss-120b",
+      "model_params": {
+        "max_tokens": 2048
+      },
+      "latency_ms": 5071.7,
+      "answer_sha256": "2b8ed0ea4edaf7ea8189cee7859d7637023933c8c820da60f787c37df83bd713"
+    },
+    {
+      "case_id": "W6-20",
+      "question": "How do I restrict what a token is allowed to do?",
+      "mode": "unexplained-refusal",
+      "version_sensitive": true,
+      "sdk_version_intent": "v3",
+      "origin": {
+        "kind": "authored",
+        "basis": "v3/auth.md (Scopes)"
+      },
+      "retrieved": [
+        {
+          "chunk_id": "unknown:apiguide-readthedocs-io-en-latest:structural:53",
+          "rank": 0,
+          "dense_distance": 0.5807813405990601,
+          "bm25_score": 13.69200423834995,
+          "rrf_score": 0.03200204813108039,
+          "source_file": "apiguide-readthedocs-io-en-latest.pdf",
+          "sdk_version": "unknown",
+          "heading_path": "",
+          "text": "Rather than require the consumer to understand and code for the allowed states, HATEOAS\nprovides a means for the server to say what is allowed. The concept is best explained by example. Consider a bank account number 12345 with a positive balance of $100. A REST query on that resource might\nreturn a response indicating that subsequent allowed actions are deposit, withdraw, or transfer:\n{\n\"account_number”:”12345”’\n“balance”: 100.00,\n“links”:[\n{“rel”: \"deposit\", “href”:\"/account/12345/deposit\"},\n{“rel”: \"withdraw\", “href\":\"/account/12345/withdraw\"},\n{“rel”: \"transfer\", “href”:\"/account/12345/transfer\"}\n]\n}\nBut if the same account is overdrawn by $25 then the only allowed action is deposit:\n{\n\"account_number”:”12345”’\n“balance”: -25.00,\n“links”:[\n{“rel”: \"deposit\", “href”:\"/account/12345/deposit\"}\n]\n}\nIt is easy to see how many government interactions also have a similar idea of allowed actions depending on state."
+        },
+        {
+          "chunk_id": "v3:auth:structural:3",
+          "rank": 1,
+          "dense_distance": 0.614924430847168,
+          "bm25_score": 11.930178936133945,
+          "rrf_score": 0.03125763125763126,
+          "source_file": "v3/auth.md",
+          "sdk_version": "v3",
+          "heading_path": "Authentication > Scopes",
+          "text": "Authentication > Scopes\n\nKeys carry scopes that bound what the minted token may do. A token can never\nhold a scope its parent key lacks.\n\n| Scope | Grants |\n|---|---|\n| `send` | Dispatch messages to any channel the key's organisation owns. |\n| `read` | Read receipts, delivery status and channel metadata. |\n| `admin` | Rotate keys, register webhook endpoints, and change billing tier. |\n\nRequesting a scope the key does not hold fails with `AUTH_SCOPE_DENIED` at mint\ntime, not at call time. Check scopes during deployment rather than discovering\nthem in production traffic."
+        },
+        {
+          "chunk_id": "unknown:authentication:structural:3",
+          "rank": 2,
+          "dense_distance": 0.5479483604431152,
+          "bm25_score": 6.94227272719159,
+          "rrf_score": 0.03009207275993712,
+          "source_file": "authentication.pdf",
+          "sdk_version": "unknown",
+          "heading_path": "",
+          "text": "If possible, GitHub recommends that you use a fine-grained personal access token\ninstead of a personal access token (classic). For more information about creating a personal\naccess token, see Managing your personal access tokens. If you are using a fine-grained personal access token, your fine-grained personal access token\nrequires specific permissions in order to access each REST API endpoint. The REST API\nreference document for each endpoint states whether the endpoint works with fine-grained\npersonal access tokens and states what permissions are required in order for the token to use\nthe endpoint. Some endpoints may require multiple permissions, and some endpoints may\nrequire one of multiple permissions. For an overview of which REST API endpoints a fine-\ngrained personal access token can access with each permission, see Permissions required for\nfine-grained personal access tokens."
+        },
+        {
+          "chunk_id": "unknown:authentication:structural:5",
+          "rank": 3,
+          "dense_distance": 0.633236825466156,
+          "bm25_score": 9.78094934611511,
+          "rrf_score": 0.029857397504456328,
+          "source_file": "authentication.pdf",
+          "sdk_version": "unknown",
+          "heading_path": "",
+          "text": "Personal access tokens and SAML SSO\nIf you use a personal access token (classic) to access an organization that enforces SAML\nsingle sign-on (SSO) for authentication, you will need to authorize your token after creation. Fine-grained personal access tokens are authorized during token creation, before access to\nthe organization is granted. For more information, see Authorizing a personal access token for\nuse with single sign-on. If you do not authorize your personal access token (classic) for SAML SSO before you try to\nuse it to access a single organization that enforces SAML SSO, you may receive a 404 Not \nFound or a 403 Forbidden error. If you receive a 403 Forbidden error, the X-GitHub-SSO\nheader will include a URL that you can follow to authorize your token. The URL expires after\none hour."
+        }
+      ],
+      "raw_output": "You restrict a token’s capabilities by assigning it only the scopes (or permissions) it needs when the token is minted.  \nA key’s token can only contain scopes that the parent key already has, and any request for a scope the key does not hold is rejected at mint‑time with `AUTH_SCOPE_DENIED`【chunk: v3:auth:structural:3】.  \nThus you limit a token by:\n\n* Giving the parent key only the required scopes (e.g., `send`, `read`, `admin`).  \n* Requesting just those scopes for the new token; extra scopes cannot be added.  \n\nFor GitHub fine‑grained personal access tokens, you similarly restrict the token by selecting only the specific permissions needed for the REST API endpoints you intend to call【chunk: unknown:authentication:structural:3】.",
+      "refused": false,
+      "citations": [],
+      "citation_check": {
+        "cited": [],
+        "unresolvable": [],
+        "ok": false
+      },
+      "prompt_version": "sysprompt-c10b763ebb",
+      "model": "openai/gpt-oss-120b",
+      "model_params": {
+        "max_tokens": 2048
+      },
+      "latency_ms": 7621.8,
+      "answer_sha256": "e5e291340ba077ea5836d2845a7a2d904e6157ce5f7be7f8acbfb9f49f5691d9"
+    },
+    {
+      "case_id": "W6-21",
+      "question": "What is the default value of retry_backoff_ms for Client.send() in the v3 SDK?",
+      "mode": "clean",
+      "version_sensitive": true,
+      "sdk_version_intent": "v3",
+      "origin": {
+        "kind": "authored",
+        "basis": "golden_set:Q1"
+      },
+      "retrieved": [
+        {
+          "chunk_id": "v2:client:structural:3",
+          "rank": 0,
+          "dense_distance": 0.35432904958724976,
+          "bm25_score": 32.45917486639893,
+          "rrf_score": 0.03278688524590164,
+          "source_file": "v2/client.md",
+          "sdk_version": "v2",
+          "heading_path": "Client > Client.send() > Default retry backoff",
+          "text": "Client > Client.send() > Default retry backoff\n\nThe default retry backoff for `Client.send()` is 500 ms. Retries use a fixed\ndelay: every attempt waits the same `retry_backoff_ms` interval, with no\nmultiplier and no jitter. With the defaults, the delays before attempts two and\nthree are both 500 ms.\n\nRetries are attempted for network errors and `RELAY_503` only. `RELAY_429` is\nnot retried automatically in v2.\n\n```python\nreceipt = client.send(\n    message=\"deployment finished\",\n    channel=\"acme/deploys\",\n    retry_backoff_ms=500,\n    retry_max_attempts=3,\n)\n```\n\n"
+        },
+        {
+          "chunk_id": "v2:client:structural:2",
+          "rank": 1,
+          "dense_distance": 0.37714308500289917,
+          "bm25_score": 24.918853807040993,
+          "rrf_score": 0.031754032258064516,
+          "source_file": "v2/client.md",
+          "sdk_version": "v2",
+          "heading_path": "Client > Client.send() > Parameters",
+          "text": "Client > Client.send() > Parameters\n\n| Parameter | Type | Default | Required | Description |\n|---|---|---|---|---|\n| `message` | `str` | — | yes | Body of the message. Must be valid UTF-8 and at most 64 KiB. |\n| `channel` | `str` | — | yes | Target channel identifier, in the form `org/topic`. |\n| `idempotency_key` | `str` | `None` | no | Client-supplied de-duplication key. |\n| `retry_backoff_ms` | `int` | `500` | no | Base delay in milliseconds before the first retry. |\n| `retry_max_attempts` | `int` | `3` | no | Total number of delivery attempts, including the first. |\n| `timeout_ms` | `int` | `10000` | no | Total wall-clock budget for the call. |"
+        },
+        {
+          "chunk_id": "v3:client:structural:2",
+          "rank": 2,
+          "dense_distance": 0.42027950286865234,
+          "bm25_score": 26.537984344258955,
+          "rrf_score": 0.031754032258064516,
+          "source_file": "v3/client.md",
+          "sdk_version": "v3",
+          "heading_path": "Client > Client.send() > Parameters",
+          "text": "Client > Client.send() > Parameters\n\n| Parameter | Type | Default | Required | Description |\n|---|---|---|---|---|\n| `message` | `str` | — | yes | Body of the message. Must be valid UTF-8 and at most 256 KiB after encoding. |\n| `channel` | `str` | — | yes | Target channel identifier, in the form `org/team/topic`. Case sensitive. |\n| `idempotency_key` | `str` | `None` | no | Client-supplied de-duplication key. Reusing a key within the dedupe window returns the original receipt instead of sending again. |\n| `retry_backoff_ms` | `int` | `2000` | no | Base delay in milliseconds before the first retry. Subsequent retries multiply this value by the backoff factor. |\n| `retry_backoff_factor` | `float` | `2.0` | no | Multiplier applied to the backoff delay after each failed attempt. A value of `1.0` produces constant-delay retries. |\n| `retry_max_attempts` | `int` | `4` | no | Total number of delivery attempts, including the first. Set to `1` to disable retries entirely. |"
+        },
+        {
+          "chunk_id": "v3:client:structural:4",
+          "rank": 3,
+          "dense_distance": 0.44319742918014526,
+          "bm25_score": 25.770739895531836,
+          "rrf_score": 0.03125763125763126,
+          "source_file": "v3/client.md",
+          "sdk_version": "v3",
+          "heading_path": "Client > Client.send() > Retry behaviour",
+          "text": "Client > Client.send() > Retry behaviour\n\nRetries use exponential backoff seeded by `retry_backoff_ms` and multiplied by\n`retry_backoff_factor` after each failure. With the defaults, the delays before\nattempts two, three and four are 2000 ms, 4000 ms and 8000 ms respectively.\nJitter of up to ±10% is applied to each delay to avoid thundering herds.\n\nRetries are attempted only for transient failures — network errors, `RELAY_503`\nand `RELAY_429`. A `RELAY_400` or any authentication error fails immediately\nregardless of `retry_max_attempts`.\n\n```python\nreceipt = client.send(\n    message=\"deployment finished\",\n    channel=\"acme/platform/deploys\",\n    retry_backoff_ms=2000,\n    retry_backoff_factor=2.0,\n    retry_max_attempts=4,\n    idempotency_key=\"deploy-8817\",\n)\nprint(receipt.id, receipt.accepted_at)\n```\n\n"
+        }
+      ],
+      "raw_output": "The default `retry_backoff_ms` for `Client.send()` in the v3 SDK is **2000 ms**【chunk: v3:client:structural:2】",
+      "refused": false,
+      "citations": [],
+      "citation_check": {
+        "cited": [],
+        "unresolvable": [],
+        "ok": false
+      },
+      "prompt_version": "sysprompt-c10b763ebb",
+      "model": "openai/gpt-oss-120b",
+      "model_params": {
+        "max_tokens": 2048
+      },
+      "latency_ms": 7323.3,
+      "answer_sha256": "2134ed5b7bfd0e0ba978bb1610e84f568d3af958f9bcea498aa547fbc8a5bc4d"
+    },
+    {
+      "case_id": "W6-22",
+      "question": "How long is a v3 access token valid before it needs to be refreshed?",
+      "mode": "clean",
+      "version_sensitive": true,
+      "sdk_version_intent": "v3",
+      "origin": {
+        "kind": "authored",
+        "basis": "golden_set:Q8"
+      },
+      "retrieved": [
+        {
+          "chunk_id": "v3:auth:structural:1",
+          "rank": 0,
+          "dense_distance": 0.39912497997283936,
+          "bm25_score": 15.5558986625337,
+          "rrf_score": 0.03278688524590164,
+          "source_file": "v3/auth.md",
+          "sdk_version": "v3",
+          "heading_path": "Authentication > Token lifecycle",
+          "text": "Authentication > Token lifecycle\n\nAn access token issued by `POST /v3/auth/token` is valid for 3600 seconds. The\nSDK refreshes it when 80% of its lifetime has elapsed, so a healthy client\nrefreshes roughly every 48 minutes. Refresh happens on a background thread and\ndoes not block calls in flight.\n\n| Parameter | Type | Default | Required | Description |\n|---|---|---|---|---|\n| `api_key` | `str` | — | yes | Long-lived key beginning `rk_live_` or `rk_test_`. Never ship a live key to a client device. |\n| `region` | `str` | `\"us-east-1\"` | no | Region whose token endpoint is used. Tokens are not portable between regions. |\n| `refresh_margin` | `float` | `0.8` | no | Fraction of token lifetime after which a refresh is attempted. Values above `0.95` are rejected. |\n| `token_cache` | `TokenCache` | `MemoryCache()` | no | Where minted tokens are stored. Supply a shared cache to avoid one refresh per process. |"
+        },
+        {
+          "chunk_id": "v2:migrating-to-v3:structural:1",
+          "rank": 1,
+          "dense_distance": 0.6101337671279907,
+          "bm25_score": 14.619677349047791,
+          "rrf_score": 0.03057889822595705,
+          "source_file": "v2/migrating-to-v3.md",
+          "sdk_version": "v2",
+          "heading_path": "Migrating from v2 to v3 > Breaking changes",
+          "text": "Migrating from v2 to v3 > Breaking changes\n\nChannel identifiers gained a segment. A v2 channel `org/topic` becomes\n`org/team/topic` in v3, and the v3 broker rejects two-segment identifiers with\n`RELAY_400` rather than inferring a team.\n\nAuthentication changed from long-lived keys on every request to short-lived\nbearer tokens minted from a key. Application code is unaffected — the SDK\nperforms the exchange — but network policy that pinned the v2 auth endpoint\nneeds updating.\n\nRetry semantics changed from fixed-delay to exponential backoff, and the\ndefault base delay changed. Any service that hand-tuned `retry_backoff_ms`\nagainst v2's fixed-delay behaviour should re-derive the value rather than\ncarrying it across.\n\nOffset pagination was removed entirely in favour of cursors. Code that computed\npage offsets must be rewritten to thread `next_cursor`."
+        },
+        {
+          "chunk_id": "unknown:authentication:structural:5",
+          "rank": 2,
+          "dense_distance": 0.6918748617172241,
+          "bm25_score": 14.951528583895133,
+          "rrf_score": 0.028629032258064516,
+          "source_file": "authentication.pdf",
+          "sdk_version": "unknown",
+          "heading_path": "",
+          "text": "Personal access tokens and SAML SSO\nIf you use a personal access token (classic) to access an organization that enforces SAML\nsingle sign-on (SSO) for authentication, you will need to authorize your token after creation. Fine-grained personal access tokens are authorized during token creation, before access to\nthe organization is granted. For more information, see Authorizing a personal access token for\nuse with single sign-on. If you do not authorize your personal access token (classic) for SAML SSO before you try to\nuse it to access a single organization that enforces SAML SSO, you may receive a 404 Not \nFound or a 403 Forbidden error. If you receive a 403 Forbidden error, the X-GitHub-SSO\nheader will include a URL that you can follow to authorize your token. The URL expires after\none hour."
+        },
+        {
+          "chunk_id": "unknown:authentication:structural:4",
+          "rank": 3,
+          "dense_distance": 0.6811106204986572,
+          "bm25_score": 11.362228708862721,
+          "rrf_score": 0.02844551282051282,
+          "source_file": "authentication.pdf",
+          "sdk_version": "unknown",
+          "heading_path": "",
+          "text": "ltiple permissions. For an overview of which REST API endpoints a fine-\ngrained personal access token can access with each permission, see Permissions required for\nfine-grained personal access tokens.\n\nIf you are using a personal access token (classic), it requires specific scopes in order to access\neach REST API endpoint. For general guidance about what scopes to choose, see Scopes for\nOAuth apps. Personal access tokens act as your identity (limited by the scopes or permissions you\nselected) when you make requests to the REST API. As such, it is important to keep your\npersonal access tokens secure. For more information about keeping your personal access\ntokens secure, see Keeping your API credentials secure. 10/08/2026, 00:15 Authenticating to the REST API - GitHub Docs\nhttps://docs.github.com/en/rest/authentication/authenticating-to-the-rest-api?apiVersion=2026-03-10 2/6"
+        }
+      ],
+      "raw_output": "A v3 access token is valid for 3600 seconds before it must be refreshed. [chunk: v3:auth:structural:1]",
+      "refused": false,
+      "citations": [
+        "v3:auth:structural:1"
+      ],
+      "citation_check": {
+        "cited": [
+          "v3:auth:structural:1"
+        ],
+        "unresolvable": [],
+        "ok": true
+      },
+      "prompt_version": "sysprompt-c10b763ebb",
+      "model": "openai/gpt-oss-120b",
+      "model_params": {
+        "max_tokens": 2048
+      },
+      "latency_ms": 5844.5,
+      "answer_sha256": "7305825f7abfd2c94b3583851fe5441f930525e3118a20657bd4c663bfe0dd08"
+    },
+    {
+      "case_id": "W6-23",
+      "question": "What argument do I pass to Client.subscribe() to get messages as they arrive instead of a buffered list?",
+      "mode": "clean",
+      "version_sensitive": true,
+      "sdk_version_intent": "v3",
+      "origin": {
+        "kind": "authored",
+        "basis": "golden_set:Q9"
+      },
+      "retrieved": [
+        {
+          "chunk_id": "v3:streaming:structural:2",
+          "rank": 0,
+          "dense_distance": 0.38522452116012573,
+          "bm25_score": 23.668975938500463,
+          "rrf_score": 0.03278688524590164,
+          "source_file": "v3/streaming.md",
+          "sdk_version": "v3",
+          "heading_path": "Streaming > Client.subscribe()",
+          "text": "Streaming > Client.subscribe()\n\n frames. Set to `0` to disable, at the cost of slower dead-connection detection. |\n| `max_messages` | `int` | `None` | no | Stop after this many messages. `None` streams until the connection closes. |\n\nEnable streaming by passing `stream=True`; the default is `False`, which\nbuffers and returns a plain list instead of an iterator.\n\n```python\nfor message in client.subscribe(\n    channel=\"acme/platform/deploys\",\n    stream=True,\n    heartbeat_ms=15000,\n):\n    print(message.id, message.body)\n```\n\n"
+        },
+        {
+          "chunk_id": "v3:streaming:structural:0",
+          "rank": 1,
+          "dense_distance": 0.4369280934333801,
+          "bm25_score": 22.349403348281985,
+          "rrf_score": 0.03200204813108039,
+          "source_file": "v3/streaming.md",
+          "sdk_version": "v3",
+          "heading_path": "Streaming",
+          "text": "Streaming\n\nStreaming subscribes to a channel and yields messages as they arrive, over a\nsingle long-lived HTTP/2 connection. Use it for tailing a channel; use\n`Client.fetch()` for bounded historical reads."
+        },
+        {
+          "chunk_id": "v3:streaming:structural:1",
+          "rank": 2,
+          "dense_distance": 0.40006697177886963,
+          "bm25_score": 15.695518973209305,
+          "rrf_score": 0.031754032258064516,
+          "source_file": "v3/streaming.md",
+          "sdk_version": "v3",
+          "heading_path": "Streaming > Client.subscribe()",
+          "text": "Streaming > Client.subscribe()\n\nOpens a stream and returns an iterator. The iterator blocks between messages\nand terminates when the server closes the stream or `max_messages` is reached.\n\n| Parameter | Type | Default | Required | Description |\n|---|---|---|---|---|\n| `channel` | `str` | — | yes | Channel to tail, in the form `org/team/topic`. |\n| `stream` | `bool` | `False` | no | Must be `True` to receive incremental messages. When `False` the call buffers the whole response and returns a list. |\n| `from_cursor` | `str` | `None` | no | Resume position. When omitted the stream starts at the newest message and does not replay history. |\n| `heartbeat_ms` | `int` | `15000` | no | Interval at which the server emits keepalive frames. Set to `0` to disable, at the cost of slower dead-connection detection. |\n| `max_messages` | `int` | `None` | no | Stop after this many messages. `None` streams until the connection closes. |"
+        },
+        {
+          "chunk_id": "v3:client:structural:6",
+          "rank": 3,
+          "dense_distance": 0.5780611038208008,
+          "bm25_score": 19.694259338960237,
+          "rrf_score": 0.03057889822595705,
+          "source_file": "v3/client.md",
+          "sdk_version": "v3",
+          "heading_path": "Client > Client.close()",
+          "text": "Client > Client.close()\n\nShuts the client down. `close()` flushes any messages still buffered in the\nbackground loop, waits up to `drain_timeout_ms` for in-flight sends to settle,\nand then releases the connection pool. Messages still unsent when the drain\ndeadline passes are dropped and reported through the return value.\n\n| Parameter | Type | Default | Required | Description |\n|---|---|---|---|---|\n| `drain_timeout_ms` | `int` | `5000` | no | How long to wait for buffered messages to flush before giving up. |\n| `force` | `bool` | `False` | no | Skip the drain entirely and tear the pool down immediately. Buffered messages are lost. |\n\nCalling `close()` twice is safe; the second call is a no-op. Using a client\nafter `close()` raises `RelayClosed`.\n\n```python\ndropped = client.close(drain_timeout_ms=5000)\nif dropped:\n    logger.warning(\"relay dropped %d buffered messages\", dropped)\n```\n"
+        }
+      ],
+      "raw_output": "Pass `stream=True` to `Client.subscribe()` so it yields incremental messages as they arrive instead of buffering a list. [chunk: v3:streaming:structural:1] [chunk: v3:streaming:structural:2]",
+      "refused": false,
+      "citations": [
+        "v3:streaming:structural:1",
+        "v3:streaming:structural:2"
+      ],
+      "citation_check": {
+        "cited": [
+          "v3:streaming:structural:1",
+          "v3:streaming:structural:2"
+        ],
+        "unresolvable": [],
+        "ok": true
+      },
+      "prompt_version": "sysprompt-c10b763ebb",
+      "model": "openai/gpt-oss-120b",
+      "model_params": {
+        "max_tokens": 2048
+      },
+      "latency_ms": 4017.5,
+      "answer_sha256": "2a7a842c7982e1539c011b9a58e7075074f08bd5bf946015d12190fdf79e6220"
+    },
+    {
+      "case_id": "W6-24",
+      "question": "Is it safe to call Client.close() twice in the v3 SDK?",
+      "mode": "clean",
+      "version_sensitive": true,
+      "sdk_version_intent": "v3",
+      "origin": {
+        "kind": "authored",
+        "basis": "golden_set:Q11"
+      },
+      "retrieved": [
+        {
+          "chunk_id": "v2:client:structural:5",
+          "rank": 0,
+          "dense_distance": 0.5301955938339233,
+          "bm25_score": 16.3935364254111,
+          "rrf_score": 0.03225806451612903,
+          "source_file": "v2/client.md",
+          "sdk_version": "v2",
+          "heading_path": "Client > Client.close()",
+          "text": "Client > Client.close()\n\nReleases the connection pool. v2 has no background flush loop, so `close()`\nreturns immediately and there is nothing to drain.\n\n```python\nclient.close()\n```\n"
+        },
+        {
+          "chunk_id": "v3:client:structural:6",
+          "rank": 1,
+          "dense_distance": 0.6217997074127197,
+          "bm25_score": 24.420841606543462,
+          "rrf_score": 0.032018442622950824,
+          "source_file": "v3/client.md",
+          "sdk_version": "v3",
+          "heading_path": "Client > Client.close()",
+          "text": "Client > Client.close()\n\nShuts the client down. `close()` flushes any messages still buffered in the\nbackground loop, waits up to `drain_timeout_ms` for in-flight sends to settle,\nand then releases the connection pool. Messages still unsent when the drain\ndeadline passes are dropped and reported through the return value.\n\n| Parameter | Type | Default | Required | Description |\n|---|---|---|---|---|\n| `drain_timeout_ms` | `int` | `5000` | no | How long to wait for buffered messages to flush before giving up. |\n| `force` | `bool` | `False` | no | Skip the drain entirely and tear the pool down immediately. Buffered messages are lost. |\n\nCalling `close()` twice is safe; the second call is a no-op. Using a client\nafter `close()` raises `RelayClosed`.\n\n```python\ndropped = client.close(drain_timeout_ms=5000)\nif dropped:\n    logger.warning(\"relay dropped %d buffered messages\", dropped)\n```\n"
+        },
+        {
+          "chunk_id": "v3:client:structural:1",
+          "rank": 2,
+          "dense_distance": 0.6663997769355774,
+          "bm25_score": 13.75412976528423,
+          "rrf_score": 0.030798389007344232,
+          "source_file": "v3/client.md",
+          "sdk_version": "v3",
+          "heading_path": "Client > Client.send()",
+          "text": "Client > Client.send()\n\nDispatches a single message to a channel and returns a `Receipt`. The call is\nsynchronous by default: it returns once the broker has durably accepted the\nmessage, not once the recipient has read it."
+        },
+        {
+          "chunk_id": "v2:changelog:structural:1",
+          "rank": 3,
+          "dense_distance": 0.4913650155067444,
+          "bm25_score": 8.998849118423271,
+          "rrf_score": 0.029726775956284153,
+          "source_file": "v2/CHANGELOG.md",
+          "sdk_version": "v2",
+          "heading_path": "Changelog > 2.6.1",
+          "text": "Changelog > 2.6.1\n\nFixed a bug where `close()` could raise if called on a client that had never\nsent a message."
+        }
+      ],
+      "raw_output": "Yes, calling `Client.close()` twice in the v3 SDK is safe—the second call is a no‑op. [chunk: v3:client:structural:6]",
+      "refused": false,
+      "citations": [
+        "v3:client:structural:6"
+      ],
+      "citation_check": {
+        "cited": [
+          "v3:client:structural:6"
+        ],
+        "unresolvable": [],
+        "ok": true
+      },
+      "prompt_version": "sysprompt-c10b763ebb",
+      "model": "openai/gpt-oss-120b",
+      "model_params": {
+        "max_tokens": 2048
+      },
+      "latency_ms": 6817.7,
+      "answer_sha256": "1816852bea608d3eb5ac2d3a410f2b60bfbd47304e356e3be97840f402ec774b"
+    },
+    {
+      "case_id": "W6-25",
+      "question": "How many delivery attempts will Relay make for a webhook before marking it exhausted?",
+      "mode": "clean",
+      "version_sensitive": true,
+      "sdk_version_intent": "v3",
+      "origin": {
+        "kind": "authored",
+        "basis": "golden_set:Q10"
+      },
+      "retrieved": [
+        {
+          "chunk_id": "v3:webhooks:structural:3",
+          "rank": 0,
+          "dense_distance": 0.19411903619766235,
+          "bm25_score": 20.20630040040943,
+          "rrf_score": 0.03278688524590164,
+          "source_file": "v3/webhooks.md",
+          "sdk_version": "v3",
+          "heading_path": "Webhooks > Retry schedule",
+          "text": "Webhooks > Retry schedule\n\nA webhook endpoint that does not return a 2xx status within 10 seconds is\nretried. Relay makes at most 6 delivery attempts spread over 24 hours, at\nintervals of 30 seconds, 5 minutes, 30 minutes, 2 hours, 6 hours and 18 hours.\nAfter the final attempt the delivery is marked `exhausted` and no further\nnotification is sent.\n\nEndpoints must be idempotent. `X-Relay-Delivery-Id` is stable across retries of\nthe same event and is the correct key to deduplicate on."
+        },
+        {
+          "chunk_id": "v3:webhooks:structural:0",
+          "rank": 1,
+          "dense_distance": 0.4000837206840515,
+          "bm25_score": 16.146179400207743,
+          "rrf_score": 0.03225806451612903,
+          "source_file": "v3/webhooks.md",
+          "sdk_version": "v3",
+          "heading_path": "Webhooks",
+          "text": "Webhooks\n\nRelay delivers asynchronous delivery outcomes to the `callback_url` registered\non a send. Every webhook request is signed so that receivers can verify it\noriginated from Relay and has not been altered in transit."
+        },
+        {
+          "chunk_id": "v3:webhooks:structural:1",
+          "rank": 2,
+          "dense_distance": 0.4489239454269409,
+          "bm25_score": 12.358465599693782,
+          "rrf_score": 0.03125763125763126,
+          "source_file": "v3/webhooks.md",
+          "sdk_version": "v3",
+          "heading_path": "Webhooks > Signature verification",
+          "text": "Webhooks > Signature verification\n\nEach request carries the signature in the `X-Relay-Signature-V3` header. The\nsignature is computed as HMAC-SHA256 over the concatenation of the request\ntimestamp, a literal `.` separator, and the raw request body, keyed by your\nendpoint's signing secret.\n\n| Header | Type | Required | Description |\n|---|---|---|---|\n| `X-Relay-Signature-V3` | `str` | yes | Hex-encoded HMAC-SHA256 digest of `timestamp + \".\" + body`. |\n| `X-Relay-Timestamp` | `str` | yes | Unix epoch seconds at which the request was signed. |\n| `X-Relay-Delivery-Id` | `str` | yes | Unique identifier for this delivery attempt, stable across retries of the same event. |\n\nVerification must be done against the **raw** request body. Parsing the JSON\nand re-serialising it will change byte ordering and whitespace, and the digest\nwill not match."
+        },
+        {
+          "chunk_id": "v3:webhooks:structural:2",
+          "rank": 3,
+          "dense_distance": 0.49059855937957764,
+          "bm25_score": 12.205631497204092,
+          "rrf_score": 0.030776515151515152,
+          "source_file": "v3/webhooks.md",
+          "sdk_version": "v3",
+          "heading_path": "Webhooks > Signature verification",
+          "text": "Webhooks > Signature verification\n\netries of the same event. |\n\nVerification must be done against the **raw** request body. Parsing the JSON\nand re-serialising it will change byte ordering and whitespace, and the digest\nwill not match.\n\n```python\nfrom relay.webhooks import verify\n\nverify(\n    body=request.raw_body,\n    signature=request.headers[\"X-Relay-Signature-V3\"],\n    timestamp=request.headers[\"X-Relay-Timestamp\"],\n    secret=WEBHOOK_SECRET,\n    tolerance_seconds=300,\n)\n```\n\n\n`verify()` raises `SignatureMismatch` when the digest does not match and\n`SignatureExpired` when the timestamp is outside `tolerance_seconds`. The\ndefault tolerance is 300 seconds; widening it beyond 900 is rejected."
+        }
+      ],
+      "raw_output": "Relay will make at most 6 delivery attempts for a webhook before the delivery is marked `exhausted` [chunk: v3:webhooks:structural:3].",
+      "refused": false,
+      "citations": [
+        "v3:webhooks:structural:3"
+      ],
+      "citation_check": {
+        "cited": [
+          "v3:webhooks:structural:3"
+        ],
+        "unresolvable": [],
+        "ok": true
+      },
+      "prompt_version": "sysprompt-c10b763ebb",
+      "model": "openai/gpt-oss-120b",
+      "model_params": {
+        "max_tokens": 2048
+      },
+      "latency_ms": 8837.2,
+      "answer_sha256": "f7bb2745f56998293f5519fff0400c2a605e13c042a7532629b2177b8345a781"
+    }
+  ]
+}

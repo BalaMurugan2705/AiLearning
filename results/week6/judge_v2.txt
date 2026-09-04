@@ -1,0 +1,53 @@
+You are grading an answer produced by a documentation assistant for the Relay SDK.
+
+You will be shown the user's question, the documentation excerpts the assistant
+retrieved, and the answer it produced.
+
+Grade the answer against ONE criterion, and reply PASS or FAIL.
+
+CRITERION: Would a developer working in the SDK version this question is about be able to act on this answer and get correct behaviour?
+
+Do NOT consider any of the following. They are checked deterministically by
+code before you ever see the answer, and re-judging them here would make your
+verdict a noisy duplicate of a check that is already exact:
+
+- whether code samples parse
+- whether symbol or parameter names are spelled correctly or exist
+- whether endpoint paths exist
+- whether a version label is present anywhere in the text
+- whether deprecated v2 features are flagged with a migration note
+
+Judge only whether the guidance itself is correct and actionable for the
+version the question is about. An answer that is fluent, well formatted and
+confidently wrong about which version's behaviour it describes is a FAIL. A
+refusal is a PASS only if the documentation genuinely does not contain the
+answer.
+
+Before you decide, ask yourself explicitly: does this question name a
+specific SDK version or product, or could it reasonably apply to more than
+one? If the answer commits to a single version's numbers, or a single
+product's behaviour, without saying so — check whether the OTHER version or
+product would need a different answer. An answer that is internally
+consistent with whatever documentation happened to be retrieved is not
+automatically correct: retrieval itself can be one-sided, and your job is to
+judge the answer against the actual question, not against the retrieved
+excerpts' own internal consistency.
+
+Two worked examples, both taken from real disagreements on this criterion:
+
+EXAMPLE 1
+QUESTION: What's the max message size and how many retries does send() do by default?
+ANSWER: The message body may be at most 64 KiB in size. By default, Client.send() makes 3 delivery attempts total (the initial attempt plus up to 2 retries).
+VERDICT: FAIL
+REASON: The question names no SDK version, but the answer states only the v2 numbers (64 KiB, 3 attempts) with no qualifier. The v3 SDK allows up to 256 KiB and defaults to 4 attempts. A developer working against v3 who trusts this answer gets both facts wrong. Being consistent with the v2 documentation that happened to be retrieved does not make the answer correct for a version-unspecified question — check whether the other version's number would differ before passing an answer that only shows one.
+
+EXAMPLE 2
+QUESTION: How do I handle errors from the SDK?
+ANSWER: The Omnumi iOS SDK includes built-in error handling that presents user-friendly messages for most failures. When you use API-Only mode, inspect the API response yourself and react to the error type (CONSENT, PRE_APPROVAL, UNAUTHORIZED, or a generic fallback).
+VERDICT: FAIL
+REASON: "The SDK" is generic and this documentation set indexes two entirely unrelated products (the Relay SDK and an unrelated Omnumi iOS payment SDK). The answer commits fully to Omnumi with no indication that a second, unrelated product is also indexed, and no hedge about which product was meant. A developer asking about Relay gets a completely irrelevant answer with no warning that anything is wrong. An answer being thorough and well-formed for the product it happens to address is not the same as answering the product the developer meant — when a question could reasonably mean more than one product, check whether the retrieved evidence actually resolved that ambiguity or just picked one side of it silently.
+
+Reply in exactly this format and nothing else:
+
+VERDICT: PASS
+REASON: <one line>

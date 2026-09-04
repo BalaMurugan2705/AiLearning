@@ -1,0 +1,56 @@
+[
+  {
+    "id": "relay-401-error-code",
+    "label": "RELAY_401",
+    "kind": "error_code",
+    "match": "\\bRELAY_401\\b",
+    "replacement": "AUTH_TOKEN_EXPIRED / AUTH_SCOPE_DENIED",
+    "migration_signals": ["AUTH_TOKEN_EXPIRED", "AUTH_SCOPE_DENIED", "v2 only", "not in v3", "replaced"],
+    "source": "data/documents/v2/errors.md vs data/documents/v3/errors.md"
+  },
+  {
+    "id": "offset-pagination",
+    "label": "offset pagination",
+    "kind": "pagination",
+    "match": "\\b(page_offset|offset=|offset pagination|page offset)\\b",
+    "replacement": "next_cursor / from_cursor",
+    "migration_signals": ["next_cursor", "from_cursor", "cursor", "removed in v3", "no longer"],
+    "source": "data/documents/v2/migrating-to-v3.md ('Offset pagination was removed entirely')"
+  },
+  {
+    "id": "two-segment-channel",
+    "label": "two-segment channel org/topic",
+    "kind": "identifier_format",
+    "match": "\\borg/topic\\b",
+    "replacement": "org/team/topic",
+    "migration_signals": ["org/team/topic", "three segment", "gained a segment", "v3 rejects", "RELAY_400"],
+    "source": "data/documents/v2/migrating-to-v3.md ('A v2 channel org/topic becomes org/team/topic in v3')"
+  },
+  {
+    "id": "long-lived-key-per-request",
+    "label": "long-lived API key sent on every request",
+    "kind": "auth_pattern",
+    "match": "\\b(long-lived key|long-lived api key|key on every request)\\b",
+    "replacement": "bearer token minted via POST /v3/auth/token",
+    "migration_signals": ["bearer token", "/v3/auth/token", "token exchange", "short-lived", "v3 instead"],
+    "source": "data/documents/v2/migrating-to-v3.md + data/documents/v2/auth.md"
+  },
+  {
+    "id": "v2-fixed-delay-retry",
+    "label": "v2 fixed-delay retry defaults (500 ms, 3 attempts)",
+    "kind": "defaults",
+    "match": "\\b(500\\s?ms|three attempts 500|fixed-delay)\\b",
+    "replacement": "retry_backoff_ms=2000 with retry_backoff_factor over 4 attempts",
+    "migration_signals": ["2000", "exponential", "retry_backoff_factor", "v2", "re-derive", "changed in v3"],
+    "source": "data/documents/v2/migrating-to-v3.md + data/documents/v2/CHANGELOG.md (2.5.0)"
+  },
+  {
+    "id": "v2-webhook-signatures",
+    "label": "v2 webhook signatures",
+    "kind": "signing_scheme",
+    "match": "\\bv2 (webhook )?signature",
+    "replacement": "re-register endpoints under v3 and verify with verify()",
+    "migration_signals": ["re-register", "verify()", "not accepted by v3", "v3 signature"],
+    "source": "data/documents/v2/migrating-to-v3.md ('Re-register webhook endpoints; v2 signatures are not accepted by v3')"
+  }
+]
