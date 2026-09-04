@@ -179,7 +179,12 @@ def test_a2_never_examines_bare_prose_words_or_builtins():
 
 
 def test_a2_ignores_local_variables_inside_code_fences():
-    answer = "```python\nmy_client = Client(api_key='k')\nraw_payload = {}\n```\n"
+    """Not just "no candidate exists here" -- the fenced comment below DOES
+    contain a backticked snake_case token, so this only passes because
+    strip_code_fences actually removed the fence before scanning. Without
+    the strip, `local_batch_size` would be selected as a candidate and FAIL
+    (it is not in SYMBOLS)."""
+    answer = "```python\n# uses `local_batch_size`, not an SDK parameter\nmy_client = Client(api_key='k')\n```\n"
     assert assert_symbols_exist(answer, SYMBOLS)["status"] == SKIPPED
 
 
