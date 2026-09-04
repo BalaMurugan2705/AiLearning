@@ -1,6 +1,6 @@
 {
   "n_cases": 25,
-  "answers_sha256": "998ee8b725c901cbd54535ce5a1929726815c6c8f0dd1fac84ee6b9719d98d31",
+  "answers_sha256": "b35510d75e8b9804487f40431d6a07be3d14c3260fc8b0f0cf365c032429511d",
   "assertion_count": 5,
   "judged_criteria_count": 1,
   "judge_v0_criteria_count": 6,
@@ -12,7 +12,7 @@
       "overall": null,
       "assertion_pass_counts": {
         "A1_code_parses": 0,
-        "A2_symbols_exist": 4,
+        "A2_symbols_exist": 5,
         "A3_endpoints_exist": 0,
         "A4_version_stated": 1,
         "A5_deprecation_has_migration_note": 0
@@ -42,7 +42,7 @@
         "A2_symbols_exist": 1,
         "A3_endpoints_exist": 0,
         "A4_version_stated": 2,
-        "A5_deprecation_has_migration_note": 0
+        "A5_deprecation_has_migration_note": 1
       }
     },
     "cross-product-bleed": {
@@ -53,7 +53,7 @@
       "assertion_pass_counts": {
         "A1_code_parses": 1,
         "A2_symbols_exist": 1,
-        "A3_endpoints_exist": 0,
+        "A3_endpoints_exist": 1,
         "A4_version_stated": 1,
         "A5_deprecation_has_migration_note": 0
       },
@@ -67,41 +67,41 @@
     },
     "unexplained-refusal": {
       "n": 5,
-      "assertions_ok": 2,
+      "assertions_ok": 0,
       "judge_pass": null,
       "overall": null,
       "assertion_pass_counts": {
         "A1_code_parses": 0,
         "A2_symbols_exist": 4,
         "A3_endpoints_exist": 0,
-        "A4_version_stated": 2,
+        "A4_version_stated": 0,
         "A5_deprecation_has_migration_note": 0
       },
       "assertion_fail_counts": {
         "A1_code_parses": 0,
         "A2_symbols_exist": 0,
         "A3_endpoints_exist": 0,
-        "A4_version_stated": 3,
+        "A4_version_stated": 5,
         "A5_deprecation_has_migration_note": 0
       }
     },
     "clean": {
       "n": 5,
-      "assertions_ok": 5,
+      "assertions_ok": 3,
       "judge_pass": null,
       "overall": null,
       "assertion_pass_counts": {
         "A1_code_parses": 0,
         "A2_symbols_exist": 3,
         "A3_endpoints_exist": 0,
-        "A4_version_stated": 5,
+        "A4_version_stated": 3,
         "A5_deprecation_has_migration_note": 0
       },
       "assertion_fail_counts": {
         "A1_code_parses": 0,
         "A2_symbols_exist": 0,
         "A3_endpoints_exist": 0,
-        "A4_version_stated": 0,
+        "A4_version_stated": 2,
         "A5_deprecation_has_migration_note": 0
       }
     }
@@ -160,8 +160,8 @@
         },
         {
           "id": "A4_version_stated",
-          "status": "pass",
-          "detail": "states v2"
+          "status": "fail",
+          "detail": "no v2/v3 named anywhere in the answer"
         },
         {
           "id": "A5_deprecation_has_migration_note",
@@ -169,7 +169,7 @@
           "detail": "answer mentions nothing on the deprecations list"
         }
       ],
-      "assertions_ok": true
+      "assertions_ok": false
     },
     {
       "case_id": "W6-11",
@@ -256,8 +256,8 @@
         },
         {
           "id": "A4_version_stated",
-          "status": "fail",
-          "detail": "no v2/v3 named anywhere in the answer"
+          "status": "pass",
+          "detail": "states v3"
         },
         {
           "id": "A5_deprecation_has_migration_note",
@@ -265,7 +265,7 @@
           "detail": "answer mentions nothing on the deprecations list"
         }
       ],
-      "assertions_ok": false
+      "assertions_ok": true
     },
     {
       "case_id": "W6-03",
@@ -288,8 +288,8 @@
         },
         {
           "id": "A4_version_stated",
-          "status": "pass",
-          "detail": "states v3"
+          "status": "fail",
+          "detail": "no v2/v3 named anywhere in the answer"
         },
         {
           "id": "A5_deprecation_has_migration_note",
@@ -297,7 +297,7 @@
           "detail": "answer mentions nothing on the deprecations list"
         }
       ],
-      "assertions_ok": true
+      "assertions_ok": false
     },
     {
       "case_id": "W6-04",
@@ -310,8 +310,8 @@
         },
         {
           "id": "A2_symbols_exist",
-          "status": "skipped",
-          "detail": "answer names no SDK-shaped symbol"
+          "status": "pass",
+          "detail": "1 symbol(s) resolved"
         },
         {
           "id": "A3_endpoints_exist",
@@ -343,7 +343,7 @@
         {
           "id": "A2_symbols_exist",
           "status": "pass",
-          "detail": "2 symbol(s) resolved"
+          "detail": "3 symbol(s) resolved"
         },
         {
           "id": "A3_endpoints_exist",
@@ -389,8 +389,8 @@
         },
         {
           "id": "A5_deprecation_has_migration_note",
-          "status": "skipped",
-          "detail": "answer mentions nothing on the deprecations list"
+          "status": "fail",
+          "detail": "no migration note beside: two-segment-channel"
         }
       ],
       "assertions_ok": false
@@ -471,7 +471,7 @@
         {
           "id": "A2_symbols_exist",
           "status": "pass",
-          "detail": "2 symbol(s) resolved"
+          "detail": "1 symbol(s) resolved"
         },
         {
           "id": "A3_endpoints_exist",
@@ -480,8 +480,8 @@
         },
         {
           "id": "A4_version_stated",
-          "status": "fail",
-          "detail": "no v2/v3 named anywhere in the answer"
+          "status": "pass",
+          "detail": "states v2, v3"
         },
         {
           "id": "A5_deprecation_has_migration_note",
@@ -489,7 +489,7 @@
           "detail": "answer mentions nothing on the deprecations list"
         }
       ],
-      "assertions_ok": false
+      "assertions_ok": true
     },
     {
       "case_id": "W6-12",
@@ -571,6 +571,38 @@
         },
         {
           "id": "A3_endpoints_exist",
+          "status": "pass",
+          "detail": "1 path(s) found in the spec"
+        },
+        {
+          "id": "A4_version_stated",
+          "status": "pass",
+          "detail": "states v3"
+        },
+        {
+          "id": "A5_deprecation_has_migration_note",
+          "status": "skipped",
+          "detail": "answer mentions nothing on the deprecations list"
+        }
+      ],
+      "assertions_ok": true
+    },
+    {
+      "case_id": "W6-15",
+      "mode": "cross-product-bleed",
+      "assertions": [
+        {
+          "id": "A1_code_parses",
+          "status": "skipped",
+          "detail": "answer contains no python fence"
+        },
+        {
+          "id": "A2_symbols_exist",
+          "status": "pass",
+          "detail": "6 symbol(s) resolved"
+        },
+        {
+          "id": "A3_endpoints_exist",
           "status": "skipped",
           "detail": "answer mentions no endpoint path"
         },
@@ -586,38 +618,6 @@
         }
       ],
       "assertions_ok": false
-    },
-    {
-      "case_id": "W6-15",
-      "mode": "cross-product-bleed",
-      "assertions": [
-        {
-          "id": "A1_code_parses",
-          "status": "skipped",
-          "detail": "answer contains no python fence"
-        },
-        {
-          "id": "A2_symbols_exist",
-          "status": "pass",
-          "detail": "3 symbol(s) resolved"
-        },
-        {
-          "id": "A3_endpoints_exist",
-          "status": "skipped",
-          "detail": "answer mentions no endpoint path"
-        },
-        {
-          "id": "A4_version_stated",
-          "status": "pass",
-          "detail": "states v3"
-        },
-        {
-          "id": "A5_deprecation_has_migration_note",
-          "status": "skipped",
-          "detail": "answer mentions nothing on the deprecations list"
-        }
-      ],
-      "assertions_ok": true
     },
     {
       "case_id": "W6-17",
@@ -640,8 +640,8 @@
         },
         {
           "id": "A4_version_stated",
-          "status": "pass",
-          "detail": "states v3"
+          "status": "fail",
+          "detail": "no v2/v3 named anywhere in the answer"
         },
         {
           "id": "A5_deprecation_has_migration_note",
@@ -649,7 +649,7 @@
           "detail": "answer mentions nothing on the deprecations list"
         }
       ],
-      "assertions_ok": true
+      "assertions_ok": false
     },
     {
       "case_id": "W6-18",
@@ -704,8 +704,8 @@
         },
         {
           "id": "A4_version_stated",
-          "status": "pass",
-          "detail": "states v3"
+          "status": "fail",
+          "detail": "no v2/v3 named anywhere in the answer"
         },
         {
           "id": "A5_deprecation_has_migration_note",
@@ -713,7 +713,7 @@
           "detail": "answer mentions nothing on the deprecations list"
         }
       ],
-      "assertions_ok": true
+      "assertions_ok": false
     },
     {
       "case_id": "W6-20",
@@ -832,8 +832,8 @@
         },
         {
           "id": "A4_version_stated",
-          "status": "pass",
-          "detail": "states v3"
+          "status": "fail",
+          "detail": "no v2/v3 named anywhere in the answer"
         },
         {
           "id": "A5_deprecation_has_migration_note",
@@ -841,7 +841,7 @@
           "detail": "answer mentions nothing on the deprecations list"
         }
       ],
-      "assertions_ok": true
+      "assertions_ok": false
     },
     {
       "case_id": "W6-24",
@@ -896,8 +896,8 @@
         },
         {
           "id": "A4_version_stated",
-          "status": "pass",
-          "detail": "states v3"
+          "status": "fail",
+          "detail": "no v2/v3 named anywhere in the answer"
         },
         {
           "id": "A5_deprecation_has_migration_note",
@@ -905,7 +905,7 @@
           "detail": "answer mentions nothing on the deprecations list"
         }
       ],
-      "assertions_ok": true
+      "assertions_ok": false
     }
   ],
   "judge_runs": {},

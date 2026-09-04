@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-09-04T14:54:10+00:00",
+  "generated_at": "2026-09-04T15:02:38+00:00",
   "generated_by": "eval/week6/snapshot.py",
-  "answers_sha256": "998ee8b725c901cbd54535ce5a1929726815c6c8f0dd1fac84ee6b9719d98d31",
+  "answers_sha256": "b35510d75e8b9804487f40431d6a07be3d14c3260fc8b0f0cf365c032429511d",
   "answers": [
     {
       "case_id": "W6-01",
@@ -59,7 +59,7 @@
           "text": "Omnumi SDK (iOS) - Developer Documentation > 19. FAQ > Q: What happens if the user backgrounds the app during card operations?\n\n**A:** The SDK preserves state and allows users to resume where they left off. Critical operations like card issuance are completed before allowing backgrounding."
         }
       ],
-      "raw_output": "When you call `Client.close()` the method first tries to flush any messages that are still buffered in the background loop. It will wait up to the value you pass for `drain_timeout_ms` (default 5000 ms) for those in‑flight sends to finish. If the deadline passes and some messages are still unsent, they are dropped and the number of dropped messages is returned to you [chunk: v3:client:structural:6].\n\nIf you want to skip that waiting period entirely, you can pass `force=True`. This bypasses the drain step, tears the connection pool down immediately, and any buffered messages are lost [chunk: v3:client:structural:6].",
+      "raw_output": "When `Client.close()` is called, it first tries to flush any messages that are still buffered in the background loop. It then waits up to the value given by `drain_timeout_ms` (default 5000 ms) for any in‑flight sends to finish. If the deadline passes and some messages are still unsent, those messages are dropped and the number dropped is returned to the caller [chunk: v3:client:structural:6].\n\nYou can bypass this waiting entirely by passing `force=True`. When `force` is set, the method skips the drain step, tears the connection pool down immediately, and any buffered messages are lost [chunk: v3:client:structural:6].",
       "refused": false,
       "citations": [
         "v3:client:structural:6"
@@ -76,8 +76,8 @@
       "model_params": {
         "max_tokens": 2048
       },
-      "latency_ms": 1391.5,
-      "answer_sha256": "d4fe7e7cfc8e6e38e88e06cdce983161fc8cdf6f41c718b544a6cab462108f91"
+      "latency_ms": 1664.4,
+      "answer_sha256": "fea629d0a86a1e566a5371f3b06f5b1576c92638e06230b698e97737eaaa1307"
     },
     {
       "case_id": "W6-06",
@@ -135,7 +135,7 @@
           "text": "Streaming > Client.subscribe()\n\n frames. Set to `0` to disable, at the cost of slower dead-connection detection. |\n| `max_messages` | `int` | `None` | no | Stop after this many messages. `None` streams until the connection closes. |\n\nEnable streaming by passing `stream=True`; the default is `False`, which\nbuffers and returns a plain list instead of an iterator.\n\n```python\nfor message in client.subscribe(\n    channel=\"acme/platform/deploys\",\n    stream=True,\n    heartbeat_ms=15000,\n):\n    print(message.id, message.body)\n```\n\n"
         }
       ],
-      "raw_output": "The SDK limits a message body to **at most 64 KiB**【v2:client:structural:2】.  \n\nFor `Client.send()`, the default configuration allows **3 total delivery attempts** (the initial attempt plus up to two retries)【v2:client:structural:2】【v2:client:structural:3】.",
+      "raw_output": "- The message body may be at most **64 KiB** in size【chunk: v2:client:structural:2】.  \n- By default, `Client.send()` makes **3 delivery attempts total** (the initial attempt plus up to **2 retries**)【chunk: v2:client:structural:2】【chunk: v2:client:structural:3】.",
       "refused": false,
       "citations": [],
       "citation_check": {
@@ -148,8 +148,8 @@
       "model_params": {
         "max_tokens": 2048
       },
-      "latency_ms": 1448.0,
-      "answer_sha256": "369ba39c37df2fb66e813ced8095f42e36e4c11f46f3cf367a4284b8ebc8fe12"
+      "latency_ms": 1746.3,
+      "answer_sha256": "9191caf94fb1309eef4dc38ace77021405986434f412be3f85079917af126d9f"
     },
     {
       "case_id": "W6-11",
@@ -207,7 +207,7 @@
           "text": "Omnumi SDK (iOS) - Developer Documentation > 6. Error Handling\n\nThe Omnumi SDK implements comprehensive error handling with user-friendly error messages."
         }
       ],
-      "raw_output": "The Omnumi SDK includes built‑in, comprehensive error handling that presents user‑friendly error messages automatically [chunk: unknown:OMNUMI_SDK_IOS_DOCUMENTATION:structural:62].  \n\nIf you are using API‑Only Mode with a custom UI, you need to inspect the API response yourself and act on the error type. A typical implementation checks the response for an error message and then handles known cases such as consent errors, pre‑approval errors, or token‑refresh errors, falling back to a generic error display for anything else [chunk: unknown:OMNUMI_SDK_IOS_DOCUMENTATION:structural:50].",
+      "raw_output": "The Omnumi iOS SDK includes built‑in error handling that presents user‑friendly messages for most failures [chunk: unknown:OMNUMI_SDK_IOS_DOCUMENTATION:structural:62].  \nWhen you use API‑Only mode (i.e., a custom UI), you must inspect the API response yourself and react to the error type:  \n\n* If the error message contains **“CONSENT”**, navigate the user to your custom consent flow.  \n* If it contains **“PRE_APPROVAL”**, trigger the pre‑approval flow.  \n* If it contains **“UNAUTHORIZED”**, refresh the token and retry the request.  \n* For any other error, display a generic error message to the user.  \n\nThe example implementation shows how to parse the response and handle each case accordingly [chunk: unknown:OMNUMI_SDK_IOS_DOCUMENTATION:structural:50].",
       "refused": false,
       "citations": [
         "unknown:OMNUMI_SDK_IOS_DOCUMENTATION:structural:62",
@@ -226,8 +226,8 @@
       "model_params": {
         "max_tokens": 2048
       },
-      "latency_ms": 984.1,
-      "answer_sha256": "2e410d287c05813878133593facaaa347ba04a6c0cb441d77cb83ec7a5eebcc5"
+      "latency_ms": 1315.7,
+      "answer_sha256": "492c6450eb96236805cae2a6b41ed6881bea6fa37920115ee0a82b6add82e996"
     },
     {
       "case_id": "W6-16",
@@ -298,7 +298,7 @@
       "model_params": {
         "max_tokens": 2048
       },
-      "latency_ms": 696.1,
+      "latency_ms": 762.9,
       "answer_sha256": "8d4afb5271de3ca64a73c91666a5761958c1196baf3f95a6dadeb051d7325283"
     },
     {
@@ -357,25 +357,21 @@
           "text": "Client > Client.send() > Default retry backoff\n\nThe default retry backoff for `Client.send()` is 500 ms. Retries use a fixed\ndelay: every attempt waits the same `retry_backoff_ms` interval, with no\nmultiplier and no jitter. With the defaults, the delays before attempts two and\nthree are both 500 ms.\n\nRetries are attempted for network errors and `RELAY_503` only. `RELAY_429` is\nnot retried automatically in v2.\n\n```python\nreceipt = client.send(\n    message=\"deployment finished\",\n    channel=\"acme/deploys\",\n    retry_backoff_ms=500,\n    retry_max_attempts=3,\n)\n```\n\n"
         }
       ],
-      "raw_output": "The maximum accepted value for `dedupe_window_ms` is `86400000` milliseconds (24 hours) [chunk: v3:client:structural:3].",
+      "raw_output": "The maximum accepted value for `dedupe_window_ms` is **86400000** (24 hours)【v3:client:structural:3】.",
       "refused": false,
-      "citations": [
-        "v3:client:structural:3"
-      ],
+      "citations": [],
       "citation_check": {
-        "cited": [
-          "v3:client:structural:3"
-        ],
+        "cited": [],
         "unresolvable": [],
-        "ok": true
+        "ok": false
       },
       "prompt_version": "sysprompt-c10b763ebb",
       "model": "openai/gpt-oss-120b",
       "model_params": {
         "max_tokens": 2048
       },
-      "latency_ms": 556.0,
-      "answer_sha256": "f26afc92505bdc10432645d0d89f2674e9afbdcca0b07d53f671bb4edeaf56de"
+      "latency_ms": 780.4,
+      "answer_sha256": "d4d4d9e13e29d45e8ab6690b75ff99078ed0e16d7dd59c42c8db4b99c9f264d8"
     },
     {
       "case_id": "W6-03",
@@ -433,93 +429,101 @@
           "text": "Authentication > Rotation\n\nKeys are rotated from the console or with `Client.rotate_key()`. Rotation mints\na replacement and marks the old key for expiry after a 24 hour overlap window,\nduring which both keys authenticate. Tokens already minted from the old key\nremain valid until their own expiry."
         }
       ],
-      "raw_output": "The error code for a bearer token that has expired is **`AUTH_TOKEN_EXPIRED`**【v3:errors:structural:1】",
+      "raw_output": "The error code for an expired bearer token is **`AUTH_TOKEN_EXPIRED`** [chunk: v3:errors:structural:1].",
       "refused": false,
-      "citations": [],
+      "citations": [
+        "v3:errors:structural:1"
+      ],
       "citation_check": {
-        "cited": [],
+        "cited": [
+          "v3:errors:structural:1"
+        ],
         "unresolvable": [],
-        "ok": false
+        "ok": true
       },
       "prompt_version": "sysprompt-c10b763ebb",
       "model": "openai/gpt-oss-120b",
       "model_params": {
         "max_tokens": 2048
       },
-      "latency_ms": 1733.7,
-      "answer_sha256": "4247a15c60946f009123f1aa8614ad6de5de0524bc3d57f3bb76178be1d1a7ed"
+      "latency_ms": 678.5,
+      "answer_sha256": "84d78facda7ec2ff9958f5abe2e278be03ccc190f7cacee1208eaa9810d386bb"
     },
     {
       "case_id": "W6-04",
-      "question": "What hashing algorithm does Relay use to sign webhook requests?",
+      "question": "What error code does an expired pagination cursor raise?",
       "mode": "citation-format",
       "version_sensitive": true,
       "sdk_version_intent": "v3",
       "origin": {
         "kind": "authored",
-        "basis": "golden_set:Q7"
+        "basis": "golden_set:Q4"
       },
       "retrieved": [
         {
-          "chunk_id": "v3:webhooks:structural:0",
+          "chunk_id": "v3:pagination:structural:2",
           "rank": 0,
-          "dense_distance": 0.3208301067352295,
-          "bm25_score": 10.660383237026249,
+          "dense_distance": 0.3181845545768738,
+          "bm25_score": 15.569985326020335,
           "rrf_score": 0.03278688524590164,
-          "source_file": "v3/webhooks.md",
+          "source_file": "v3/pagination.md",
           "sdk_version": "v3",
-          "heading_path": "Webhooks",
-          "text": "Webhooks\n\nRelay delivers asynchronous delivery outcomes to the `callback_url` registered\non a send. Every webhook request is signed so that receivers can verify it\noriginated from Relay and has not been altered in transit."
+          "heading_path": "Pagination > Cursor stability",
+          "text": "Pagination > Cursor stability\n\nA cursor remains valid for 7 days. Using an expired cursor raises `RELAY_410`\nand requires restarting from the first page. Cursors are scoped to the channel\nand direction that produced them; reusing a forward cursor on a backward read\nraises `RELAY_400`.\n\nMessages deleted between pages are skipped rather than leaving gaps, so a\nconsumer walking pages sees a consistent sequence even under concurrent\ndeletion."
         },
         {
-          "chunk_id": "v3:webhooks:structural:3",
+          "chunk_id": "v3:pagination:structural:0",
           "rank": 1,
-          "dense_distance": 0.558397650718689,
-          "bm25_score": 10.441114114901415,
-          "rrf_score": 0.0315136476426799,
-          "source_file": "v3/webhooks.md",
+          "dense_distance": 0.38921499252319336,
+          "bm25_score": 11.693229889915187,
+          "rrf_score": 0.03200204813108039,
+          "source_file": "v3/pagination.md",
           "sdk_version": "v3",
-          "heading_path": "Webhooks > Retry schedule",
-          "text": "Webhooks > Retry schedule\n\nA webhook endpoint that does not return a 2xx status within 10 seconds is\nretried. Relay makes at most 6 delivery attempts spread over 24 hours, at\nintervals of 30 seconds, 5 minutes, 30 minutes, 2 hours, 6 hours and 18 hours.\nAfter the final attempt the delivery is marked `exhausted` and no further\nnotification is sent.\n\nEndpoints must be idempotent. `X-Relay-Delivery-Id` is stable across retries of\nthe same event and is the correct key to deduplicate on."
+          "heading_path": "Pagination",
+          "text": "Pagination\n\nList endpoints return cursor-paginated results. Cursors are opaque strings\nencoding a position in a stable sort order; do not parse or construct them.\nOffset pagination was removed in v3."
         },
         {
-          "chunk_id": "v3:webhooks:structural:2",
+          "chunk_id": "v3:pagination:structural:1",
           "rank": 2,
-          "dense_distance": 0.40148234367370605,
-          "bm25_score": 9.430165245193606,
-          "rrf_score": 0.03149801587301587,
-          "source_file": "v3/webhooks.md",
+          "dense_distance": 0.5550559759140015,
+          "bm25_score": 10.107831483092866,
+          "rrf_score": 0.03125763125763126,
+          "source_file": "v3/pagination.md",
           "sdk_version": "v3",
-          "heading_path": "Webhooks > Signature verification",
-          "text": "Webhooks > Signature verification\n\netries of the same event. |\n\nVerification must be done against the **raw** request body. Parsing the JSON\nand re-serialising it will change byte ordering and whitespace, and the digest\nwill not match.\n\n```python\nfrom relay.webhooks import verify\n\nverify(\n    body=request.raw_body,\n    signature=request.headers[\"X-Relay-Signature-V3\"],\n    timestamp=request.headers[\"X-Relay-Timestamp\"],\n    secret=WEBHOOK_SECRET,\n    tolerance_seconds=300,\n)\n```\n\n\n`verify()` raises `SignatureMismatch` when the digest does not match and\n`SignatureExpired` when the timestamp is outside `tolerance_seconds`. The\ndefault tolerance is 300 seconds; widening it beyond 900 is rejected."
+          "heading_path": "Pagination > Client.fetch()",
+          "text": "Pagination > Client.fetch()\n\n| Parameter | Type | Default | Required | Description |\n|---|---|---|---|---|\n| `channel` | `str` | — | yes | Channel to read from. |\n| `page_size` | `int` | `50` | no | Messages per page. The maximum accepted value is `250`; larger values are rejected with `RELAY_400` rather than silently clamped. |\n| `cursor` | `str` | `None` | no | Position returned by a previous call as `next_cursor`. Omit for the first page. |\n| `direction` | `str` | `\"forward\"` | no | `\"forward\"` reads oldest to newest; `\"backward\"` reads newest to oldest. |\n\nA page response carries `items`, `next_cursor` and `has_more`. When `has_more`\nis `False`, `next_cursor` is `None` and iteration is complete.\n\n```python\ncursor, out = None, []\nwhile True:\n    page = client.fetch(channel=ch, page_size=250, cursor=cursor)\n    out.extend(page.items)\n    if not page.has_more:\n        break\n    cursor = page.next_cursor\n```\n\n"
         },
         {
-          "chunk_id": "v3:errors:structural:1",
+          "chunk_id": "v2:migrating-to-v3:structural:1",
           "rank": 3,
-          "dense_distance": 0.6841976642608643,
-          "bm25_score": 7.97192573096321,
-          "rrf_score": 0.028258706467661692,
-          "source_file": "v3/errors.md",
-          "sdk_version": "v3",
-          "heading_path": "Errors > Error codes",
-          "text": "Errors > Error codes\n\n| Code | HTTP | Retryable | Meaning |\n|---|---|---|---|\n| `RELAY_400` | 400 | no | Malformed request. The payload failed schema validation before reaching the broker. |\n| `AUTH_TOKEN_EXPIRED` | 401 | no | The bearer token is past its expiry. The SDK refreshes automatically; seeing this means the refresh loop is not running. |\n| `AUTH_SCOPE_DENIED` | 403 | no | The parent key does not hold the scope required for this call. |\n| `RELAY_404` | 404 | no | Channel does not exist, or the key's organisation cannot see it. |\n| `RELAY_409` | 409 | no | Idempotency key reused with a different payload inside the dedupe window. |\n| `RELAY_413` | 413 | no | Message body exceeds 256 KiB after encoding. |\n| `RELAY_429` | 429 | yes | Rate limit exceeded. Honour the `Retry-After` header rather than the SDK's own backoff. |\n| `RELAY_503` | 503 | yes | Broker temporarily unavailable. Safe to retry with backoff. |"
+          "dense_distance": 0.7114826440811157,
+          "bm25_score": 8.617811345086542,
+          "rrf_score": 0.029857397504456328,
+          "source_file": "v2/migrating-to-v3.md",
+          "sdk_version": "v2",
+          "heading_path": "Migrating from v2 to v3 > Breaking changes",
+          "text": "Migrating from v2 to v3 > Breaking changes\n\nChannel identifiers gained a segment. A v2 channel `org/topic` becomes\n`org/team/topic` in v3, and the v3 broker rejects two-segment identifiers with\n`RELAY_400` rather than inferring a team.\n\nAuthentication changed from long-lived keys on every request to short-lived\nbearer tokens minted from a key. Application code is unaffected — the SDK\nperforms the exchange — but network policy that pinned the v2 auth endpoint\nneeds updating.\n\nRetry semantics changed from fixed-delay to exponential backoff, and the\ndefault base delay changed. Any service that hand-tuned `retry_backoff_ms`\nagainst v2's fixed-delay behaviour should re-derive the value rather than\ncarrying it across.\n\nOffset pagination was removed entirely in favour of cursors. Code that computed\npage offsets must be rewritten to thread `next_cursor`."
         }
       ],
-      "raw_output": "I cannot answer that from the indexed documentation.",
-      "refused": true,
-      "citations": [],
+      "raw_output": "An expired pagination cursor raises the `RELAY_410` error code. [chunk: v3:pagination:structural:2]",
+      "refused": false,
+      "citations": [
+        "v3:pagination:structural:2"
+      ],
       "citation_check": {
-        "cited": [],
+        "cited": [
+          "v3:pagination:structural:2"
+        ],
         "unresolvable": [],
-        "ok": false
+        "ok": true
       },
       "prompt_version": "sysprompt-c10b763ebb",
       "model": "openai/gpt-oss-120b",
       "model_params": {
         "max_tokens": 2048
       },
-      "latency_ms": 529.0,
-      "answer_sha256": "8d4afb5271de3ca64a73c91666a5761958c1196baf3f95a6dadeb051d7325283"
+      "latency_ms": 1239.1,
+      "answer_sha256": "21d6984b8121453b09bbadc998747c169e3f8c3167686b33f8bd01ad820f155a"
     },
     {
       "case_id": "W6-05",
@@ -577,7 +581,7 @@
           "text": "1\n2\n3\n4\n5\n6\n7\ncurl --request POST \\\n--url \"https://api.github.com/applications/YOUR_CLIENT_ID/token\" \\\n--user \"YOUR_CLIENT_ID:YOUR_CLIENT_SECRET\" \\\n--header \"Accept: application/vnd.github+json\" \\\n--header \"X-GitHub-Api-Version: 2026-03-10\" \\\n--data '{\n  \"access_token\": \"ACCESS_TOKEN_TO_CHECK\"\n}'\nThe client ID and client secret are associated with the app, not with the owner of the app or a\nuser who authorized the app. They are used to perform operations on behalf of the app, such\nas creating access tokens. If you are the owner of a GitHub App or OAuth app, or if you are an app manager for a GitHub\nApp, you can find the client ID and generate a client secret on the settings page for your app. To navigate to your app's settings page:\nIn the upper-right corner of any page on GitHub, click your profile picture. Navigate to your account settings. For an app owned by a personal account, click Settings. For an app owned by an organization:\na. Click Your organizations. b."
         }
       ],
-      "raw_output": "The maximum `page_size` you can request with `Client.fetch()` is **250** [chunk: v3:pagination:structural:1].",
+      "raw_output": "The highest `page_size` accepted by `Client.fetch()` is `250` – larger values are rejected with `RELAY_400` instead of being clamped. [chunk: v3:pagination:structural:1]",
       "refused": false,
       "citations": [
         "v3:pagination:structural:1"
@@ -594,80 +598,84 @@
       "model_params": {
         "max_tokens": 2048
       },
-      "latency_ms": 750.7,
-      "answer_sha256": "09c85e862bb6694c1e9e98fa5118a29cfbc12373a5fa290385144d9d94ce2f5f"
+      "latency_ms": 1359.9,
+      "answer_sha256": "bb5c0e34e41c651434ae55d7a3fa6f94b35578d33d6512e29b877f851a3e47f6"
     },
     {
       "case_id": "W6-07",
-      "question": "What format does a channel identifier take?",
+      "question": "What format does a channel identifier use when sending a message?",
       "mode": "version-ambiguity",
       "version_sensitive": true,
       "sdk_version_intent": "unspecified",
       "origin": {
         "kind": "authored",
-        "basis": "v2/migrating-to-v3.md (org/topic -> org/team/topic)"
+        "basis": "v2/client.md channel parameter vs v3/client.md (verified live retrieval)"
       },
       "retrieved": [
         {
-          "chunk_id": "unknown:OMNUMI_SDK_IOS_DOCUMENTATION:structural:141",
+          "chunk_id": "v2:client:structural:2",
           "rank": 0,
-          "dense_distance": 0.6396725177764893,
-          "bm25_score": 6.266511594619583,
-          "rrf_score": 0.03177805800756621,
+          "dense_distance": 0.6682561635971069,
+          "bm25_score": 9.105376449427169,
+          "rrf_score": 0.03007688828584351,
+          "source_file": "v2/client.md",
+          "sdk_version": "v2",
+          "heading_path": "Client > Client.send() > Parameters",
+          "text": "Client > Client.send() > Parameters\n\n| Parameter | Type | Default | Required | Description |\n|---|---|---|---|---|\n| `message` | `str` | — | yes | Body of the message. Must be valid UTF-8 and at most 64 KiB. |\n| `channel` | `str` | — | yes | Target channel identifier, in the form `org/topic`. |\n| `idempotency_key` | `str` | `None` | no | Client-supplied de-duplication key. |\n| `retry_backoff_ms` | `int` | `500` | no | Base delay in milliseconds before the first retry. |\n| `retry_max_attempts` | `int` | `3` | no | Total number of delivery attempts, including the first. |\n| `timeout_ms` | `int` | `10000` | no | Total wall-clock budget for the call. |"
+        },
+        {
+          "chunk_id": "v2:client:structural:1",
+          "rank": 1,
+          "dense_distance": 0.6309530735015869,
+          "bm25_score": 7.91605554915846,
+          "rrf_score": 0.029709507042253523,
+          "source_file": "v2/client.md",
+          "sdk_version": "v2",
+          "heading_path": "Client > Client.send()",
+          "text": "Client > Client.send()\n\nDispatches a single message to a channel and returns a `Receipt`."
+        },
+        {
+          "chunk_id": "unknown:OMNUMI_SDK_IOS_DOCUMENTATION:structural:141",
+          "rank": 2,
+          "dense_distance": 0.6523767709732056,
+          "bm25_score": 6.649832270675075,
+          "rrf_score": 0.028205128205128206,
           "source_file": "OMNUMI_SDK_IOS_DOCUMENTATION.md",
           "sdk_version": "unknown",
           "heading_path": "Omnumi SDK (iOS) - Developer Documentation > 16. Appendix > 16.1 Glossary",
           "text": "Omnumi SDK (iOS) - Developer Documentation > 16. Appendix > 16.1 Glossary\n\n- **Card Product**: A specific type of card offering (e.g., Virtual Visa, Physical Mastercard)\n- **Customer Account ID**: Unique identifier for a customer in the Rain system\n- **Custom Namespace**: Partner-specific identifier for wallet/user\n- **Domain Namespace**: Public domain-based identifier (e.g., ENS name)\n- **Pre-Approval**: Blockchain transaction approval required before card issuance\n- **Token Symbol**: Cryptocurrency symbol (e.g., USDC, USDT, ETH)\n- **Wallet Address**: Ethereum-compatible blockchain address"
         },
         {
-          "chunk_id": "unknown:apiguide-readthedocs-io-en-latest:structural:35",
-          "rank": 1,
-          "dense_distance": 0.7323869466781616,
-          "bm25_score": 5.055431451956961,
-          "rrf_score": 0.02877846790890269,
-          "source_file": "apiguide-readthedocs-io-en-latest.pdf",
-          "sdk_version": "unknown",
-          "heading_path": "",
-          "text": "Using GET parameters to specify format is another common pattern for specifying the encoding of API payloads. This results in slightly longer URLs than resource label technique, and can occasionally create problems with\ncaching behavior of some proxy servers. Resource label speciﬁcation of API payload format, such as /foo/{id}.json, are functionally equivalent to GET\nparameter encoding but without the (admittedly rare) proxy caching issues. Should\nAgency APIs should consider supplimenting URL-based format speﬁcications with HTTP header based format\nspeciﬁcation (e.g. Content-Type: and Accept:). Should\nAgency APIs should consider use resource labels to indicate payload format, e.g. /foo/{id}.json. Should\nIf GET parameter based payload format speciﬁcation is chosen, the potential impact of proxy caching and URL\nlength issues should be evaluated."
-        },
-        {
-          "chunk_id": "unknown:apiguide-readthedocs-io-en-latest:structural:34",
-          "rank": 2,
-          "dense_distance": 0.6614497900009155,
-          "bm25_score": 4.248926198571339,
-          "rrf_score": 0.028531243721117136,
-          "source_file": "apiguide-readthedocs-io-en-latest.pdf",
-          "sdk_version": "unknown",
-          "heading_path": "",
-          "text": "API Design Guide Documentation, Release 0.1\nMay\nAgency APIs may support multiple (open) payload formats. For example, it is not unusual for an API endpoint to\nsupport both JSON and XML formats. 4.1.5 API Payload format encoding\nTo interact with an API, the consumer needs to know how the payload is encoded. This is true regardless of how\nmany encoding formats the endpoint supports. Should Not\nAgencies should not rely on documentation alone to inform consumers about payload encoding. This is generally\npoor affordance. The three patterns of payload format encoding most frequently found in the wild are:\n• HTTP headers (e.g. Content-Type: and Accept:)\n• GET parameters (e.g. &format=json)\n• resource label (e.g. /foo.json)\nUsing HTTP headers to specifying payload format can be convenient, however unfortunately not all clients handle\nheaders consistently. Using HTTP headers alone will create issues for buggy clients."
-        },
-        {
-          "chunk_id": "unknown:OMNUMI_SDK_IOS_DOCUMENTATION:structural:10",
+          "chunk_id": "v3:client:structural:1",
           "rank": 3,
-          "dense_distance": 0.7412745356559753,
-          "bm25_score": 4.761384140279054,
-          "rrf_score": 0.02702702702702703,
-          "source_file": "OMNUMI_SDK_IOS_DOCUMENTATION.md",
-          "sdk_version": "unknown",
-          "heading_path": "Omnumi SDK (iOS) - Developer Documentation > 2. How Omnumi SDK Works > 2.2 Detailed Flow Description > Step 1: SDK Initialization > Optional Parameters",
-          "text": "Omnumi SDK (iOS) - Developer Documentation > 2. How Omnumi SDK Works > 2.2 Detailed Flow Description > Step 1: SDK Initialization > Optional Parameters\n\n- `cardBackgroundUrl`: Custom card background image URL\n- `primaryColor`: Primary theme color (hex format)\n- `secondaryColor`: Secondary theme color (hex format)"
+          "dense_distance": 0.6906323432922363,
+          "bm25_score": 7.311917799698843,
+          "rrf_score": 0.02817460317460317,
+          "source_file": "v3/client.md",
+          "sdk_version": "v3",
+          "heading_path": "Client > Client.send()",
+          "text": "Client > Client.send()\n\nDispatches a single message to a channel and returns a `Receipt`. The call is\nsynchronous by default: it returns once the broker has durably accepted the\nmessage, not once the recipient has read it."
         }
       ],
-      "raw_output": "I cannot answer that from the indexed documentation.",
-      "refused": true,
-      "citations": [],
+      "raw_output": "The channel identifier must be given in the form `org/topic` [chunk: v2:client:structural:2].",
+      "refused": false,
+      "citations": [
+        "v2:client:structural:2"
+      ],
       "citation_check": {
-        "cited": [],
+        "cited": [
+          "v2:client:structural:2"
+        ],
         "unresolvable": [],
-        "ok": false
+        "ok": true
       },
       "prompt_version": "sysprompt-c10b763ebb",
       "model": "openai/gpt-oss-120b",
       "model_params": {
         "max_tokens": 2048
       },
-      "latency_ms": 12117.8,
-      "answer_sha256": "8d4afb5271de3ca64a73c91666a5761958c1196baf3f95a6dadeb051d7325283"
+      "latency_ms": 965.7,
+      "answer_sha256": "fc551121f9c8fc8f8f1b5a41d0f201b32f939179bbb8a16798da3f23b3315b8d"
     },
     {
       "case_id": "W6-08",
@@ -725,7 +733,7 @@
           "text": "applications that reuse\nan API. When supplying client libraries or reference implementations for use with an API, mocking features can\nbe implemented at that layer as an alternative to the API itself.\n\n4.5.1 Example 1 - GET mock list of magazines\nRequest mock list of magazines\nGET /api/v1/magazines.json?mock=True HTTP /1.1\nHost: example.gov.au\nAccept: application/json, text/javascript\nResponse list of mock magazines\nHTTP/1.1 200 OK\nVary: Accept\nContent-Type: text/javascript\n{\n\"metadata\": {\n\"resultset\": {\n\"count\": 123,\n\"offset\": 0,\n\"limit\": 10\n}\n},\n\"results\": [\n{\n\"id\": \"1234\",\n\"type\": \"magazine\",\n\"title\": \"Public Water Systems\",\n\"tags\": [\n{\"id\": \"125\", \"name\": \"Environment\", “url”: “http://api.example.gov.au/v1/\n˓→tags/125”},\n{\"id\": \"834\", \"name\": \"Water Quality\"}\n],\n4.5. Mock behaviour 21"
         }
       ],
-      "raw_output": "To page through a long list you use the cursor‑based pagination that v3 provides.  \nCursors are opaque strings that encode a position in a stable sort order, and you should never parse or build them yourself; offset pagination is no longer available [chunk: v3:pagination:structural:0].  \n\nThe typical pattern is to call `client.fetch` repeatedly, passing the channel name and optionally a `page_size` (default 50, maximum 250). Start with `cursor=None` for the first page, then loop while the response’s `has_more` flag is true, updating the cursor with `next_cursor` each iteration [chunk: v3:pagination:structural:1]:\n\n```python\ncursor, out = None, []\nwhile True:\n    page = client.fetch(channel=ch, page_size=250, cursor=cursor)\n    out.extend(page.items)          # process or store the items\n    if not page.has_more:           # no more pages\n        break\n    cursor = page.next_cursor       # use the cursor for the next request\n```\n\nWhen `has_more` becomes `False`, `next_cursor` will be `None` and the iteration is complete. This approach lets you retrieve the entire result set page by page.",
+      "raw_output": "To page through a long list of results you use the cursor‑based pagination that the v3 API provides.  \nList endpoints return an opaque cursor that encodes the position in a stable sort order; you must not parse or construct the cursor yourself and offset pagination is no longer available [chunk: v3:pagination:structural:0].  \n\nUse the client’s `fetch()` method, supplying the channel and optionally a `page_size` (default 50, max 250), a `cursor` from the previous page, and a `direction` (`\"forward\"` reads oldest‑to‑newest, `\"backward\"` reads newest‑to‑oldest) [chunk: v3:pagination:structural:1].  \n\nA typical loop looks like:\n\n```python\ncursor, out = None, []\nwhile True:\n    page = client.fetch(channel=ch, page_size=250, cursor=cursor)\n    out.extend(page.items)\n    if not page.has_more:\n        break\n    cursor = page.next_cursor\n```\n\nEach page’s response contains `items`, `next_cursor`, and `has_more`; when `has_more` is `False`, `next_cursor` is `None` and pagination is complete [chunk: v3:pagination:structural:1].",
       "refused": false,
       "citations": [
         "v3:pagination:structural:0",
@@ -744,8 +752,8 @@
       "model_params": {
         "max_tokens": 2048
       },
-      "latency_ms": 6378.1,
-      "answer_sha256": "90c35ff5f5c5068ba1f12c2a31241d49f6ee8ad23391852fc462f7f9e837e1f3"
+      "latency_ms": 8435.6,
+      "answer_sha256": "7152fd97b7962bea06a1891c22083144b6bafe6b2e67db033091bdf852f6ae32"
     },
     {
       "case_id": "W6-09",
@@ -803,7 +811,7 @@
           "text": "Webhooks > Signature verification\n\netries of the same event. |\n\nVerification must be done against the **raw** request body. Parsing the JSON\nand re-serialising it will change byte ordering and whitespace, and the digest\nwill not match.\n\n```python\nfrom relay.webhooks import verify\n\nverify(\n    body=request.raw_body,\n    signature=request.headers[\"X-Relay-Signature-V3\"],\n    timestamp=request.headers[\"X-Relay-Timestamp\"],\n    secret=WEBHOOK_SECRET,\n    tolerance_seconds=300,\n)\n```\n\n\n`verify()` raises `SignatureMismatch` when the digest does not match and\n`SignatureExpired` when the timestamp is outside `tolerance_seconds`. The\ndefault tolerance is 300 seconds; widening it beyond 900 is rejected."
         }
       ],
-      "raw_output": "In Relay v3 the SDK authenticates by exchanging a long‑lived API key for short‑lived bearer tokens; the SDK performs the token‑minting and background refresh automatically, so you only need to provide the API key once【chunk: v3:auth:structural:0】.  \n\nIn Relay v2 there is no token exchange—each request includes the API key directly, and the SDK does not perform any refresh logic【chunk: v2:auth:structural:0】.",
+      "raw_output": "In Relay v3 the SDK exchanges a long‑lived API key for short‑lived bearer tokens and automatically refreshes those tokens in the background, so you only provide the key once and the client handles the token lifecycle transparently【v3:auth:structural:0】.  \nIn Relay v2 there is no token exchange; the API key is sent directly with every request and the SDK does not perform any refresh loop【v2:auth:structural:0】.",
       "refused": false,
       "citations": [],
       "citation_check": {
@@ -816,8 +824,8 @@
       "model_params": {
         "max_tokens": 2048
       },
-      "latency_ms": 9040.8,
-      "answer_sha256": "539c5e3435f8231b4e64bc46964dd311381031957dd177c1cf9d20b2c484cbae"
+      "latency_ms": 9967.7,
+      "answer_sha256": "5e34a984c57fef9af2d1c628cb93f2b4be9ab56b7fbebe2bea40c53b5e3265a4"
     },
     {
       "case_id": "W6-10",
@@ -875,14 +883,16 @@
           "text": "Errors > Timeouts\n\n`RelayTimeout` is raised when the total budget set by `timeout_ms` is exhausted\nacross all retry attempts. It is not an error code returned by the broker — it\nis raised client-side and carries `attempts`, the number of tries made before\nthe budget ran out.\n\nA timeout does not mean the message was not delivered. If the broker accepted\nthe message but the acknowledgement was lost, retrying with the same\n`idempotency_key` returns the original receipt rather than sending twice."
         }
       ],
-      "raw_output": "A failed `Client.send()` will be tried up to **4 times total** (the initial attempt plus three retries) unless you change the setting `retry_max_attempts` [chunk: v3:client:structural:3].",
+      "raw_output": "A failed send is retried according to the client’s `retry_max_attempts` setting, which defaults to 4 attempts (including the first) in the v3 SDK [chunk: v3:client:structural:3] and defaults to 3 attempts (including the first) in the v2 SDK [chunk: v2:client:structural:2].",
       "refused": false,
       "citations": [
-        "v3:client:structural:3"
+        "v3:client:structural:3",
+        "v2:client:structural:2"
       ],
       "citation_check": {
         "cited": [
-          "v3:client:structural:3"
+          "v3:client:structural:3",
+          "v2:client:structural:2"
         ],
         "unresolvable": [],
         "ok": true
@@ -892,8 +902,8 @@
       "model_params": {
         "max_tokens": 2048
       },
-      "latency_ms": 10517.6,
-      "answer_sha256": "68f8ca50bb87cc49572772dcc9ccabf542f9be553409b54dfb8dc44ed00bbc31"
+      "latency_ms": 1995.2,
+      "answer_sha256": "f528c5bd8fcfb12370485ae0463f95452ff54e3430a5e5f7dba56d0dbdfa7a18"
     },
     {
       "case_id": "W6-12",
@@ -951,29 +961,21 @@
           "text": "Omnumi SDK (iOS) - Developer Documentation > 6. Error Handling\n\nThe Omnumi SDK implements comprehensive error handling with user-friendly error messages."
         }
       ],
-      "raw_output": "The Omnumi SDK includes comprehensive error‑handling that presents user‑friendly messages automatically [chunk: unknown:OMNUMI_SDK_IOS_DOCUMENTATION:structural:62].  \n\nWhen you implement a custom UI in API‑Only mode, you should examine each API response, detect error strings, and handle known error types explicitly (e.g., “CONSENT”, “PRE_APPROVAL”, “UNAUTHORIZED”), falling back to a generic error display for any other messages [chunk: unknown:OMNUMI_SDK_IOS_DOCUMENTATION:structural:50].  \n\nIn addition, the recommended best‑practice approach is to show clear, actionable error messages, provide retry options for recoverable errors, guide users toward resolution steps, and log errors for debugging while avoiding sensitive data [chunk: unknown:OMNUMI_SDK_IOS_DOCUMENTATION:structural:119].",
+      "raw_output": "The Omnumi SDK implements comprehensive error handling with user‑friendly error messages【chunk: unknown:OMNUMI_SDK_IOS_DOCUMENTATION:structural:62】.  \n\nWhen using API‑Only mode, inspect the API response and handle specific error types (e.g., “CONSENT”, “PRE_APPROVAL”, “UNAUTHORIZED”) by navigating to the appropriate custom flow or showing a generic error message if none match【chunk: unknown:OMNUMI_SDK_IOS_DOCUMENTATION:structural:50】.  \n\nIn all cases follow the best‑practice guidelines: display clear, actionable error messages, provide retry options for recoverable errors, guide users to resolution steps, and log errors for debugging without including sensitive data【chunk: unknown:OMNUMI_SDK_IOS_DOCUMENTATION:structural:119】.",
       "refused": false,
-      "citations": [
-        "unknown:OMNUMI_SDK_IOS_DOCUMENTATION:structural:62",
-        "unknown:OMNUMI_SDK_IOS_DOCUMENTATION:structural:50",
-        "unknown:OMNUMI_SDK_IOS_DOCUMENTATION:structural:119"
-      ],
+      "citations": [],
       "citation_check": {
-        "cited": [
-          "unknown:OMNUMI_SDK_IOS_DOCUMENTATION:structural:62",
-          "unknown:OMNUMI_SDK_IOS_DOCUMENTATION:structural:50",
-          "unknown:OMNUMI_SDK_IOS_DOCUMENTATION:structural:119"
-        ],
+        "cited": [],
         "unresolvable": [],
-        "ok": true
+        "ok": false
       },
       "prompt_version": "sysprompt-c10b763ebb",
       "model": "openai/gpt-oss-120b",
       "model_params": {
         "max_tokens": 2048
       },
-      "latency_ms": 8939.3,
-      "answer_sha256": "508e711f34d40e54ebca343c2e746a932842a6470add5f4df0cf9aea761de7f0"
+      "latency_ms": 7669.9,
+      "answer_sha256": "f308987a420941cc3706a9051e93343e916e384757b00fc579855e09c6064615"
     },
     {
       "case_id": "W6-13",
@@ -1031,21 +1033,25 @@
           "text": "Omnumi SDK (iOS) - Developer Documentation > 19. FAQ > Q: Can I test the SDK in a sandbox environment?\n\n**A:** Yes, use sandbox auth tokens provided by Rain Card. The SDK automatically connects to the appropriate environment based on the token.\n\n---\n\n**Document Version:** 1.0.0\n**Last Updated:** 2025-01-15\n**Omnumi SDK Version:** 1.0.0\n\n© 2025 Omnumi. All rights reserved."
         }
       ],
-      "raw_output": "To create a client, import the `Client` class from the Relay SDK and instantiate it with your API key and region, e.g.:\n\n```python\nfrom relay import Client\n\nclient = Client(api_key=\"rk_live_...\", region=\"eu-west-1\")\n```  \n\nThe documentation notes that a single client should be created per process and shared, as it owns the connection pool and related resources【chunk: v3:client:structural:0】.",
+      "raw_output": "To initialise a client, create an instance of the `Client` class with your API key and region, e.g.:\n\n```python\nfrom relay import Client\n\nclient = Client(api_key=\"rk_live_...\", region=\"eu-west-1\")\n``` \n\nConstruct one client per process and share it; creating a client for each request wastes connections and can exhaust local ports under load. [chunk: v3:client:structural:0]",
       "refused": false,
-      "citations": [],
+      "citations": [
+        "v3:client:structural:0"
+      ],
       "citation_check": {
-        "cited": [],
+        "cited": [
+          "v3:client:structural:0"
+        ],
         "unresolvable": [],
-        "ok": false
+        "ok": true
       },
       "prompt_version": "sysprompt-c10b763ebb",
       "model": "openai/gpt-oss-120b",
       "model_params": {
         "max_tokens": 2048
       },
-      "latency_ms": 9112.7,
-      "answer_sha256": "081936f1c3fcfb6bda6d6d3247d971b4e6840eb62bd5f5bd16bb8e92616b9283"
+      "latency_ms": 10397.0,
+      "answer_sha256": "6516c99e644b6bd2ff5281ca35b4fda015392c474483774188c2a3edcbb02835"
     },
     {
       "case_id": "W6-14",
@@ -1103,15 +1109,17 @@
           "text": "Omnumi SDK (iOS) - Developer Documentation > 11. Troubleshooting > 11.1 Common Issues > Issue: Token refresh not working\n\n**Cause:** tokenRefreshCallback returning invalid or expired token\n**Solution:** Ensure callback returns a valid, fresh auth token"
         }
       ],
-      "raw_output": "Implement a token‑refresh callback that contains the logic to obtain a new auth token and returns it, e.g.:\n\n```swift\nfunc getRefreshedToken() -> String {\n    // Your logic to refresh and return a new auth token\n    return refreshedAuthToken\n}\n```  \nThe SDK will automatically invoke this callback when it detects an expired token — on any 401 Unauthorized response, before the token’s expiration if it is detected, and on SDK initialization if the stored token is already expired [chunk: unknown:OMNUMI_SDK_IOS_DOCUMENTATION:structural:74].  \n\nInternally, the SDK also monitors the token’s lifetime (the access token is valid for 3600 seconds) and proactively attempts a refresh after 80 % of that lifetime has elapsed (about 48 minutes), running the refresh on a background thread so it does not block in‑flight calls [chunk: v3:auth:structural:1].  \n\nIf the callback returns an invalid or expired token, the refresh will fail; ensure it returns a fresh, valid token [chunk: unknown:OMNUMI_SDK_IOS_DOCUMENTATION:structural:122].",
+      "raw_output": "To refresh an expired token you supply a **token‑refresh callback** that returns a fresh authentication token.  \n\n```swift\nfunc getRefreshedToken() -> String {\n    // Your logic to refresh and return a new auth token\n    // This is called automatically when the token expires\n    return refreshedAuthToken\n}\n```  \n[chunk: unknown:OMNUMI_SDK_IOS_DOCUMENTATION:structural:27]\n\nThe SDK invokes this callback in three situations:  \n\n* when any API call returns **401 Unauthorized**,  \n* shortly before the token’s expiry (if the SDK detects it), and  \n* on SDK initialization if the stored token is already expired.  \n[chunk: unknown:OMNUMI_SDK_IOS_DOCUMENTATION:structural:74]\n\nAn access token obtained from `POST /v3/auth/token` is valid for **3600 seconds**; the SDK attempts a refresh after **80 %** of that lifetime (≈ 48 minutes) on a background thread so active calls are not blocked.  \n[chunk: v3:auth:structural:1]\n\nIf the callback returns an invalid or expired token the refresh will fail; ensure the function returns a valid, fresh token.  \n[chunk: unknown:OMNUMI_SDK_IOS_DOCUMENTATION:structural:122]",
       "refused": false,
       "citations": [
+        "unknown:OMNUMI_SDK_IOS_DOCUMENTATION:structural:27",
         "unknown:OMNUMI_SDK_IOS_DOCUMENTATION:structural:74",
         "v3:auth:structural:1",
         "unknown:OMNUMI_SDK_IOS_DOCUMENTATION:structural:122"
       ],
       "citation_check": {
         "cited": [
+          "unknown:OMNUMI_SDK_IOS_DOCUMENTATION:structural:27",
           "unknown:OMNUMI_SDK_IOS_DOCUMENTATION:structural:74",
           "v3:auth:structural:1",
           "unknown:OMNUMI_SDK_IOS_DOCUMENTATION:structural:122"
@@ -1124,8 +1132,8 @@
       "model_params": {
         "max_tokens": 2048
       },
-      "latency_ms": 6852.3,
-      "answer_sha256": "bc4972bdf7f893ac24200ae03f4f73359f74d845928d29df773204cd30d0d63d"
+      "latency_ms": 10251.0,
+      "answer_sha256": "211bcc5baba3a36bce368796f50ca64354e01049118100dad1703073e699285b"
     },
     {
       "case_id": "W6-15",
@@ -1183,21 +1191,29 @@
           "text": "Errors > Timeouts\n\n`RelayTimeout` is raised when the total budget set by `timeout_ms` is exhausted\nacross all retry attempts. It is not an error code returned by the broker — it\nis raised client-side and carries `attempts`, the number of tries made before\nthe budget ran out.\n\nA timeout does not mean the message was not delivered. If the broker accepted\nthe message but the acknowledgement was lost, retrying with the same\n`idempotency_key` returns the original receipt rather than sending twice."
         }
       ],
-      "raw_output": "The SDK automatically retries only the errors that are marked **retryable**.  \n- For a **429 (Rate limit exceeded)** it retries after waiting the period indicated in the `Retry-After` header rather than using its own back‑off logic【v3:errors:structural:1】.  \n- For a **503 (Broker temporarily unavailable)** it retries with an exponential back‑off【v3:errors:structural:1】.  \n- For a **504 (Broker accepted the request but did not settle it within the deadline)** it retries using the same `idempotency_key` so the original receipt can be returned【v3:errors:structural:2】.  \n\nIn addition, the iOS SDK exposes a **Network Retry** mechanism that lets developers invoke a retry for any failed operation【unknown:OMNUMI_SDK_IOS_DOCUMENTATION:structural:72】.  \n\nRetries continue until the total time budget defined by `timeout_ms` is exhausted, at which point a client‑side `RelayTimeout` is raised【v3:errors:structural:4】.",
+      "raw_output": "The SDK automatically retries operations that return a **retry‑able error code** – for example `RELAY_429` (rate‑limit exceeded), `RELAY_503` (broker temporarily unavailable) and `RELAY_504` (broker did not settle in time) – using the guidance in each code’s description (honour the `Retry‑After` header for 429 and apply back‑off for 503/504) [chunk: v3:errors:structural:1].  \n\nRetries are performed until the client‑side timeout budget (`timeout_ms`) is exhausted; each attempt is counted in the `RelayTimeout` error, and retries use the same `idempotency_key` so that a successful earlier delivery is not duplicated [chunk: v3:errors:structural:4].  \n\nAdditionally, the SDK’s error‑recovery layer includes a **Network Retry** capability that lets users retry failed operations [chunk: unknown:OMNUMI_SDK_IOS_DOCUMENTATION:structural:72].",
       "refused": false,
-      "citations": [],
+      "citations": [
+        "v3:errors:structural:1",
+        "v3:errors:structural:4",
+        "unknown:OMNUMI_SDK_IOS_DOCUMENTATION:structural:72"
+      ],
       "citation_check": {
-        "cited": [],
+        "cited": [
+          "v3:errors:structural:1",
+          "v3:errors:structural:4",
+          "unknown:OMNUMI_SDK_IOS_DOCUMENTATION:structural:72"
+        ],
         "unresolvable": [],
-        "ok": false
+        "ok": true
       },
       "prompt_version": "sysprompt-c10b763ebb",
       "model": "openai/gpt-oss-120b",
       "model_params": {
         "max_tokens": 2048
       },
-      "latency_ms": 11148.0,
-      "answer_sha256": "7185cf815524e27fb91c091f3d369835518ce5189a52e389e7077409bc3797a2"
+      "latency_ms": 5789.0,
+      "answer_sha256": "95d91f27de7f5a42b49c6e4d7e0de303c94fbfd9aa23feef091377a3cec4eba0"
     },
     {
       "case_id": "W6-17",
@@ -1255,21 +1271,25 @@
           "text": "Streaming > Client.subscribe()\n\n frames. Set to `0` to disable, at the cost of slower dead-connection detection. |\n| `max_messages` | `int` | `None` | no | Stop after this many messages. `None` streams until the connection closes. |\n\nEnable streaming by passing `stream=True`; the default is `False`, which\nbuffers and returns a plain list instead of an iterator.\n\n```python\nfor message in client.subscribe(\n    channel=\"acme/platform/deploys\",\n    stream=True,\n    heartbeat_ms=15000,\n):\n    print(message.id, message.body)\n```\n\n"
         }
       ],
-      "raw_output": "If a subscriber reads slower than the channel produces, the server will buffer up to 2000 messages for that subscription and then start dropping the oldest messages. Each drop is reported as a `StreamLagged` event that includes the count of lost messages and is delivered inline in the iterator【v3:streaming:structural:4】.",
+      "raw_output": "If a subscriber reads slower than the channel produces, the server will buffer up to 2000 messages for that subscription and then start dropping the oldest messages. Each drop is reported as a `StreamLagged` event that includes the count of lost messages and is delivered inline in the iterator [chunk: v3:streaming:structural:4].",
       "refused": false,
-      "citations": [],
+      "citations": [
+        "v3:streaming:structural:4"
+      ],
       "citation_check": {
-        "cited": [],
+        "cited": [
+          "v3:streaming:structural:4"
+        ],
         "unresolvable": [],
-        "ok": false
+        "ok": true
       },
       "prompt_version": "sysprompt-c10b763ebb",
       "model": "openai/gpt-oss-120b",
       "model_params": {
         "max_tokens": 2048
       },
-      "latency_ms": 12087.5,
-      "answer_sha256": "eef6123b42372069971500c0561a567f78d5410a87857ee950f5f2f21784fbb2"
+      "latency_ms": 12669.9,
+      "answer_sha256": "8a33dbc38f3981a7d4d1de77af3c676be69e096b876b8dc54e3ed609c30905d0"
     },
     {
       "case_id": "W6-18",
@@ -1327,7 +1347,7 @@
           "text": "Pagination > Client.fetch()\n\n| Parameter | Type | Default | Required | Description |\n|---|---|---|---|---|\n| `channel` | `str` | — | yes | Channel to read from. |\n| `page_size` | `int` | `50` | no | Messages per page. The maximum accepted value is `250`; larger values are rejected with `RELAY_400` rather than silently clamped. |\n| `cursor` | `str` | `None` | no | Position returned by a previous call as `next_cursor`. Omit for the first page. |\n| `direction` | `str` | `\"forward\"` | no | `\"forward\"` reads oldest to newest; `\"backward\"` reads newest to oldest. |\n\nA page response carries `items`, `next_cursor` and `has_more`. When `has_more`\nis `False`, `next_cursor` is `None` and iteration is complete.\n\n```python\ncursor, out = None, []\nwhile True:\n    page = client.fetch(channel=ch, page_size=250, cursor=cursor)\n    out.extend(page.items)\n    if not page.has_more:\n        break\n    cursor = page.next_cursor\n```\n\n"
         }
       ],
-      "raw_output": "Yes. Cursors are only valid for 7 days; after that they expire and a request using an expired cursor returns a `RELAY_410` error, requiring the listing to be restarted from the first page. [chunk: v3:pagination:structural:2]",
+      "raw_output": "Yes. A cursor is only valid for 7 days; after that it expires and using it raises `RELAY_410`, so you must restart the pagination from the first page. [chunk: v3:pagination:structural:2]",
       "refused": false,
       "citations": [
         "v3:pagination:structural:2"
@@ -1344,8 +1364,8 @@
       "model_params": {
         "max_tokens": 2048
       },
-      "latency_ms": 8194.6,
-      "answer_sha256": "187f58711984c4346c99b6fcf0ffc45fe6ac0572b86847c00c7311ea09e3a0c0"
+      "latency_ms": 7145.1,
+      "answer_sha256": "d69e6954527e3b6eba90bcb0ecaca8aed09121ef14bb240952b4a3f04fc18f00"
     },
     {
       "case_id": "W6-19",
@@ -1403,21 +1423,25 @@
           "text": "Streaming > Backpressure\n\nIf a consumer reads slower than the channel produces, the server buffers up to\n2000 messages per subscription and then begins dropping the oldest. Dropped\nmessages are reported as a `StreamLagged` event carrying the number of messages\nlost, which is delivered inline in the iterator."
         }
       ],
-      "raw_output": "When the connection drops, the SDK automatically reconnects and resumes the subscription from the cursor of the last message it yielded. The reconnection attempts follow the same exponential‑backoff policy used by `Client.send()`, with a maximum delay of 60 seconds between attempts. Because the cursor of the most‑recent message may not have been acknowledged yet, the client can replay that message after reconnecting, so consumers must be prepared to handle duplicate deliveries【v3:streaming:structural:3】.",
+      "raw_output": "When the connection drops, the SDK automatically attempts to reconnect, using the same exponential‑backoff policy as `Client.send()` (capped at 60 seconds between attempts) and resumes the subscription from the cursor of the last message it yielded. Because the cursor may not have been acknowledged yet, the reconnect can replay the most‑recent message, so consumers must be prepared to handle duplicate deliveries. [chunk: v3:streaming:structural:3]",
       "refused": false,
-      "citations": [],
+      "citations": [
+        "v3:streaming:structural:3"
+      ],
       "citation_check": {
-        "cited": [],
+        "cited": [
+          "v3:streaming:structural:3"
+        ],
         "unresolvable": [],
-        "ok": false
+        "ok": true
       },
       "prompt_version": "sysprompt-c10b763ebb",
       "model": "openai/gpt-oss-120b",
       "model_params": {
         "max_tokens": 2048
       },
-      "latency_ms": 4875.1,
-      "answer_sha256": "19c965e9d96023b8de279abe4f985dadba85c972d018d39dfb3cb6afdf1b6fc4"
+      "latency_ms": 5071.7,
+      "answer_sha256": "2b8ed0ea4edaf7ea8189cee7859d7637023933c8c820da60f787c37df83bd713"
     },
     {
       "case_id": "W6-20",
@@ -1475,27 +1499,21 @@
           "text": "Personal access tokens and SAML SSO\nIf you use a personal access token (classic) to access an organization that enforces SAML\nsingle sign-on (SSO) for authentication, you will need to authorize your token after creation. Fine-grained personal access tokens are authorized during token creation, before access to\nthe organization is granted. For more information, see Authorizing a personal access token for\nuse with single sign-on. If you do not authorize your personal access token (classic) for SAML SSO before you try to\nuse it to access a single organization that enforces SAML SSO, you may receive a 404 Not \nFound or a 403 Forbidden error. If you receive a 403 Forbidden error, the X-GitHub-SSO\nheader will include a URL that you can follow to authorize your token. The URL expires after\none hour."
         }
       ],
-      "raw_output": "Restrict a token’s abilities by limiting the scopes (or permissions) it is minted with. Keys carry scopes that bound what the resulting token may do, and a token can never hold a scope that its parent key does not have [chunk: v3:auth:structural:3]. When you request a token, specify only the scopes you need (e.g., `send`, `read`, or `admin`); any request for a scope the key lacks will be rejected at mint time with `AUTH_SCOPE_DENIED`. For GitHub‑style personal access tokens, use a fine‑grained token and select only the required permissions for the REST endpoints you plan to call [chunk: unknown:authentication:structural:3].",
+      "raw_output": "You restrict a token’s capabilities by assigning it only the scopes (or permissions) it needs when the token is minted.  \nA key’s token can only contain scopes that the parent key already has, and any request for a scope the key does not hold is rejected at mint‑time with `AUTH_SCOPE_DENIED`【chunk: v3:auth:structural:3】.  \nThus you limit a token by:\n\n* Giving the parent key only the required scopes (e.g., `send`, `read`, `admin`).  \n* Requesting just those scopes for the new token; extra scopes cannot be added.  \n\nFor GitHub fine‑grained personal access tokens, you similarly restrict the token by selecting only the specific permissions needed for the REST API endpoints you intend to call【chunk: unknown:authentication:structural:3】.",
       "refused": false,
-      "citations": [
-        "v3:auth:structural:3",
-        "unknown:authentication:structural:3"
-      ],
+      "citations": [],
       "citation_check": {
-        "cited": [
-          "v3:auth:structural:3",
-          "unknown:authentication:structural:3"
-        ],
+        "cited": [],
         "unresolvable": [],
-        "ok": true
+        "ok": false
       },
       "prompt_version": "sysprompt-c10b763ebb",
       "model": "openai/gpt-oss-120b",
       "model_params": {
         "max_tokens": 2048
       },
-      "latency_ms": 9954.7,
-      "answer_sha256": "92fcef596a5f4459c03de55fa713fd032b796770747ff0522fc8250c11cc9268"
+      "latency_ms": 7621.8,
+      "answer_sha256": "e5e291340ba077ea5836d2845a7a2d904e6157ce5f7be7f8acbfb9f49f5691d9"
     },
     {
       "case_id": "W6-21",
@@ -1566,7 +1584,7 @@
       "model_params": {
         "max_tokens": 2048
       },
-      "latency_ms": 11653.8,
+      "latency_ms": 7323.3,
       "answer_sha256": "2134ed5b7bfd0e0ba978bb1610e84f568d3af958f9bcea498aa547fbc8a5bc4d"
     },
     {
@@ -1625,7 +1643,7 @@
           "text": "ltiple permissions. For an overview of which REST API endpoints a fine-\ngrained personal access token can access with each permission, see Permissions required for\nfine-grained personal access tokens.\n\nIf you are using a personal access token (classic), it requires specific scopes in order to access\neach REST API endpoint. For general guidance about what scopes to choose, see Scopes for\nOAuth apps. Personal access tokens act as your identity (limited by the scopes or permissions you\nselected) when you make requests to the REST API. As such, it is important to keep your\npersonal access tokens secure. For more information about keeping your personal access\ntokens secure, see Keeping your API credentials secure. 10/08/2026, 00:15 Authenticating to the REST API - GitHub Docs\nhttps://docs.github.com/en/rest/authentication/authenticating-to-the-rest-api?apiVersion=2026-03-10 2/6"
         }
       ],
-      "raw_output": "A v3 access token is valid for 3600 seconds (1 hour) before the SDK attempts to refresh it. [chunk: v3:auth:structural:1]",
+      "raw_output": "A v3 access token is valid for 3600 seconds before it must be refreshed. [chunk: v3:auth:structural:1]",
       "refused": false,
       "citations": [
         "v3:auth:structural:1"
@@ -1642,8 +1660,8 @@
       "model_params": {
         "max_tokens": 2048
       },
-      "latency_ms": 6316.0,
-      "answer_sha256": "7579f47361d389f6f402d8a78305361f7b2085ade858485b297ee76979b70896"
+      "latency_ms": 5844.5,
+      "answer_sha256": "7305825f7abfd2c94b3583851fe5441f930525e3118a20657bd4c663bfe0dd08"
     },
     {
       "case_id": "W6-23",
@@ -1701,21 +1719,27 @@
           "text": "Client > Client.close()\n\nShuts the client down. `close()` flushes any messages still buffered in the\nbackground loop, waits up to `drain_timeout_ms` for in-flight sends to settle,\nand then releases the connection pool. Messages still unsent when the drain\ndeadline passes are dropped and reported through the return value.\n\n| Parameter | Type | Default | Required | Description |\n|---|---|---|---|---|\n| `drain_timeout_ms` | `int` | `5000` | no | How long to wait for buffered messages to flush before giving up. |\n| `force` | `bool` | `False` | no | Skip the drain entirely and tear the pool down immediately. Buffered messages are lost. |\n\nCalling `close()` twice is safe; the second call is a no-op. Using a client\nafter `close()` raises `RelayClosed`.\n\n```python\ndropped = client.close(drain_timeout_ms=5000)\nif dropped:\n    logger.warning(\"relay dropped %d buffered messages\", dropped)\n```\n"
         }
       ],
-      "raw_output": "Pass `stream=True` to `Client.subscribe()` so it yields messages incrementally instead of buffering them into a list【v3:streaming:structural:1】.",
+      "raw_output": "Pass `stream=True` to `Client.subscribe()` so it yields incremental messages as they arrive instead of buffering a list. [chunk: v3:streaming:structural:1] [chunk: v3:streaming:structural:2]",
       "refused": false,
-      "citations": [],
+      "citations": [
+        "v3:streaming:structural:1",
+        "v3:streaming:structural:2"
+      ],
       "citation_check": {
-        "cited": [],
+        "cited": [
+          "v3:streaming:structural:1",
+          "v3:streaming:structural:2"
+        ],
         "unresolvable": [],
-        "ok": false
+        "ok": true
       },
       "prompt_version": "sysprompt-c10b763ebb",
       "model": "openai/gpt-oss-120b",
       "model_params": {
         "max_tokens": 2048
       },
-      "latency_ms": 6865.1,
-      "answer_sha256": "e6c081df013091dee1b82d3cfa34b8c93edc3ee7925aed758e1cd7bb7c67c5d3"
+      "latency_ms": 4017.5,
+      "answer_sha256": "2a7a842c7982e1539c011b9a58e7075074f08bd5bf946015d12190fdf79e6220"
     },
     {
       "case_id": "W6-24",
@@ -1773,7 +1797,7 @@
           "text": "Changelog > 2.6.1\n\nFixed a bug where `close()` could raise if called on a client that had never\nsent a message."
         }
       ],
-      "raw_output": "Yes. In the v3 SDK, calling `Client.close()` a second time is safe and acts as a no‑op. [chunk: v3:client:structural:6]",
+      "raw_output": "Yes, calling `Client.close()` twice in the v3 SDK is safe—the second call is a no‑op. [chunk: v3:client:structural:6]",
       "refused": false,
       "citations": [
         "v3:client:structural:6"
@@ -1790,8 +1814,8 @@
       "model_params": {
         "max_tokens": 2048
       },
-      "latency_ms": 3815.1,
-      "answer_sha256": "ecd5180cebfce78a9e743a4f3a573737fff624d61675204024bb35475f20fc40"
+      "latency_ms": 6817.7,
+      "answer_sha256": "1816852bea608d3eb5ac2d3a410f2b60bfbd47304e356e3be97840f402ec774b"
     },
     {
       "case_id": "W6-25",
@@ -1849,21 +1873,25 @@
           "text": "Webhooks > Signature verification\n\netries of the same event. |\n\nVerification must be done against the **raw** request body. Parsing the JSON\nand re-serialising it will change byte ordering and whitespace, and the digest\nwill not match.\n\n```python\nfrom relay.webhooks import verify\n\nverify(\n    body=request.raw_body,\n    signature=request.headers[\"X-Relay-Signature-V3\"],\n    timestamp=request.headers[\"X-Relay-Timestamp\"],\n    secret=WEBHOOK_SECRET,\n    tolerance_seconds=300,\n)\n```\n\n\n`verify()` raises `SignatureMismatch` when the digest does not match and\n`SignatureExpired` when the timestamp is outside `tolerance_seconds`. The\ndefault tolerance is 300 seconds; widening it beyond 900 is rejected."
         }
       ],
-      "raw_output": "Relay will make up to **six** delivery attempts before the webhook is marked `exhausted`【v3:webhooks:structural:3】.",
+      "raw_output": "Relay will make at most 6 delivery attempts for a webhook before the delivery is marked `exhausted` [chunk: v3:webhooks:structural:3].",
       "refused": false,
-      "citations": [],
+      "citations": [
+        "v3:webhooks:structural:3"
+      ],
       "citation_check": {
-        "cited": [],
+        "cited": [
+          "v3:webhooks:structural:3"
+        ],
         "unresolvable": [],
-        "ok": false
+        "ok": true
       },
       "prompt_version": "sysprompt-c10b763ebb",
       "model": "openai/gpt-oss-120b",
       "model_params": {
         "max_tokens": 2048
       },
-      "latency_ms": 9639.7,
-      "answer_sha256": "9d73d6523afa7729cb6e9183dac2eb92949a54095c7d7108663ef0ce3f0631e4"
+      "latency_ms": 8837.2,
+      "answer_sha256": "f7bb2745f56998293f5519fff0400c2a605e13c042a7532629b2177b8345a781"
     }
   ]
 }
