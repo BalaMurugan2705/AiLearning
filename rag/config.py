@@ -13,8 +13,11 @@ GROQ_MODEL = os.environ.get("GROQ_MODEL", "openai/gpt-oss-120b")
 # The judge runs on a different model than the answerer. A model grading its
 # own family's output shows measurable self-preference, which would make the
 # agreement figure partly a measure of family resemblance rather than of
-# correctness.
-JUDGE_MODEL = os.environ.get("JUDGE_MODEL", "llama-3.3-70b-versatile")
+# correctness. llama-3.3-70b-versatile was decommissioned from Groq after this
+# default was chosen; qwen/qwen3.8-27b is the replacement -- still a different
+# family from GROQ_MODEL (openai/gpt-oss-120b) and confirmed to follow the
+# strict VERDICT/REASON output contract.
+JUDGE_MODEL = os.environ.get("JUDGE_MODEL", "qwen/qwen3.8-27b")
 
 EMBEDDING_MODEL = os.environ.get("EMBEDDING_MODEL", "all-MiniLM-L6-v2")
 
