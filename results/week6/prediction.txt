@@ -1,0 +1,34 @@
+Week 6 prediction — dated 2026-09-04 (before judge_v2 was written)
+
+Adding W6-06 (version-ambiguity) and W6-11 (cross-product-bleed) to judge_v1
+as few-shot FAIL examples will raise agreement from 84% (21/25) to at least
+92% (23/25) by fixing the two remaining disagreements NOT used as few-shots —
+W6-07 and W6-12 — because both are structurally near-duplicates of their
+respective few-shot: W6-07 is another "one SDK version's number stated with
+no version qualifier, for a question that names none" case (same shape as
+W6-06), and W6-12 is another "generic 'the SDK' question answered entirely
+from the unrelated Omnumi product, with zero disambiguation" case (same shape
+as W6-11, almost the same question). Both few-shots explicitly instruct the
+judge to ask "could there be another version or product this answer silently
+ignored?" instead of only checking the answer's coherence with whatever was
+retrieved — which is the diagnosed root cause behind all 4 misses in
+disagreements.md.
+
+The exact delta expected: agreement_before 84% (21/25) -> agreement_after at
+least 92% (23/25), with W6-07 and W6-12 specifically flipping from PASS to
+FAIL. Kappa should rise correspondingly from 0.43 to at least 0.55, since two
+of the corrected verdicts are on the FAIL side of a skewed label set, which
+moves kappa faster than raw agreement.
+
+Falsified if: agreement lands at or below 84%, OR W6-07 or W6-12 still
+verdicts PASS, OR any of the 21 previously-agreeing cases flips verdict
+(citation-format, unexplained-refusal, and clean cases are not expected to
+move, since none of them exercise the version/product-ambiguity blind spot
+these two few-shots target).
+
+What this prediction does NOT claim: that the judge will generalize to a
+version- or product-ambiguity failure mode it has not seen an example of.
+Both few-shots are cross-product-bleed and version-ambiguity; a fresh
+disagreement in a mode with no representative example (there are none left
+untested here, since citation-format/unexplained-refusal/clean all showed
+100% judge agreement in this run) would not be predicted to improve.
