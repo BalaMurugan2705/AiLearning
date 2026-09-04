@@ -8,8 +8,8 @@
     "citation-format": {
       "n": 5,
       "assertions_ok": 1,
-      "judge_pass": 5,
-      "overall": 1,
+      "judge_pass": 1,
+      "overall": 0,
       "assertion_pass_counts": {
         "A1_code_parses": 0,
         "A2_symbols_exist": 5,
@@ -28,7 +28,7 @@
     "version-ambiguity": {
       "n": 5,
       "assertions_ok": 2,
-      "judge_pass": 5,
+      "judge_pass": 2,
       "overall": 2,
       "assertion_pass_counts": {
         "A1_code_parses": 1,
@@ -48,7 +48,7 @@
     "cross-product-bleed": {
       "n": 5,
       "assertions_ok": 1,
-      "judge_pass": 3,
+      "judge_pass": 0,
       "overall": 0,
       "assertion_pass_counts": {
         "A1_code_parses": 1,
@@ -68,7 +68,7 @@
     "unexplained-refusal": {
       "n": 5,
       "assertions_ok": 0,
-      "judge_pass": 5,
+      "judge_pass": 4,
       "overall": 0,
       "assertion_pass_counts": {
         "A1_code_parses": 0,
@@ -915,6 +915,13 @@
       "labels_commit": "55bc482069faaccad18a56341c45738b91df3039",
       "labels_sha256": "70f12088274966e559239181e13cbe0922dee3efc5d3f74881c509b8feb733be",
       "run_at": "2026-09-04T15:53:27+00:00"
+    },
+    "v2": {
+      "judge_prompt": "/Users/balamurugan/Documents/Projects/pythom/AiLearning/results/week6/judge_v2.txt",
+      "judge_model": "qwen/qwen3.8-27b",
+      "labels_commit": "55bc482069faaccad18a56341c45738b91df3039",
+      "labels_sha256": "70f12088274966e559239181e13cbe0922dee3efc5d3f74881c509b8feb733be",
+      "run_at": "2026-09-04T16:01:26+00:00"
     }
   },
   "agreement": {
@@ -982,6 +989,91 @@
           "n": 5,
           "matches": 3,
           "agreement": 0.6
+        }
+      }
+    },
+    "v2": {
+      "n": 25,
+      "matches": 18,
+      "agreement": 0.72,
+      "confusion": {
+        "tp": 12,
+        "fn": 7,
+        "fp": 0,
+        "tn": 6
+      },
+      "kappa": 0.45141065830720994,
+      "human_pass_rate": 0.76,
+      "unparsed": 0,
+      "disagreements": [
+        {
+          "case_id": "W6-01",
+          "mode": "citation-format",
+          "human": true,
+          "judge": "FAIL"
+        },
+        {
+          "case_id": "W6-02",
+          "mode": "citation-format",
+          "human": true,
+          "judge": "FAIL"
+        },
+        {
+          "case_id": "W6-03",
+          "mode": "citation-format",
+          "human": true,
+          "judge": "FAIL"
+        },
+        {
+          "case_id": "W6-05",
+          "mode": "citation-format",
+          "human": true,
+          "judge": "FAIL"
+        },
+        {
+          "case_id": "W6-08",
+          "mode": "version-ambiguity",
+          "human": true,
+          "judge": "FAIL"
+        },
+        {
+          "case_id": "W6-13",
+          "mode": "cross-product-bleed",
+          "human": true,
+          "judge": "FAIL"
+        },
+        {
+          "case_id": "W6-20",
+          "mode": "unexplained-refusal",
+          "human": true,
+          "judge": "FAIL"
+        }
+      ],
+      "by_mode": {
+        "citation-format": {
+          "n": 5,
+          "matches": 1,
+          "agreement": 0.2
+        },
+        "clean": {
+          "n": 5,
+          "matches": 5,
+          "agreement": 1.0
+        },
+        "cross-product-bleed": {
+          "n": 5,
+          "matches": 4,
+          "agreement": 0.8
+        },
+        "unexplained-refusal": {
+          "n": 5,
+          "matches": 4,
+          "agreement": 0.8
+        },
+        "version-ambiguity": {
+          "n": 5,
+          "matches": 4,
+          "agreement": 0.8
         }
       }
     }

@@ -1,0 +1,162 @@
+{
+  "judge_prompt": "/Users/balamurugan/Documents/Projects/pythom/AiLearning/results/week6/judge_v2.txt",
+  "judge_prompt_sha256": "2e7a13479815490551faf6100395f1fb98ab5692ee74503fd1c292a51e95207c",
+  "judge_model": "qwen/qwen3.8-27b",
+  "temperature": 0,
+  "answers_sha256": "b35510d75e8b9804487f40431d6a07be3d14c3260fc8b0f0cf365c032429511d",
+  "labels_commit": "55bc482069faaccad18a56341c45738b91df3039",
+  "labels_sha256": "70f12088274966e559239181e13cbe0922dee3efc5d3f74881c509b8feb733be",
+  "run_at": "2026-09-04T16:01:26+00:00",
+  "verdicts": [
+    {
+      "case_id": "W6-01",
+      "verdict": "FAIL",
+      "reason": "The question does not specify an SDK version, but the answer describes only v3 behavior (background flush loop, drain_timeout_ms, force parameter) without acknowledging that v2 behaves differently (no background loop, immediate return, no drain), which would mislead a v2 developer.",
+      "raw": "VERDICT: FAIL\nREASON: The question does not specify an SDK version, but the answer describes only v3 behavior (background flush loop, drain_timeout_ms, force parameter) without acknowledging that v2 behaves differently (no background loop, immediate return, no drain), which would mislead a v2 developer."
+    },
+    {
+      "case_id": "W6-06",
+      "verdict": "FAIL",
+      "reason": "The question does not specify an SDK version, but the answer provides only the v2 limits (64 KiB, 3 attempts) without qualification, whereas the v3 SDK has different defaults (256 KiB, 4 attempts), making the answer incorrect for developers using v3.",
+      "raw": "VERDICT: FAIL\nREASON: The question does not specify an SDK version, but the answer provides only the v2 limits (64 KiB, 3 attempts) without qualification, whereas the v3 SDK has different defaults (256 KiB, 4 attempts), making the answer incorrect for developers using v3."
+    },
+    {
+      "case_id": "W6-11",
+      "verdict": "FAIL",
+      "reason": "The question asks about \"the SDK\" in the context of the Relay SDK, but the answer describes the Omnumi iOS SDK, which is a completely different product indexed in the documentation set, providing irrelevant guidance to a Relay developer.",
+      "raw": "VERDICT: FAIL\nREASON: The question asks about \"the SDK\" in the context of the Relay SDK, but the answer describes the Omnumi iOS SDK, which is a completely different product indexed in the documentation set, providing irrelevant guidance to a Relay developer."
+    },
+    {
+      "case_id": "W6-16",
+      "verdict": "PASS",
+      "reason": "The retrieved documentation contains no information regarding error handling for card activation, so the refusal is correct.",
+      "raw": "VERDICT: PASS\nREASON: The retrieved documentation contains no information regarding error handling for card activation, so the refusal is correct."
+    },
+    {
+      "case_id": "W6-02",
+      "verdict": "FAIL",
+      "reason": "The question does not specify an SDK version, but the answer provides only the v3 limit (86400000) without qualification; a developer using v2 (which has different defaults and behaviors) would not be able to verify if this limit applies to their version, and the retrieved docs do not confirm the v2 limit, making the answer potentially misleading or incomplete for a version-agnostic query.",
+      "raw": "VERDICT: FAIL\nREASON: The question does not specify an SDK version, but the answer provides only the v3 limit (86400000) without qualification; a developer using v2 (which has different defaults and behaviors) would not be able to verify if this limit applies to their version, and the retrieved docs do not confirm the v2 limit, making the answer potentially misleading or incomplete for a version-agnostic query."
+    },
+    {
+      "case_id": "W6-03",
+      "verdict": "FAIL",
+      "reason": "The question does not specify an SDK version, but the answer commits to the v3 error code `AUTH_TOKEN_EXPIRED` without noting that v2 has no token expiry concept and thus no such error code, which would mislead a v2 developer.",
+      "raw": "VERDICT: FAIL\nREASON: The question does not specify an SDK version, but the answer commits to the v3 error code `AUTH_TOKEN_EXPIRED` without noting that v2 has no token expiry concept and thus no such error code, which would mislead a v2 developer."
+    },
+    {
+      "case_id": "W6-04",
+      "verdict": "PASS",
+      "reason": "The answer correctly identifies the error code `RELAY_410` for an expired cursor, which is explicitly stated in the v3 documentation and is the only version with cursor pagination (v2 used offset pagination).",
+      "raw": "VERDICT: PASS\nREASON: The answer correctly identifies the error code `RELAY_410` for an expired cursor, which is explicitly stated in the v3 documentation and is the only version with cursor pagination (v2 used offset pagination)."
+    },
+    {
+      "case_id": "W6-05",
+      "verdict": "FAIL",
+      "reason": "The question does not specify an SDK version, but the answer commits to the v3 limit (250) without qualification; a developer using v2 would need a different answer, and the retrieved documentation does not provide the v2 limit to confirm or deny it.",
+      "raw": "VERDICT: FAIL\nREASON: The question does not specify an SDK version, but the answer commits to the v3 limit (250) without qualification; a developer using v2 would need a different answer, and the retrieved documentation does not provide the v2 limit to confirm or deny it."
+    },
+    {
+      "case_id": "W6-07",
+      "verdict": "FAIL",
+      "reason": "The question does not specify an SDK version, but the answer commits to the v2 format (`org/topic`) without qualification; if the v3 SDK uses a different channel identifier format (e.g., a UUID or different namespace structure), a developer working on v3 would be misled.",
+      "raw": "VERDICT: FAIL\nREASON: The question does not specify an SDK version, but the answer commits to the v2 format (`org/topic`) without qualification; if the v3 SDK uses a different channel identifier format (e.g., a UUID or different namespace structure), a developer working on v3 would be misled."
+    },
+    {
+      "case_id": "W6-08",
+      "verdict": "FAIL",
+      "reason": "The question does not specify an SDK version, but the answer commits exclusively to v3 behavior (cursor pagination, `client.fetch`) without acknowledging that v2 uses offset pagination, which would lead a v2 developer to use incorrect methods and parameters.",
+      "raw": "VERDICT: FAIL\nREASON: The question does not specify an SDK version, but the answer commits exclusively to v3 behavior (cursor pagination, `client.fetch`) without acknowledging that v2 uses offset pagination, which would lead a v2 developer to use incorrect methods and parameters."
+    },
+    {
+      "case_id": "W6-09",
+      "verdict": "PASS",
+      "reason": "The question does not specify a version, and the answer correctly distinguishes between the authentication mechanisms of Relay v2 (direct API key) and Relay v3 (token exchange), providing accurate and actionable guidance for both.",
+      "raw": "VERDICT: PASS\nREASON: The question does not specify a version, and the answer correctly distinguishes between the authentication mechanisms of Relay v2 (direct API key) and Relay v3 (token exchange), providing accurate and actionable guidance for both."
+    },
+    {
+      "case_id": "W6-10",
+      "verdict": "PASS",
+      "reason": "The answer correctly identifies that the default number of delivery attempts differs between SDK versions (4 for v3, 3 for v2) and explicitly states both values, allowing a developer to select the correct behavior for their specific version.",
+      "raw": "VERDICT: PASS\nREASON: The answer correctly identifies that the default number of delivery attempts differs between SDK versions (4 for v3, 3 for v2) and explicitly states both values, allowing a developer to select the correct behavior for their specific version."
+    },
+    {
+      "case_id": "W6-12",
+      "verdict": "FAIL",
+      "reason": "The question asks about the Relay SDK, but the answer exclusively describes the Omnumi iOS SDK without acknowledging the product mismatch or the existence of the Relay SDK documentation.",
+      "raw": "VERDICT: FAIL\nREASON: The question asks about the Relay SDK, but the answer exclusively describes the Omnumi iOS SDK without acknowledging the product mismatch or the existence of the Relay SDK documentation."
+    },
+    {
+      "case_id": "W6-13",
+      "verdict": "FAIL",
+      "reason": "The question is generic (\"the SDK\") and the documentation set contains two unrelated products (Relay SDK and Omnumi iOS SDK); the answer commits exclusively to the Relay SDK without acknowledging the ambiguity or the other product, which is a critical failure for a developer who might be asking about the Omnumi SDK.",
+      "raw": "VERDICT: FAIL\nREASON: The question is generic (\"the SDK\") and the documentation set contains two unrelated products (Relay SDK and Omnumi iOS SDK); the answer commits exclusively to the Relay SDK without acknowledging the ambiguity or the other product, which is a critical failure for a developer who might be asking about the Omnumi SDK."
+    },
+    {
+      "case_id": "W6-14",
+      "verdict": "FAIL",
+      "reason": "The answer conflates two unrelated products (Omnumi iOS SDK and Relay SDK v3), presenting incompatible mechanisms (Swift callback vs. Python auto-refresh) as a single coherent workflow, which is incorrect and unactionable for either specific product.",
+      "raw": "VERDICT: FAIL\nREASON: The answer conflates two unrelated products (Omnumi iOS SDK and Relay SDK v3), presenting incompatible mechanisms (Swift callback vs. Python auto-refresh) as a single coherent workflow, which is incorrect and unactionable for either specific product."
+    },
+    {
+      "case_id": "W6-15",
+      "verdict": "FAIL",
+      "reason": "The answer conflates the Relay SDK with the unrelated Omnumi iOS SDK by including Omnumi's \"Network Retry\" feature in the description of Relay's retry behavior, which is incorrect and misleading for a developer working with Relay.",
+      "raw": "VERDICT: FAIL\nREASON: The answer conflates the Relay SDK with the unrelated Omnumi iOS SDK by including Omnumi's \"Network Retry\" feature in the description of Relay's retry behavior, which is incorrect and misleading for a developer working with Relay."
+    },
+    {
+      "case_id": "W6-17",
+      "verdict": "PASS",
+      "reason": "The answer correctly describes the backpressure behavior (buffering 2000 messages, dropping oldest, reporting StreamLagged) for the v3 SDK, which is the only version documented in the retrieved excerpts and the standard current version for this question context.",
+      "raw": "VERDICT: PASS\nREASON: The answer correctly describes the backpressure behavior (buffering 2000 messages, dropping oldest, reporting StreamLagged) for the v3 SDK, which is the only version documented in the retrieved excerpts and the standard current version for this question context."
+    },
+    {
+      "case_id": "W6-18",
+      "verdict": "PASS",
+      "reason": "The answer correctly identifies the 7-day validity limit and the specific error code (`RELAY_410`) for expired cursors in the v3 SDK, providing actionable guidance to restart pagination.",
+      "raw": "VERDICT: PASS\nREASON: The answer correctly identifies the 7-day validity limit and the specific error code (`RELAY_410`) for expired cursors in the v3 SDK, providing actionable guidance to restart pagination."
+    },
+    {
+      "case_id": "W6-19",
+      "verdict": "PASS",
+      "reason": "The answer correctly describes the v3 SDK's automatic reconnection behavior, including the exponential backoff policy, cursor-based resumption, and the requirement to handle duplicate messages, which is accurate and actionable for a developer using the v3 SDK.",
+      "raw": "VERDICT: PASS\nREASON: The answer correctly describes the v3 SDK's automatic reconnection behavior, including the exponential backoff policy, cursor-based resumption, and the requirement to handle duplicate messages, which is accurate and actionable for a developer using the v3 SDK."
+    },
+    {
+      "case_id": "W6-20",
+      "verdict": "FAIL",
+      "reason": "The question is generic (\"a token\") and the documentation set contains unrelated products (Relay SDK and GitHub); the answer commits to both without clarifying which product the user is asking about, making it potentially irrelevant or confusing for a developer working on just one of them.",
+      "raw": "VERDICT: FAIL\nREASON: The question is generic (\"a token\") and the documentation set contains unrelated products (Relay SDK and GitHub); the answer commits to both without clarifying which product the user is asking about, making it potentially irrelevant or confusing for a developer working on just one of them."
+    },
+    {
+      "case_id": "W6-21",
+      "verdict": "PASS",
+      "reason": "The answer correctly identifies the default value as 2000 ms for the v3 SDK, which matches the retrieved v3 documentation.",
+      "raw": "VERDICT: PASS\nREASON: The answer correctly identifies the default value as 2000 ms for the v3 SDK, which matches the retrieved v3 documentation."
+    },
+    {
+      "case_id": "W6-22",
+      "verdict": "PASS",
+      "reason": "The answer correctly states the 3600-second validity period for v3 access tokens as specified in the retrieved documentation.",
+      "raw": "VERDICT: PASS\nREASON: The answer correctly states the 3600-second validity period for v3 access tokens as specified in the retrieved documentation."
+    },
+    {
+      "case_id": "W6-23",
+      "verdict": "PASS",
+      "reason": "The answer correctly identifies `stream=True` as the argument required to receive messages incrementally, which is accurate for the v3 SDK described in the documentation.",
+      "raw": "VERDICT: PASS\nREASON: The answer correctly identifies `stream=True` as the argument required to receive messages incrementally, which is accurate for the v3 SDK described in the documentation."
+    },
+    {
+      "case_id": "W6-24",
+      "verdict": "PASS",
+      "reason": "The answer correctly identifies that calling close() twice is safe in the v3 SDK, which aligns with the retrieved v3 documentation stating the second call is a no-op.",
+      "raw": "VERDICT: PASS\nREASON: The answer correctly identifies that calling close() twice is safe in the v3 SDK, which aligns with the retrieved v3 documentation stating the second call is a no-op."
+    },
+    {
+      "case_id": "W6-25",
+      "verdict": "PASS",
+      "reason": "The answer correctly identifies the maximum number of delivery attempts (6) for the v3 SDK, which is the version specified in the retrieved documentation and the only version with webhook retry details provided.",
+      "raw": "VERDICT: PASS\nREASON: The answer correctly identifies the maximum number of delivery attempts (6) for the v3 SDK, which is the version specified in the retrieved documentation and the only version with webhook retry details provided."
+    }
+  ]
+}

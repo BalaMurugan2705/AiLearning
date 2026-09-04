@@ -137,3 +137,25 @@ def test_run_judge_refuses_before_making_a_single_model_call(repo):
     with pytest.raises(OrderingError):
         run_judge(prompt, {"answers_sha256": "x", "answers": [{"case_id": "W6-01", "question": "q", "retrieved": [], "raw_output": "a"}]}, labels, "m", call_fn=fake_call)
     assert calls == [], "no model call may happen before the ordering guard passes"
+
+
+def test_the_committed_labels_were_never_edited_after_the_judge_ran():
+    """The task's sharpest trap: reaching a higher agreement by relabelling
+    the cases you disagreed on moves the ruler, not the thing being measured.
+    This makes that mechanically detectable instead of a matter of conscience.
+    """
+    from pathlib import Path
+
+    from eval.week6.judge import LABELS_PATH, run_path_for
+
+    if not LABELS_PATH.exists():
+        pytest.skip("labels not written yet")
+
+    for version in ("v1", "v2"):
+        path = run_path_for(version)
+        if not path.exists():
+            continue
+        recorded = json.loads(path.read_text(encoding="utf-8"))["labels_sha256"]
+        assert recorded == sha256_file(LABELS_PATH), (
+            f"labels_25.json changed since judge_{version} ran"
+        )

@@ -9,10 +9,10 @@ Frozen answer set: `b35510d75e8b9804…` over 25 cases.
 
 | Mode | n | assertions ok | judge pass | overall |
 |---|---|---|---|---|
-| `citation-format` | 5 | 1/5 | 5/5 | 1/5 (20%) |
-| `version-ambiguity` | 5 | 2/5 | 5/5 | 2/5 (40%) |
-| `cross-product-bleed` | 5 | 1/5 | 3/5 | 0/5 (0%) |
-| `unexplained-refusal` | 5 | 0/5 | 5/5 | 0/5 (0%) |
+| `citation-format` | 5 | 1/5 | 1/5 | 0/5 (0%) |
+| `version-ambiguity` | 5 | 2/5 | 2/5 | 2/5 (40%) |
+| `cross-product-bleed` | 5 | 1/5 | 0/5 | 0/5 (0%) |
+| `unexplained-refusal` | 5 | 0/5 | 4/5 | 0/5 (0%) |
 | `clean` | 5 | 3/5 | 5/5 | 3/5 (60%) |
 
 Reported per mode and never pooled: an average hides a total regression
@@ -43,6 +43,27 @@ Disagreements:
 - `W6-07` (`version-ambiguity`) — human FAIL, judge PASS
 - `W6-11` (`cross-product-bleed`) — human FAIL, judge PASS
 - `W6-12` (`cross-product-bleed`) — human FAIL, judge PASS
+
+### agreement_after — `judge_v2`
+
+- agreement: **72%** (18/25)
+- Cohen's kappa: **0.45**
+- human PASS rate: 76%
+- confusion (human as reference): {'tp': 12, 'fn': 7, 'fp': 0, 'tn': 6}
+- unparsed verdicts: 0
+- labels commit (ordering proof): `55bc482069faaccad18a56341c45738b91df3039`
+- labels sha256: `70f12088274966e5…`
+- judge model: `qwen/qwen3.8-27b`
+
+Disagreements:
+
+- `W6-01` (`citation-format`) — human PASS, judge FAIL
+- `W6-02` (`citation-format`) — human PASS, judge FAIL
+- `W6-03` (`citation-format`) — human PASS, judge FAIL
+- `W6-05` (`citation-format`) — human PASS, judge FAIL
+- `W6-08` (`version-ambiguity`) — human PASS, judge FAIL
+- `W6-13` (`cross-product-bleed`) — human PASS, judge FAIL
+- `W6-20` (`unexplained-refusal`) — human PASS, judge FAIL
 
 ## Caveats on these numbers
 
