@@ -7,7 +7,8 @@ drift, which would make the headline number of the whole week meaningless.
 """
 import json
 
-from eval.week6.snapshot import build_snapshot, canonical_sha256
+from eval.week6.snapshot import build_snapshot, canonical_sha256, resolve_chunks
+from rag.generator import should_refuse
 
 CASES = [
     {
@@ -108,3 +109,35 @@ def test_canonical_sha256_ignores_key_order():
 def test_snapshot_is_json_serialisable():
     snap = build_snapshot(CASES, resolve_fn=_resolve, answer_fn=_answer)
     json.dumps(snap)
+
+
+def test_resolve_chunks_reattaches_the_trace_scores_for_a_replay_case(monkeypatch):
+    """The other 7 tests inject resolve_chunks away entirely. This one calls
+    the real function, because it is the one place a regression to null
+    scores would slip past the whole suite and only surface on a live run as
+    every replay case silently refusing.
+    """
+    import rag.store
+
+    def _fake_get_by_id(self, chunk_id):
+        return {
+            "chunk_id": chunk_id,
+            "text": "The default retry backoff is 500 ms.",
+            "metadata": {"source_file": "v2/client.md", "sdk_version": "v2"},
+        }
+
+    monkeypatch.setattr(rag.store.VectorStore, "get_by_id", _fake_get_by_id)
+
+    replay_case = CASES[0]  # W6-01: origin.kind == "replay"
+    chunks = resolve_chunks(replay_case)
+
+    record = replay_case["replay_retrieved"][0]
+    assert chunks[0]["dense_distance"] == record["dense_distance"]
+    assert chunks[0]["bm25_score"] == record["bm25_score"]
+    assert chunks[0]["rrf_score"] == record["rrf_score"]
+    assert chunks[0]["rerank_score"] == record["rerank_score"]
+
+    # 0.51 is comfortably under REFUSAL_DISTANCE_THRESHOLD (0.85). If the
+    # scores had come back None instead of reattached, should_refuse() would
+    # treat this as no evidence and return True.
+    assert should_refuse(chunks) is False
