@@ -182,3 +182,37 @@ a notice when `GROQ_API_KEY` is unset and filled in on a later run.
 
 `results.md` is generated. Edit `eval/report.py` and re-run, never the
 markdown.
+
+## Week 6 evaluation — validating the judge
+
+```bash
+python -m eval.week6.run              # the one command: pass rate by mode
+python -m eval.week6.run --no-judge   # assertions only, no API key needed
+```
+
+Scores a frozen 25-answer snapshot (`eval/raw/answers_25.json`) with five
+deterministic assertions and, when they exist, the judge runs. Prints pass
+rate **by mode** — never pooled — plus the assertion/judged-criteria counts
+and human agreement before and after the judge iteration.
+
+The protocol is ordered, and the order is the evidence:
+
+```bash
+python -m eval.week6.snapshot                              # generate the frozen answers, once
+python -m eval.week6.label --labeler "<you>"               # 25 blind labels
+git add eval/week6/labels_25.json && git commit             # MUST come before the judge run
+python -m eval.week6.judge --version v1                    # refuses if the labels are uncommitted
+python -m eval.week6.judge --version v2
+```
+
+`eval/week6/judge.py` reads `git log` and will not make a single model call
+against labels that are not committed and clean. Each run records the labels'
+commit hash and sha256, so the run file itself proves the labels came first:
+
+```bash
+git log --oneline --reverse -- eval/week6/labels_25.json eval/raw/judge_v1_run.json
+jq -r .labels_commit eval/raw/judge_v1_run.json
+```
+
+`results/week6-results.md` is generated. Edit `eval/week6/report.py` and
+re-run, never the markdown.
