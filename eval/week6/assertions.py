@@ -125,3 +125,119 @@ def assert_version_stated(answer: str, version_sensitive: bool) -> dict:
         ordered = sorted(unique.values(), key=str.lower)
         return _result(A4, PASS, f"states {', '.join(ordered)}")
     return _result(A4, FAIL, "no v2/v3 named anywhere in the answer")
+
+
+# A2 selects tokens to check by SHAPE, then passes or fails them on presence
+# in the symbol table. Selecting by presence instead would be circular --
+# nothing could ever fail. The required underscore in _PARAM_RE is what keeps
+# single prose words (`str`, `message`, `id`) out without a stoplist.
+_ERROR_CODE_RE = re.compile(r"\b(?:RELAY_\d{3}|AUTH_[A-Z_]{3,})\b")
+_CLASS_RE = re.compile(r"\b(?:Relay[A-Z]\w*|Signature[A-Z]\w*|Stream[A-Z]\w*|[A-Z]\w*Cache)\b")
+_METHOD_RE = re.compile(r"\bClient\.\w+\(\)")
+# Parameters are read only from inline-code spans. Bare snake_case in prose is
+# too often an English phrase, and inside a fence it is usually a local
+# variable the example invented.
+_INLINE_CODE_RE = re.compile(r"`([^`\n]+)`")
+_PARAM_RE = re.compile(r"^[a-z][a-z0-9]*(?:_[a-z0-9]+)+$")
+_PATH_RE = re.compile(r"(?:(?:GET|POST|PUT|PATCH|DELETE)\s+)?(/v\d+/[A-Za-z0-9/_{}.-]+)")
+
+
+def _candidate_symbols(answer: str) -> list[str]:
+    prose = strip_code_fences(answer)
+    found: list[str] = []
+    found.extend(_ERROR_CODE_RE.findall(prose))
+    found.extend(_CLASS_RE.findall(prose))
+    found.extend(_METHOD_RE.findall(prose))
+    for span in _INLINE_CODE_RE.findall(prose):
+        token = span.strip()
+        if _PARAM_RE.match(token):
+            found.append(token)
+    return list(dict.fromkeys(found))
+
+
+def assert_symbols_exist(answer: str, symbols: dict) -> dict:
+    """A2: every SDK-shaped token in the answer exists in the symbol table."""
+    candidates = _candidate_symbols(answer)
+    if not candidates:
+        return _result(A2, SKIPPED, "answer names no SDK-shaped symbol")
+
+    unknown = [name for name in candidates if name not in symbols]
+    if unknown:
+        return _result(A2, FAIL, f"not in the SDK: {', '.join(unknown)}")
+    return _result(A2, PASS, f"{len(candidates)} symbol(s) resolved")
+
+
+def assert_endpoints_exist(answer: str, openapi: dict) -> dict:
+    """A3: every /vN/... path mentioned appears in the OpenAPI spec.
+
+    Applies to only a handful of cases, because the whole corpus documents one
+    endpoint path. Kept anyway: "how do I authenticate in v3?" is exactly
+    where a model invents /v3/tokens/refresh, and a guard that fires rarely
+    but catches fabrication is still worth having. The applicable count is
+    reported so the small N stays visible rather than hidden.
+    """
+    known = set(openapi.get("paths", {}))
+    found = [m.group(1).rstrip(".,;:)`") for m in _PATH_RE.finditer(strip_code_fences(answer))]
+    found = list(dict.fromkeys(found))
+    if not found:
+        return _result(A3, SKIPPED, "answer mentions no endpoint path")
+
+    unknown = [path for path in found if path not in known]
+    if unknown:
+        return _result(A3, FAIL, f"not in the spec: {', '.join(unknown)}")
+    return _result(A3, PASS, f"{len(found)} path(s) found in the spec")
+
+
+def _paragraph_around(text: str, start: int, end: int) -> str:
+    """The blank-line-delimited block containing a match.
+
+    Falls back to a +/-300 character window when the answer has no blank
+    lines. The window size is fixed here rather than tuned later because it
+    is the difference between a strict and a lenient assertion, and that
+    should not be an accident.
+    """
+    if "\n\n" not in text:
+        return text[max(0, start - 300) : end + 300]
+    left = text.rfind("\n\n", 0, start)
+    left = 0 if left == -1 else left + 2
+    right = text.find("\n\n", end)
+    right = len(text) if right == -1 else right
+    return text[left:right]
+
+
+def assert_deprecation_has_migration_note(answer: str, deprecations: list[dict]) -> dict:
+    """A5: a deprecated thing never appears without a migration signal nearby."""
+    offenders = []
+    matched_any = False
+
+    for entry in deprecations:
+        match = re.search(entry["match"], answer, re.IGNORECASE)
+        if match is None:
+            continue
+        matched_any = True
+        window = _paragraph_around(answer, match.start(), match.end()).lower()
+        if not any(signal.lower() in window for signal in entry["migration_signals"]):
+            offenders.append(entry["id"])
+
+    if not matched_any:
+        return _result(A5, SKIPPED, "answer mentions nothing on the deprecations list")
+    if offenders:
+        return _result(A5, FAIL, f"no migration note beside: {', '.join(offenders)}")
+    return _result(A5, PASS, "every deprecated mention carries a migration note")
+
+
+def run_assertions(answer: str, case: dict, specs: dict) -> list[dict]:
+    """All five assertions, always in ASSERTION_IDS order."""
+    return [
+        assert_code_parses(answer),
+        assert_symbols_exist(answer, specs["symbols"]),
+        assert_endpoints_exist(answer, specs["openapi"]),
+        assert_version_stated(answer, case.get("version_sensitive", False)),
+        assert_deprecation_has_migration_note(answer, specs["deprecations"]),
+    ]
+
+
+def assertions_ok(results: list[dict]) -> bool:
+    """True when nothing failed. A skipped assertion is not a pass, but it is
+    also not a failure -- it simply did not apply."""
+    return all(r["status"] != FAIL for r in results)

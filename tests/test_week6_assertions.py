@@ -6,11 +6,19 @@ not-applicable cases matter as much as the others: an assertion that returns
 to the 25-case table and manufacture a pass rate out of nothing.
 """
 from eval.week6.assertions import (
+    A1,
+    A4,
+    ASSERTION_IDS,
     FAIL,
     PASS,
     SKIPPED,
     assert_code_parses,
+    assert_deprecation_has_migration_note,
+    assert_endpoints_exist,
+    assert_symbols_exist,
     assert_version_stated,
+    assertions_ok,
+    run_assertions,
 )
 
 
@@ -112,3 +120,133 @@ def test_a1_fails_an_unterminated_python_fence_naming_truncation():
     result = assert_code_parses("```python\nx = 1\n")
     assert result["status"] == FAIL
     assert "truncat" in result["detail"].lower()
+
+
+SYMBOLS = {
+    "RELAY_429": {"kind": "error_code", "versions": ["v2", "v3"], "sources": []},
+    "retry_backoff_ms": {"kind": "parameter", "versions": ["v2", "v3"], "sources": []},
+    "Client.send()": {"kind": "method", "versions": ["v2", "v3"], "sources": []},
+    "RelayTimeout": {"kind": "class", "versions": ["v3"], "sources": []},
+}
+
+OPENAPI = {"paths": {"/v3/auth/token": {"post": {}}}}
+
+DEPRECATIONS = [
+    {
+        "id": "offset-pagination",
+        "label": "offset pagination",
+        "match": r"\b(page_offset|offset pagination)\b",
+        "replacement": "next_cursor",
+        "migration_signals": ["next_cursor", "removed in v3"],
+        "source": "migrating-to-v3.md",
+    }
+]
+
+
+def test_a2_passes_an_answer_using_only_real_symbols():
+    answer = "`Client.send()` retries on `RELAY_429`; tune `retry_backoff_ms`."
+    assert assert_symbols_exist(answer, SYMBOLS)["status"] == PASS
+
+
+def test_a2_fails_a_fabricated_error_code():
+    result = assert_symbols_exist("Handle `RELAY_777` on failure.", SYMBOLS)
+    assert result["status"] == FAIL
+    assert "RELAY_777" in result["detail"]
+
+
+def test_a2_fails_a_fabricated_parameter():
+    result = assert_symbols_exist("Set `retry_delay_ms` to 2000.", SYMBOLS)
+    assert result["status"] == FAIL
+    assert "retry_delay_ms" in result["detail"]
+
+
+def test_a2_fails_a_fabricated_qualified_method():
+    result = assert_symbols_exist("Call `Client.sendBatch()` instead.", SYMBOLS)
+    assert result["status"] == FAIL
+
+
+def test_a2_never_examines_bare_prose_words_or_builtins():
+    """The corpus backticks `str`, `int`, `None`, `message`. Checking those
+    against the table would fail on ordinary English, so the shape rules
+    exclude every single-word token.
+
+    A real symbol is included so this asserts PASS rather than SKIPPED --
+    otherwise the test would pass simply because nothing was examined, and
+    would keep passing if the noise-filtering broke.
+    """
+    answer = "`RELAY_429` is retried; the `message` is a `str`, `metadata` is `None`, `id` an `int`."
+    assert assert_symbols_exist(answer, SYMBOLS)["status"] == PASS
+
+
+def test_a2_ignores_local_variables_inside_code_fences():
+    answer = "```python\nmy_client = Client(api_key='k')\nraw_payload = {}\n```\n"
+    assert assert_symbols_exist(answer, SYMBOLS)["status"] == SKIPPED
+
+
+def test_a2_is_skipped_when_no_sdk_shaped_token_appears():
+    assert assert_symbols_exist("The docs do not say.", SYMBOLS)["status"] == SKIPPED
+
+
+def test_a3_passes_the_one_documented_path():
+    answer = "Exchange the key at `POST /v3/auth/token`."
+    assert assert_endpoints_exist(answer, OPENAPI)["status"] == PASS
+
+
+def test_a3_fails_a_hallucinated_endpoint():
+    result = assert_endpoints_exist("Refresh via `POST /v3/tokens/refresh`.", OPENAPI)
+    assert result["status"] == FAIL
+    assert "/v3/tokens/refresh" in result["detail"]
+
+
+def test_a3_is_skipped_when_the_answer_mentions_no_path():
+    assert assert_endpoints_exist("The SDK handles it.", OPENAPI)["status"] == SKIPPED
+
+
+def test_a3_strips_trailing_punctuation_from_a_path():
+    assert assert_endpoints_exist("Call /v3/auth/token.", OPENAPI)["status"] == PASS
+
+
+def test_a5_passes_a_deprecated_mention_that_carries_its_migration_note():
+    answer = "v2 used offset pagination; in v3 thread `next_cursor` instead."
+    assert assert_deprecation_has_migration_note(answer, DEPRECATIONS)["status"] == PASS
+
+
+def test_a5_fails_a_deprecated_recommendation_with_no_note():
+    answer = "Use offset pagination to page through results."
+    result = assert_deprecation_has_migration_note(answer, DEPRECATIONS)
+    assert result["status"] == FAIL
+    assert "offset-pagination" in result["detail"]
+
+
+def test_a5_requires_the_note_in_the_same_paragraph():
+    """A migration note three paragraphs away does not help a reader who
+    copies the code block next to the deprecated mention."""
+    answer = "Use offset pagination to page.\n\nUnrelated.\n\nv3 uses `next_cursor`."
+    assert assert_deprecation_has_migration_note(answer, DEPRECATIONS)["status"] == FAIL
+
+
+def test_a5_falls_back_to_a_character_window_with_no_blank_lines():
+    answer = "Use offset pagination, though v3 replaced it with next_cursor."
+    assert assert_deprecation_has_migration_note(answer, DEPRECATIONS)["status"] == PASS
+
+
+def test_a5_is_skipped_when_no_deprecated_thing_is_mentioned():
+    answer = "The default retry backoff is 2000 ms in v3."
+    assert assert_deprecation_has_migration_note(answer, DEPRECATIONS)["status"] == SKIPPED
+
+
+def test_run_assertions_returns_all_five_in_order():
+    case = {"version_sensitive": True}
+    specs = {"symbols": SYMBOLS, "openapi": OPENAPI, "deprecations": DEPRECATIONS}
+    results = run_assertions("In v3 the default is 2000 ms.", case, specs)
+    assert [r["id"] for r in results] == list(ASSERTION_IDS)
+
+
+def test_assertions_ok_treats_skipped_as_not_a_failure():
+    results = [{"id": A1, "status": SKIPPED, "detail": ""}, {"id": A4, "status": PASS, "detail": ""}]
+    assert assertions_ok(results) is True
+
+
+def test_assertions_ok_is_false_when_anything_failed():
+    results = [{"id": A1, "status": PASS, "detail": ""}, {"id": A4, "status": FAIL, "detail": ""}]
+    assert assertions_ok(results) is False
