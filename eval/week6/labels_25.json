@@ -1,0 +1,135 @@
+{
+  "criterion_text": "Would a developer working in the SDK version this question is about be able to act on this answer and get correct behaviour?",
+  "criterion_sha256": "a1108293ef74c452e3e7a0f2fcf782a73e2efe97db9c6918124073a119884b44",
+  "answers_sha256": "b35510d75e8b9804487f40431d6a07be3d14c3260fc8b0f0cf365c032429511d",
+  "blind": true,
+  "completed_at": "2026-09-04T15:47:36+00:00",
+  "labels": [
+    {
+      "case_id": "W6-01",
+      "label": true,
+      "note": "close() docs confirm drain_timeout_ms default 5000ms and a force=True parameter that skips the drain -- verified both exist in v3/client.md; answer is accurate and complete."
+    },
+    {
+      "case_id": "W6-02",
+      "label": true,
+      "note": "dedupe_window_ms max 86400000 (24h) verified verbatim against v3:client:structural:3. Citation bracket is malformed (missing \"chunk:\" label) but content correctness is what this criterion judges."
+    },
+    {
+      "case_id": "W6-03",
+      "label": true,
+      "note": "AUTH_TOKEN_EXPIRED verified against the v3 error-code table."
+    },
+    {
+      "case_id": "W6-04",
+      "label": true,
+      "note": "RELAY_410 for an expired cursor verified against v3:pagination:structural:2 (Cursor stability section)."
+    },
+    {
+      "case_id": "W6-05",
+      "label": true,
+      "note": "page_size max 250 / RELAY_400 on overflow verified against v3:pagination:structural:1."
+    },
+    {
+      "case_id": "W6-06",
+      "label": false,
+      "note": "Question names no version. Answer gives ONLY v2 numbers (64 KiB max, 3 attempts) with no version qualifier at all. v3 actually allows 256 KiB and defaults to 4 attempts. A developer on v3 taking these numbers at face value gets both facts wrong -- the exact version-unspecified-answered-with-one-version failure mode this case exists to test."
+    },
+    {
+      "case_id": "W6-07",
+      "label": false,
+      "note": "Question names no version. Answer states channel format is \"org/topic\" (v2 format) with no version qualifier. v3 requires the three-segment \"org/team/topic\" and its broker rejects two-segment ids with RELAY_400 (confirmed in v2/migrating-to-v3.md). A v3 developer following this answer ships a channel id their own broker will reject."
+    },
+    {
+      "case_id": "W6-08",
+      "label": true,
+      "note": "Correctly and explicitly attributed to \"the v3 API\"; cursor-based pagination code sample matches Client.fetch() and Pagination docs exactly (page_size default 50 max 250, cursor, direction, items/next_cursor/has_more)."
+    },
+    {
+      "case_id": "W6-09",
+      "label": true,
+      "note": "Explicitly and correctly describes BOTH versions (v3 bearer-token exchange with background refresh vs v2 direct key with no refresh) -- verified against both auth docs. This is the correct way to handle a version-ambiguous question, not a failure."
+    },
+    {
+      "case_id": "W6-10",
+      "label": true,
+      "note": "Explicitly and correctly attributes v3=4 attempts and v2=3 attempts to their respective versions -- verified v2/client.md literally states retry_max_attempts default 3. Model handled the ambiguity correctly."
+    },
+    {
+      "case_id": "W6-11",
+      "label": false,
+      "note": "Question is a generic \"the SDK\" question. Answer is entirely about the unrelated Omnumi iOS SDK with zero indication that a second, unrelated product (Relay) is also indexed. A reader asking about Relay gets a completely irrelevant, unusable answer with no warning."
+    },
+    {
+      "case_id": "W6-12",
+      "label": false,
+      "note": "Same failure as W6-11 -- entirely Omnumi content for a generic error-handling question, no disambiguation that two unrelated products share this index."
+    },
+    {
+      "case_id": "W6-13",
+      "label": true,
+      "note": "Borderline: retrieval surfaced mostly Omnumi noise, but the model selected the one genuinely relevant Relay chunk and answered accurately and completely for Relay client init (from relay import Client; Client(api_key=..., region=...) -- verified verbatim against v3/client.md). Does not blend or fabricate; the ambiguity is unflagged but the content given is correct if the reader meant Relay, which is the app's primary subject."
+    },
+    {
+      "case_id": "W6-14",
+      "label": false,
+      "note": "Most severe case: blends Omnumi's manual Swift getRefreshedToken() callback pattern with Relay's real v3 token-lifetime numbers (3600s, 80% refresh) as if they describe ONE unified API. Relay v3 has no callback requirement at all -- auth.md states refresh happens transparently in the background. A Relay developer following this answer would try to implement a callback that does not exist in Relay's SDK."
+    },
+    {
+      "case_id": "W6-15",
+      "label": false,
+      "note": "Core Relay retry content (RELAY_429/503/504, Retry-After, timeout_ms budget, idempotency_key) is correct and complete on its own -- verified against v3/errors.md. But the final sentence claims \"the SDK's error-recovery layer includes a Network Retry capability that lets users retry failed operations\", lifted from Omnumi's manual retry-button feature and presented as if it is part of Relay -- Relay has no such user-facing capability. A fabricated feature attributed to the wrong product."
+    },
+    {
+      "case_id": "W6-16",
+      "label": true,
+      "note": "Refusal is genuinely justified, not arbitrary. All four retrieved chunks discuss the Omnumi \"Activate Card\" FEATURE (its API call, supported-operations list, eligibility flow, a different card-lifecycle event) but none discusses activation ERRORS specifically, which is what was asked. Refusing rather than fabricating an error-handling story is the correct, honest behavior here."
+    },
+    {
+      "case_id": "W6-17",
+      "label": true,
+      "note": "Backpressure/StreamLagged behavior verified verbatim against v3/streaming.md (buffer 2000, drop oldest, StreamLagged event with loss count, delivered inline)."
+    },
+    {
+      "case_id": "W6-18",
+      "label": true,
+      "note": "Cursor 7-day expiry and RELAY_410 verified verbatim against v3/pagination.md Cursor stability section."
+    },
+    {
+      "case_id": "W6-19",
+      "label": true,
+      "note": "Reconnection behavior (auto-reconnect, same backoff as send() capped at 60s, resumes from last cursor, possible duplicate replay) verified verbatim against v3/streaming.md Reconnection section."
+    },
+    {
+      "case_id": "W6-20",
+      "label": true,
+      "note": "Borderline: core Relay scopes content (send/read/admin, AUTH_SCOPE_DENIED at mint time) is correct and complete, verified against v3/auth.md. The appended paragraph about GitHub fine-grained personal access tokens is irrelevant noise pulled from an unrelated PDF in the corpus, but it does not instruct the reader to take any incorrect action within Relay's actual API -- it is confusing, not harmful."
+    },
+    {
+      "case_id": "W6-21",
+      "label": true,
+      "note": "retry_backoff_ms=2000 for v3 verified verbatim against v3/client.md parameter table."
+    },
+    {
+      "case_id": "W6-22",
+      "label": true,
+      "note": "3600 seconds verified verbatim against v3/auth.md Token lifecycle section."
+    },
+    {
+      "case_id": "W6-23",
+      "label": true,
+      "note": "stream=True verified verbatim against v3/streaming.md Client.subscribe() parameter table."
+    },
+    {
+      "case_id": "W6-24",
+      "label": true,
+      "note": "Calling close() twice being a safe no-op verified verbatim against v3/client.md."
+    },
+    {
+      "case_id": "W6-25",
+      "label": true,
+      "note": "6 delivery attempts before exhausted verified verbatim against v3/webhooks.md Retry schedule section."
+    }
+  ],
+  "labeler": "claude-opus-5 (model-generated substitute for human labeling, at the user's explicit request -- see conversation disclosure; NOT an independent human label)"
+}
