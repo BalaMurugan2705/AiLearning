@@ -1,0 +1,913 @@
+{
+  "n_cases": 25,
+  "answers_sha256": "998ee8b725c901cbd54535ce5a1929726815c6c8f0dd1fac84ee6b9719d98d31",
+  "assertion_count": 5,
+  "judged_criteria_count": 1,
+  "judge_v0_criteria_count": 6,
+  "by_mode": {
+    "citation-format": {
+      "n": 5,
+      "assertions_ok": 1,
+      "judge_pass": null,
+      "overall": null,
+      "assertion_pass_counts": {
+        "A1_code_parses": 0,
+        "A2_symbols_exist": 4,
+        "A3_endpoints_exist": 0,
+        "A4_version_stated": 1,
+        "A5_deprecation_has_migration_note": 0
+      },
+      "assertion_fail_counts": {
+        "A1_code_parses": 0,
+        "A2_symbols_exist": 0,
+        "A3_endpoints_exist": 0,
+        "A4_version_stated": 4,
+        "A5_deprecation_has_migration_note": 0
+      }
+    },
+    "version-ambiguity": {
+      "n": 5,
+      "assertions_ok": 2,
+      "judge_pass": null,
+      "overall": null,
+      "assertion_pass_counts": {
+        "A1_code_parses": 1,
+        "A2_symbols_exist": 2,
+        "A3_endpoints_exist": 0,
+        "A4_version_stated": 3,
+        "A5_deprecation_has_migration_note": 1
+      },
+      "assertion_fail_counts": {
+        "A1_code_parses": 0,
+        "A2_symbols_exist": 1,
+        "A3_endpoints_exist": 0,
+        "A4_version_stated": 2,
+        "A5_deprecation_has_migration_note": 0
+      }
+    },
+    "cross-product-bleed": {
+      "n": 5,
+      "assertions_ok": 1,
+      "judge_pass": null,
+      "overall": null,
+      "assertion_pass_counts": {
+        "A1_code_parses": 1,
+        "A2_symbols_exist": 1,
+        "A3_endpoints_exist": 0,
+        "A4_version_stated": 1,
+        "A5_deprecation_has_migration_note": 0
+      },
+      "assertion_fail_counts": {
+        "A1_code_parses": 0,
+        "A2_symbols_exist": 0,
+        "A3_endpoints_exist": 0,
+        "A4_version_stated": 4,
+        "A5_deprecation_has_migration_note": 0
+      }
+    },
+    "unexplained-refusal": {
+      "n": 5,
+      "assertions_ok": 2,
+      "judge_pass": null,
+      "overall": null,
+      "assertion_pass_counts": {
+        "A1_code_parses": 0,
+        "A2_symbols_exist": 4,
+        "A3_endpoints_exist": 0,
+        "A4_version_stated": 2,
+        "A5_deprecation_has_migration_note": 0
+      },
+      "assertion_fail_counts": {
+        "A1_code_parses": 0,
+        "A2_symbols_exist": 0,
+        "A3_endpoints_exist": 0,
+        "A4_version_stated": 3,
+        "A5_deprecation_has_migration_note": 0
+      }
+    },
+    "clean": {
+      "n": 5,
+      "assertions_ok": 5,
+      "judge_pass": null,
+      "overall": null,
+      "assertion_pass_counts": {
+        "A1_code_parses": 0,
+        "A2_symbols_exist": 3,
+        "A3_endpoints_exist": 0,
+        "A4_version_stated": 5,
+        "A5_deprecation_has_migration_note": 0
+      },
+      "assertion_fail_counts": {
+        "A1_code_parses": 0,
+        "A2_symbols_exist": 0,
+        "A3_endpoints_exist": 0,
+        "A4_version_stated": 0,
+        "A5_deprecation_has_migration_note": 0
+      }
+    }
+  },
+  "rows": [
+    {
+      "case_id": "W6-01",
+      "mode": "citation-format",
+      "assertions": [
+        {
+          "id": "A1_code_parses",
+          "status": "skipped",
+          "detail": "answer contains no python fence"
+        },
+        {
+          "id": "A2_symbols_exist",
+          "status": "pass",
+          "detail": "2 symbol(s) resolved"
+        },
+        {
+          "id": "A3_endpoints_exist",
+          "status": "skipped",
+          "detail": "answer mentions no endpoint path"
+        },
+        {
+          "id": "A4_version_stated",
+          "status": "fail",
+          "detail": "no v2/v3 named anywhere in the answer"
+        },
+        {
+          "id": "A5_deprecation_has_migration_note",
+          "status": "skipped",
+          "detail": "answer mentions nothing on the deprecations list"
+        }
+      ],
+      "assertions_ok": false
+    },
+    {
+      "case_id": "W6-06",
+      "mode": "version-ambiguity",
+      "assertions": [
+        {
+          "id": "A1_code_parses",
+          "status": "skipped",
+          "detail": "answer contains no python fence"
+        },
+        {
+          "id": "A2_symbols_exist",
+          "status": "pass",
+          "detail": "1 symbol(s) resolved"
+        },
+        {
+          "id": "A3_endpoints_exist",
+          "status": "skipped",
+          "detail": "answer mentions no endpoint path"
+        },
+        {
+          "id": "A4_version_stated",
+          "status": "pass",
+          "detail": "states v2"
+        },
+        {
+          "id": "A5_deprecation_has_migration_note",
+          "status": "skipped",
+          "detail": "answer mentions nothing on the deprecations list"
+        }
+      ],
+      "assertions_ok": true
+    },
+    {
+      "case_id": "W6-11",
+      "mode": "cross-product-bleed",
+      "assertions": [
+        {
+          "id": "A1_code_parses",
+          "status": "skipped",
+          "detail": "answer contains no python fence"
+        },
+        {
+          "id": "A2_symbols_exist",
+          "status": "skipped",
+          "detail": "answer names no SDK-shaped symbol"
+        },
+        {
+          "id": "A3_endpoints_exist",
+          "status": "skipped",
+          "detail": "answer mentions no endpoint path"
+        },
+        {
+          "id": "A4_version_stated",
+          "status": "fail",
+          "detail": "no v2/v3 named anywhere in the answer"
+        },
+        {
+          "id": "A5_deprecation_has_migration_note",
+          "status": "skipped",
+          "detail": "answer mentions nothing on the deprecations list"
+        }
+      ],
+      "assertions_ok": false
+    },
+    {
+      "case_id": "W6-16",
+      "mode": "unexplained-refusal",
+      "assertions": [
+        {
+          "id": "A1_code_parses",
+          "status": "skipped",
+          "detail": "answer contains no python fence"
+        },
+        {
+          "id": "A2_symbols_exist",
+          "status": "skipped",
+          "detail": "answer names no SDK-shaped symbol"
+        },
+        {
+          "id": "A3_endpoints_exist",
+          "status": "skipped",
+          "detail": "answer mentions no endpoint path"
+        },
+        {
+          "id": "A4_version_stated",
+          "status": "fail",
+          "detail": "no v2/v3 named anywhere in the answer"
+        },
+        {
+          "id": "A5_deprecation_has_migration_note",
+          "status": "skipped",
+          "detail": "answer mentions nothing on the deprecations list"
+        }
+      ],
+      "assertions_ok": false
+    },
+    {
+      "case_id": "W6-02",
+      "mode": "citation-format",
+      "assertions": [
+        {
+          "id": "A1_code_parses",
+          "status": "skipped",
+          "detail": "answer contains no python fence"
+        },
+        {
+          "id": "A2_symbols_exist",
+          "status": "pass",
+          "detail": "1 symbol(s) resolved"
+        },
+        {
+          "id": "A3_endpoints_exist",
+          "status": "skipped",
+          "detail": "answer mentions no endpoint path"
+        },
+        {
+          "id": "A4_version_stated",
+          "status": "fail",
+          "detail": "no v2/v3 named anywhere in the answer"
+        },
+        {
+          "id": "A5_deprecation_has_migration_note",
+          "status": "skipped",
+          "detail": "answer mentions nothing on the deprecations list"
+        }
+      ],
+      "assertions_ok": false
+    },
+    {
+      "case_id": "W6-03",
+      "mode": "citation-format",
+      "assertions": [
+        {
+          "id": "A1_code_parses",
+          "status": "skipped",
+          "detail": "answer contains no python fence"
+        },
+        {
+          "id": "A2_symbols_exist",
+          "status": "pass",
+          "detail": "1 symbol(s) resolved"
+        },
+        {
+          "id": "A3_endpoints_exist",
+          "status": "skipped",
+          "detail": "answer mentions no endpoint path"
+        },
+        {
+          "id": "A4_version_stated",
+          "status": "pass",
+          "detail": "states v3"
+        },
+        {
+          "id": "A5_deprecation_has_migration_note",
+          "status": "skipped",
+          "detail": "answer mentions nothing on the deprecations list"
+        }
+      ],
+      "assertions_ok": true
+    },
+    {
+      "case_id": "W6-04",
+      "mode": "citation-format",
+      "assertions": [
+        {
+          "id": "A1_code_parses",
+          "status": "skipped",
+          "detail": "answer contains no python fence"
+        },
+        {
+          "id": "A2_symbols_exist",
+          "status": "skipped",
+          "detail": "answer names no SDK-shaped symbol"
+        },
+        {
+          "id": "A3_endpoints_exist",
+          "status": "skipped",
+          "detail": "answer mentions no endpoint path"
+        },
+        {
+          "id": "A4_version_stated",
+          "status": "fail",
+          "detail": "no v2/v3 named anywhere in the answer"
+        },
+        {
+          "id": "A5_deprecation_has_migration_note",
+          "status": "skipped",
+          "detail": "answer mentions nothing on the deprecations list"
+        }
+      ],
+      "assertions_ok": false
+    },
+    {
+      "case_id": "W6-05",
+      "mode": "citation-format",
+      "assertions": [
+        {
+          "id": "A1_code_parses",
+          "status": "skipped",
+          "detail": "answer contains no python fence"
+        },
+        {
+          "id": "A2_symbols_exist",
+          "status": "pass",
+          "detail": "2 symbol(s) resolved"
+        },
+        {
+          "id": "A3_endpoints_exist",
+          "status": "skipped",
+          "detail": "answer mentions no endpoint path"
+        },
+        {
+          "id": "A4_version_stated",
+          "status": "fail",
+          "detail": "no v2/v3 named anywhere in the answer"
+        },
+        {
+          "id": "A5_deprecation_has_migration_note",
+          "status": "skipped",
+          "detail": "answer mentions nothing on the deprecations list"
+        }
+      ],
+      "assertions_ok": false
+    },
+    {
+      "case_id": "W6-07",
+      "mode": "version-ambiguity",
+      "assertions": [
+        {
+          "id": "A1_code_parses",
+          "status": "skipped",
+          "detail": "answer contains no python fence"
+        },
+        {
+          "id": "A2_symbols_exist",
+          "status": "skipped",
+          "detail": "answer names no SDK-shaped symbol"
+        },
+        {
+          "id": "A3_endpoints_exist",
+          "status": "skipped",
+          "detail": "answer mentions no endpoint path"
+        },
+        {
+          "id": "A4_version_stated",
+          "status": "fail",
+          "detail": "no v2/v3 named anywhere in the answer"
+        },
+        {
+          "id": "A5_deprecation_has_migration_note",
+          "status": "skipped",
+          "detail": "answer mentions nothing on the deprecations list"
+        }
+      ],
+      "assertions_ok": false
+    },
+    {
+      "case_id": "W6-08",
+      "mode": "version-ambiguity",
+      "assertions": [
+        {
+          "id": "A1_code_parses",
+          "status": "pass",
+          "detail": "1 python fence(s) parsed"
+        },
+        {
+          "id": "A2_symbols_exist",
+          "status": "fail",
+          "detail": "not in the SDK: has_more"
+        },
+        {
+          "id": "A3_endpoints_exist",
+          "status": "skipped",
+          "detail": "answer mentions no endpoint path"
+        },
+        {
+          "id": "A4_version_stated",
+          "status": "pass",
+          "detail": "states v3"
+        },
+        {
+          "id": "A5_deprecation_has_migration_note",
+          "status": "pass",
+          "detail": "every deprecated mention carries a migration note"
+        }
+      ],
+      "assertions_ok": false
+    },
+    {
+      "case_id": "W6-09",
+      "mode": "version-ambiguity",
+      "assertions": [
+        {
+          "id": "A1_code_parses",
+          "status": "skipped",
+          "detail": "answer contains no python fence"
+        },
+        {
+          "id": "A2_symbols_exist",
+          "status": "skipped",
+          "detail": "answer names no SDK-shaped symbol"
+        },
+        {
+          "id": "A3_endpoints_exist",
+          "status": "skipped",
+          "detail": "answer mentions no endpoint path"
+        },
+        {
+          "id": "A4_version_stated",
+          "status": "pass",
+          "detail": "states v2, v3"
+        },
+        {
+          "id": "A5_deprecation_has_migration_note",
+          "status": "skipped",
+          "detail": "answer mentions nothing on the deprecations list"
+        }
+      ],
+      "assertions_ok": true
+    },
+    {
+      "case_id": "W6-10",
+      "mode": "version-ambiguity",
+      "assertions": [
+        {
+          "id": "A1_code_parses",
+          "status": "skipped",
+          "detail": "answer contains no python fence"
+        },
+        {
+          "id": "A2_symbols_exist",
+          "status": "pass",
+          "detail": "2 symbol(s) resolved"
+        },
+        {
+          "id": "A3_endpoints_exist",
+          "status": "skipped",
+          "detail": "answer mentions no endpoint path"
+        },
+        {
+          "id": "A4_version_stated",
+          "status": "fail",
+          "detail": "no v2/v3 named anywhere in the answer"
+        },
+        {
+          "id": "A5_deprecation_has_migration_note",
+          "status": "skipped",
+          "detail": "answer mentions nothing on the deprecations list"
+        }
+      ],
+      "assertions_ok": false
+    },
+    {
+      "case_id": "W6-12",
+      "mode": "cross-product-bleed",
+      "assertions": [
+        {
+          "id": "A1_code_parses",
+          "status": "skipped",
+          "detail": "answer contains no python fence"
+        },
+        {
+          "id": "A2_symbols_exist",
+          "status": "skipped",
+          "detail": "answer names no SDK-shaped symbol"
+        },
+        {
+          "id": "A3_endpoints_exist",
+          "status": "skipped",
+          "detail": "answer mentions no endpoint path"
+        },
+        {
+          "id": "A4_version_stated",
+          "status": "fail",
+          "detail": "no v2/v3 named anywhere in the answer"
+        },
+        {
+          "id": "A5_deprecation_has_migration_note",
+          "status": "skipped",
+          "detail": "answer mentions nothing on the deprecations list"
+        }
+      ],
+      "assertions_ok": false
+    },
+    {
+      "case_id": "W6-13",
+      "mode": "cross-product-bleed",
+      "assertions": [
+        {
+          "id": "A1_code_parses",
+          "status": "pass",
+          "detail": "1 python fence(s) parsed"
+        },
+        {
+          "id": "A2_symbols_exist",
+          "status": "skipped",
+          "detail": "answer names no SDK-shaped symbol"
+        },
+        {
+          "id": "A3_endpoints_exist",
+          "status": "skipped",
+          "detail": "answer mentions no endpoint path"
+        },
+        {
+          "id": "A4_version_stated",
+          "status": "fail",
+          "detail": "no v2/v3 named anywhere in the answer"
+        },
+        {
+          "id": "A5_deprecation_has_migration_note",
+          "status": "skipped",
+          "detail": "answer mentions nothing on the deprecations list"
+        }
+      ],
+      "assertions_ok": false
+    },
+    {
+      "case_id": "W6-14",
+      "mode": "cross-product-bleed",
+      "assertions": [
+        {
+          "id": "A1_code_parses",
+          "status": "skipped",
+          "detail": "answer contains no python fence"
+        },
+        {
+          "id": "A2_symbols_exist",
+          "status": "skipped",
+          "detail": "answer names no SDK-shaped symbol"
+        },
+        {
+          "id": "A3_endpoints_exist",
+          "status": "skipped",
+          "detail": "answer mentions no endpoint path"
+        },
+        {
+          "id": "A4_version_stated",
+          "status": "fail",
+          "detail": "no v2/v3 named anywhere in the answer"
+        },
+        {
+          "id": "A5_deprecation_has_migration_note",
+          "status": "skipped",
+          "detail": "answer mentions nothing on the deprecations list"
+        }
+      ],
+      "assertions_ok": false
+    },
+    {
+      "case_id": "W6-15",
+      "mode": "cross-product-bleed",
+      "assertions": [
+        {
+          "id": "A1_code_parses",
+          "status": "skipped",
+          "detail": "answer contains no python fence"
+        },
+        {
+          "id": "A2_symbols_exist",
+          "status": "pass",
+          "detail": "3 symbol(s) resolved"
+        },
+        {
+          "id": "A3_endpoints_exist",
+          "status": "skipped",
+          "detail": "answer mentions no endpoint path"
+        },
+        {
+          "id": "A4_version_stated",
+          "status": "pass",
+          "detail": "states v3"
+        },
+        {
+          "id": "A5_deprecation_has_migration_note",
+          "status": "skipped",
+          "detail": "answer mentions nothing on the deprecations list"
+        }
+      ],
+      "assertions_ok": true
+    },
+    {
+      "case_id": "W6-17",
+      "mode": "unexplained-refusal",
+      "assertions": [
+        {
+          "id": "A1_code_parses",
+          "status": "skipped",
+          "detail": "answer contains no python fence"
+        },
+        {
+          "id": "A2_symbols_exist",
+          "status": "pass",
+          "detail": "1 symbol(s) resolved"
+        },
+        {
+          "id": "A3_endpoints_exist",
+          "status": "skipped",
+          "detail": "answer mentions no endpoint path"
+        },
+        {
+          "id": "A4_version_stated",
+          "status": "pass",
+          "detail": "states v3"
+        },
+        {
+          "id": "A5_deprecation_has_migration_note",
+          "status": "skipped",
+          "detail": "answer mentions nothing on the deprecations list"
+        }
+      ],
+      "assertions_ok": true
+    },
+    {
+      "case_id": "W6-18",
+      "mode": "unexplained-refusal",
+      "assertions": [
+        {
+          "id": "A1_code_parses",
+          "status": "skipped",
+          "detail": "answer contains no python fence"
+        },
+        {
+          "id": "A2_symbols_exist",
+          "status": "pass",
+          "detail": "1 symbol(s) resolved"
+        },
+        {
+          "id": "A3_endpoints_exist",
+          "status": "skipped",
+          "detail": "answer mentions no endpoint path"
+        },
+        {
+          "id": "A4_version_stated",
+          "status": "fail",
+          "detail": "no v2/v3 named anywhere in the answer"
+        },
+        {
+          "id": "A5_deprecation_has_migration_note",
+          "status": "skipped",
+          "detail": "answer mentions nothing on the deprecations list"
+        }
+      ],
+      "assertions_ok": false
+    },
+    {
+      "case_id": "W6-19",
+      "mode": "unexplained-refusal",
+      "assertions": [
+        {
+          "id": "A1_code_parses",
+          "status": "skipped",
+          "detail": "answer contains no python fence"
+        },
+        {
+          "id": "A2_symbols_exist",
+          "status": "pass",
+          "detail": "1 symbol(s) resolved"
+        },
+        {
+          "id": "A3_endpoints_exist",
+          "status": "skipped",
+          "detail": "answer mentions no endpoint path"
+        },
+        {
+          "id": "A4_version_stated",
+          "status": "pass",
+          "detail": "states v3"
+        },
+        {
+          "id": "A5_deprecation_has_migration_note",
+          "status": "skipped",
+          "detail": "answer mentions nothing on the deprecations list"
+        }
+      ],
+      "assertions_ok": true
+    },
+    {
+      "case_id": "W6-20",
+      "mode": "unexplained-refusal",
+      "assertions": [
+        {
+          "id": "A1_code_parses",
+          "status": "skipped",
+          "detail": "answer contains no python fence"
+        },
+        {
+          "id": "A2_symbols_exist",
+          "status": "pass",
+          "detail": "1 symbol(s) resolved"
+        },
+        {
+          "id": "A3_endpoints_exist",
+          "status": "skipped",
+          "detail": "answer mentions no endpoint path"
+        },
+        {
+          "id": "A4_version_stated",
+          "status": "fail",
+          "detail": "no v2/v3 named anywhere in the answer"
+        },
+        {
+          "id": "A5_deprecation_has_migration_note",
+          "status": "skipped",
+          "detail": "answer mentions nothing on the deprecations list"
+        }
+      ],
+      "assertions_ok": false
+    },
+    {
+      "case_id": "W6-21",
+      "mode": "clean",
+      "assertions": [
+        {
+          "id": "A1_code_parses",
+          "status": "skipped",
+          "detail": "answer contains no python fence"
+        },
+        {
+          "id": "A2_symbols_exist",
+          "status": "pass",
+          "detail": "2 symbol(s) resolved"
+        },
+        {
+          "id": "A3_endpoints_exist",
+          "status": "skipped",
+          "detail": "answer mentions no endpoint path"
+        },
+        {
+          "id": "A4_version_stated",
+          "status": "pass",
+          "detail": "states v3"
+        },
+        {
+          "id": "A5_deprecation_has_migration_note",
+          "status": "skipped",
+          "detail": "answer mentions nothing on the deprecations list"
+        }
+      ],
+      "assertions_ok": true
+    },
+    {
+      "case_id": "W6-22",
+      "mode": "clean",
+      "assertions": [
+        {
+          "id": "A1_code_parses",
+          "status": "skipped",
+          "detail": "answer contains no python fence"
+        },
+        {
+          "id": "A2_symbols_exist",
+          "status": "skipped",
+          "detail": "answer names no SDK-shaped symbol"
+        },
+        {
+          "id": "A3_endpoints_exist",
+          "status": "skipped",
+          "detail": "answer mentions no endpoint path"
+        },
+        {
+          "id": "A4_version_stated",
+          "status": "pass",
+          "detail": "states v3"
+        },
+        {
+          "id": "A5_deprecation_has_migration_note",
+          "status": "skipped",
+          "detail": "answer mentions nothing on the deprecations list"
+        }
+      ],
+      "assertions_ok": true
+    },
+    {
+      "case_id": "W6-23",
+      "mode": "clean",
+      "assertions": [
+        {
+          "id": "A1_code_parses",
+          "status": "skipped",
+          "detail": "answer contains no python fence"
+        },
+        {
+          "id": "A2_symbols_exist",
+          "status": "pass",
+          "detail": "1 symbol(s) resolved"
+        },
+        {
+          "id": "A3_endpoints_exist",
+          "status": "skipped",
+          "detail": "answer mentions no endpoint path"
+        },
+        {
+          "id": "A4_version_stated",
+          "status": "pass",
+          "detail": "states v3"
+        },
+        {
+          "id": "A5_deprecation_has_migration_note",
+          "status": "skipped",
+          "detail": "answer mentions nothing on the deprecations list"
+        }
+      ],
+      "assertions_ok": true
+    },
+    {
+      "case_id": "W6-24",
+      "mode": "clean",
+      "assertions": [
+        {
+          "id": "A1_code_parses",
+          "status": "skipped",
+          "detail": "answer contains no python fence"
+        },
+        {
+          "id": "A2_symbols_exist",
+          "status": "pass",
+          "detail": "1 symbol(s) resolved"
+        },
+        {
+          "id": "A3_endpoints_exist",
+          "status": "skipped",
+          "detail": "answer mentions no endpoint path"
+        },
+        {
+          "id": "A4_version_stated",
+          "status": "pass",
+          "detail": "states v3"
+        },
+        {
+          "id": "A5_deprecation_has_migration_note",
+          "status": "skipped",
+          "detail": "answer mentions nothing on the deprecations list"
+        }
+      ],
+      "assertions_ok": true
+    },
+    {
+      "case_id": "W6-25",
+      "mode": "clean",
+      "assertions": [
+        {
+          "id": "A1_code_parses",
+          "status": "skipped",
+          "detail": "answer contains no python fence"
+        },
+        {
+          "id": "A2_symbols_exist",
+          "status": "skipped",
+          "detail": "answer names no SDK-shaped symbol"
+        },
+        {
+          "id": "A3_endpoints_exist",
+          "status": "skipped",
+          "detail": "answer mentions no endpoint path"
+        },
+        {
+          "id": "A4_version_stated",
+          "status": "pass",
+          "detail": "states v3"
+        },
+        {
+          "id": "A5_deprecation_has_migration_note",
+          "status": "skipped",
+          "detail": "answer mentions nothing on the deprecations list"
+        }
+      ],
+      "assertions_ok": true
+    }
+  ],
+  "judge_runs": {},
+  "agreement": {}
+}
