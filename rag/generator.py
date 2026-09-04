@@ -145,14 +145,20 @@ def answer_question(
     chunks: list[dict],
     max_tokens: int = 2048,
     threshold: float = REFUSAL_DISTANCE_THRESHOLD,
+    model: str | None = None,
 ) -> str:
-    """Non-streaming answer, used by the CLI and the eval harness."""
+    """Non-streaming answer, used by the CLI and the eval harness.
+
+    model=None uses GROQ_MODEL. The override exists so a replayed trace can be
+    answered by the model that produced it rather than by whatever the env
+    happens to point at today.
+    """
     if should_refuse(chunks, threshold):
         return REFUSAL_MESSAGE
 
     client = _get_client()
     completion = client.chat.completions.create(
-        model=GROQ_MODEL,
+        model=model or GROQ_MODEL,
         max_tokens=max_tokens,
         messages=_build_messages(question, chunks),
     )

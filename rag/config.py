@@ -10,6 +10,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 GROQ_API_KEY = os.environ.get("GROQ_API_KEY")
 GROQ_MODEL = os.environ.get("GROQ_MODEL", "openai/gpt-oss-120b")
 
+# The judge runs on a different model than the answerer. A model grading its
+# own family's output shows measurable self-preference, which would make the
+# agreement figure partly a measure of family resemblance rather than of
+# correctness.
+JUDGE_MODEL = os.environ.get("JUDGE_MODEL", "llama-3.3-70b-versatile")
+
 EMBEDDING_MODEL = os.environ.get("EMBEDDING_MODEL", "all-MiniLM-L6-v2")
 
 CHROMA_DIR = str(BASE_DIR / os.environ.get("CHROMA_DIR", "chroma_db"))
