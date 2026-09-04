@@ -15,7 +15,7 @@ verdict a noisy duplicate of a check that is already exact:
 - whether symbol or parameter names are spelled correctly or exist
 - whether endpoint paths exist
 - whether a version label is present anywhere in the text
-- how citations are formatted
+- whether deprecated v2 features are flagged with a migration note
 
 Judge only whether the guidance itself is correct and actionable for the
 version the question is about. An answer that is fluent, well formatted and
