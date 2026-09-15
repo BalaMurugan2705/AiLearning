@@ -1,0 +1,12 @@
+[
+  {"id": "q01", "question": "What is the maximum file size limit supported when rendering Markdown content via the GitHub REST API?", "expected_fragment": "400 KB", "needs_chain": false},
+  {"id": "q02", "question": "What Maven group id is used to download the Swagger Codegen CLI jar for version 3.x?", "expected_fragment": "io.swagger.codegen.v3", "needs_chain": false},
+  {"id": "q03", "question": "Which OAuth scopes are required to create a repository for an authenticated user using the GitHub REST API?", "expected_fragment": "public_repo", "needs_chain": false},
+  {"id": "q04", "question": "In GitHub API version 2025-06-01, what parameter replaces the deprecated single assignee field when creating an issue?", "expected_fragment": "assignees", "needs_chain": false},
+  {"id": "q05", "question": "What parameter can be provided when creating a release in GitHub API version 2025-06-01 to automatically trigger a linked discussion?", "expected_fragment": "discussion_category_name", "needs_chain": false},
+  {"id": "q06", "question": "Compare how the context parameter format changed between GitHub API version 2022-11-28 and 2025-06-01 for rendering Markdown.", "expected_fragment": "owner", "needs_chain": true},
+  {"id": "q07", "question": "How did setting maintainer_can_modify during pull request creation change between GitHub API 2022-11-28 and 2025-06-01?", "expected_fragment": "maintainer_can_modify", "needs_chain": true},
+  {"id": "q08", "question": "How does the make_latest parameter in GitHub API version 2025-06-01 release creation replace the undocumented heuristic used in 2022-11-28?", "expected_fragment": "make_latest", "needs_chain": true},
+  {"id": "q09", "question": "How did draft pull requests interact with auto-merge settings in GitHub API version 2022-11-28 versus 2025-06-01?", "expected_fragment": "pre-armed", "needs_chain": true},
+  {"id": "q10", "question": "How did setting issue types on creation change between GitHub API versions 2022-11-28 and 2025-06-01?", "expected_fragment": "at creation", "needs_chain": true}
+]

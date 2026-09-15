@@ -1,0 +1,148 @@
+{
+  "api_versions": ["2022-11-28", "2025-06-01"],
+  "endpoints": {
+    "render_markdown": {
+      "method": "POST",
+      "path": "/markdown",
+      "versions": {
+        "2022-11-28": {
+          "params": [
+            {"name": "text", "type": "string", "required": true, "default": null, "description": "The Markdown text to render in HTML."},
+            {"name": "mode", "type": "string", "required": false, "default": "markdown", "description": "The rendering mode. Can be one of: markdown, gfm."},
+            {"name": "context", "type": "string", "required": false, "default": null, "description": "The repository context to use when creating references in gfm mode, e.g. 'octocat/Hello-World'."}
+          ],
+          "x_source": "github_combined_reference.pdf p1-2"
+        },
+        "2025-06-01": {
+          "params": [
+            {"name": "text", "type": "string", "required": true, "default": null, "description": "The Markdown text to render."},
+            {"name": "mode", "type": "string", "required": false, "default": "markdown", "description": "One of markdown or gfm."},
+            {"name": "context", "type": "object", "required": false, "default": null, "description": "{\"owner\": \"...\", \"repo\": \"...\"}. Used for gfm-mode reference linking. Was a plain string in the prior version."},
+            {"name": "wrap_tables", "type": "boolean", "required": false, "default": false, "description": "When true, wide tables render with horizontal scroll wrappers instead of overflowing. Did not exist in the prior version."}
+          ],
+          "x_source": "github_combined_reference.pdf p3"
+        }
+      }
+    },
+    "create_issue": {
+      "method": "POST",
+      "path": "/repos/{owner}/{repo}/issues",
+      "versions": {
+        "2022-11-28": {
+          "params": [
+            {"name": "owner", "type": "string", "required": true, "default": null, "description": "Path parameter. The account owner of the repository."},
+            {"name": "repo", "type": "string", "required": true, "default": null, "description": "Path parameter. The name of the repository without the .git extension."},
+            {"name": "title", "type": "string or integer", "required": true, "default": null, "description": "The title of the issue."},
+            {"name": "body", "type": "string", "required": false, "default": null, "description": "The contents of the issue."},
+            {"name": "assignee", "type": "string", "required": false, "default": null, "description": "Login for the single user this issue should be assigned to."},
+            {"name": "labels", "type": "array of strings", "required": false, "default": null, "description": "Labels to associate with this issue."}
+          ],
+          "x_source": "github_combined_reference.pdf p4"
+        },
+        "2025-06-01": {
+          "params": [
+            {"name": "owner", "type": "string", "required": true, "default": null, "description": "Path parameter. The account owner of the repository."},
+            {"name": "repo", "type": "string", "required": true, "default": null, "description": "Path parameter. The name of the repository."},
+            {"name": "title", "type": "string or integer", "required": true, "default": null, "description": "The title of the issue."},
+            {"name": "body", "type": "string", "required": false, "default": null, "description": "The contents of the issue."},
+            {"name": "assignees", "type": "array of strings", "required": false, "default": [], "description": "Logins for the users assigned to this issue. Replaces the deprecated assignee field."},
+            {"name": "labels", "type": "array of strings", "required": false, "default": [], "description": "Labels to associate with this issue."},
+            {"name": "type", "type": "string", "required": false, "default": null, "description": "The name of the issue type to set on creation. Did not exist in the prior version."}
+          ],
+          "x_source": "github_combined_reference.pdf p5"
+        }
+      }
+    },
+    "create_pull_request": {
+      "method": "POST",
+      "path": "/repos/{owner}/{repo}/pulls",
+      "versions": {
+        "2022-11-28": {
+          "params": [
+            {"name": "title", "type": "string", "required": true, "default": null, "description": "The title of the new pull request."},
+            {"name": "head", "type": "string", "required": true, "default": null, "description": "The name of the branch where your changes are implemented."},
+            {"name": "base", "type": "string", "required": true, "default": null, "description": "The name of the branch you want the changes pulled into."},
+            {"name": "body", "type": "string", "required": false, "default": null, "description": "The contents of the pull request."},
+            {"name": "draft", "type": "boolean", "required": false, "default": false, "description": "Indicates whether the pull request is a draft."}
+          ],
+          "x_source": "github_combined_reference.pdf p6"
+        },
+        "2025-06-01": {
+          "params": [
+            {"name": "owner", "type": "string", "required": true, "default": null, "description": "Path parameter."},
+            {"name": "repo", "type": "string", "required": true, "default": null, "description": "Path parameter."},
+            {"name": "title", "type": "string", "required": true, "default": null, "description": "Required unless issue is specified."},
+            {"name": "head", "type": "string", "required": true, "default": null, "description": "Branch, or user:branch for cross-repo."},
+            {"name": "base", "type": "string", "required": true, "default": null, "description": "The branch you want changes merged into."},
+            {"name": "body", "type": "string", "required": false, "default": null, "description": "PR description."},
+            {"name": "draft", "type": "boolean", "required": false, "default": false, "description": "Default false."},
+            {"name": "maintainer_can_modify", "type": "boolean", "required": false, "default": true, "description": "Now settable at creation time; previously required a follow-up PATCH call."}
+          ],
+          "x_source": "github_combined_reference.pdf p7"
+        }
+      }
+    },
+    "create_repository": {
+      "method": "POST",
+      "path": "/user/repos",
+      "versions": {
+        "2022-11-28": {
+          "params": [
+            {"name": "name", "type": "string", "required": true, "default": null, "description": "The name of the repository."},
+            {"name": "description", "type": "string", "required": false, "default": null, "description": "A short description of the repository."},
+            {"name": "homepage", "type": "string", "required": false, "default": null, "description": "A URL with more information about the repository."},
+            {"name": "private", "type": "boolean", "required": false, "default": false, "description": "Whether the repository is private."},
+            {"name": "has_issues", "type": "boolean", "required": false, "default": true, "description": "Whether issues are enabled, unconditionally true by default regardless of visibility."},
+            {"name": "auto_init", "type": "boolean", "required": false, "default": false, "description": "Pass true to create an initial commit with an empty README."}
+          ],
+          "x_source": "github_combined_reference.pdf p8"
+        },
+        "2025-06-01": {
+          "params": [
+            {"name": "name", "type": "string", "required": true, "default": null, "description": "Repository name."},
+            {"name": "description", "type": "string", "required": false, "default": null, "description": "Short repository description."},
+            {"name": "visibility", "type": "enum(public,private,internal)", "required": false, "default": "public", "description": "Supersedes the boolean private field for organizations offering internal repositories."},
+            {"name": "private", "type": "boolean", "required": false, "default": false, "description": "Deprecated in favor of visibility. Continues to work for personal accounts."},
+            {"name": "has_issues", "type": "boolean", "required": false, "default": null, "description": "Default depends on visibility: true for public, false for private/internal."},
+            {"name": "auto_init", "type": "boolean", "required": false, "default": false, "description": "Creates an initial commit with an empty README when true."}
+          ],
+          "x_source": "github_combined_reference.pdf p9"
+        }
+      }
+    },
+    "create_release": {
+      "method": "POST",
+      "path": "/repos/{owner}/{repo}/releases",
+      "versions": {
+        "2022-11-28": {
+          "params": [
+            {"name": "owner", "type": "string", "required": true, "default": null, "description": "Path parameter."},
+            {"name": "repo", "type": "string", "required": true, "default": null, "description": "Path parameter."},
+            {"name": "tag_name", "type": "string", "required": true, "default": null, "description": "The name of the tag. Created automatically at target_commitish if it doesn't already exist."},
+            {"name": "target_commitish", "type": "string", "required": false, "default": "the repository's default branch", "description": "Where the Git tag is created from."},
+            {"name": "name", "type": "string", "required": false, "default": null, "description": "The name of the release."},
+            {"name": "body", "type": "string", "required": false, "default": null, "description": "Text describing the contents of the tag."},
+            {"name": "draft", "type": "boolean", "required": false, "default": false, "description": "true makes the release a draft."},
+            {"name": "prerelease", "type": "boolean", "required": false, "default": false, "description": "true identifies the release as a prerelease."},
+            {"name": "generate_release_notes", "type": "boolean", "required": false, "default": false, "description": "Whether to automatically generate the name and body for this release."}
+          ],
+          "x_source": "github_combined_reference.pdf p10-11"
+        },
+        "2025-06-01": {
+          "params": [
+            {"name": "tag_name", "type": "string", "required": true, "default": null, "description": "The name of the tag."},
+            {"name": "target_commitish", "type": "string", "required": false, "default": "default branch", "description": "Commitish value the tag is created from, if it doesn't already exist."},
+            {"name": "name", "type": "string", "required": false, "default": null, "description": "Release title."},
+            {"name": "body", "type": "string", "required": false, "default": null, "description": "Release notes body text."},
+            {"name": "draft", "type": "boolean", "required": false, "default": false, "description": "Creates a draft (unpublished) release when true."},
+            {"name": "prerelease", "type": "boolean", "required": false, "default": false, "description": "Marks the release as a prerelease."},
+            {"name": "discussion_category_name", "type": "string", "required": false, "default": null, "description": "If specified, a discussion of the specified category is created and linked to the release. Did not exist in the prior version."},
+            {"name": "generate_release_notes", "type": "boolean", "required": false, "default": false, "description": "Auto-generates name/body from merged PRs since the previous release."},
+            {"name": "make_latest", "type": "enum(true,false,legacy)", "required": false, "default": "true", "description": "Controls whether this release is marked 'Latest'. Did not exist in the prior version; previously determined purely by an internal publish-date heuristic."}
+          ],
+          "x_source": "github_combined_reference.pdf p12-13"
+        }
+      }
+    }
+  }
+}

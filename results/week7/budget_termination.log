@@ -1,0 +1,12 @@
+question: Compare how the context parameter format changed between GitHub API version 2022-11-28 and 2025-06-01 for rendering Markdown.
+budget: Budget(max_iterations=1, max_tokens=50000, max_cost_usd=1.0, max_wall_seconds=30.0)
+terminated_by_budget: True
+budget_reason: max_iterations exceeded: 2 > 1
+iterations completed before stop: 2
+run terminated cleanly -- no crash, no extra lap, no fabricated answer.
+
+transcript:
+{'role': 'system', 'content': 'You help developers migrate code between GitHub API versions. You have tools to search documentation, look up exact endpoint parameter shapes, and check whether something is deprecated. Only state facts a tool call returned to you -- never guess a parameter name, default, or deprecation status. When you have enough information, answer the question directly in plain text with no further tool calls.'}
+{'role': 'user', 'content': 'Compare how the context parameter format changed between GitHub API version 2022-11-28 and 2025-06-01 for rendering Markdown.'}
+{'role': 'assistant', 'content': None, 'tool_calls': [{'id': 'fc_bfacfb54-3de8-4362-b8a0-6ea14a040fae', 'type': 'function', 'function': {'name': 'get_openapi_spec', 'arguments': '{"api_version":"2022-11-28","endpoint":"render_markdown"}'}}]}
+{'role': 'tool', 'tool_call_id': 'fc_bfacfb54-3de8-4362-b8a0-6ea14a040fae', 'name': 'get_openapi_spec', 'content': '{"endpoint": "render_markdown", "method": "POST", "path": "/markdown", "api_version": "2022-11-28", "params": [{"name": "text", "type": "string", "required": true, "default": null, "description": "The Markdown text to render in HTML."}, {"name": "mode", "type": "string", "required": false, "default": "markdown", "description": "The rendering mode. Can be one of: markdown, gfm."}, {"name": "context", "type": "string", "required": false, "default": null, "description": "The repository context to use when creating references in gfm mode, e.g. \'octocat/Hello-World\'."}], "x_source": "github_combined_reference.pdf p1-2"}'}
