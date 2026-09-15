@@ -1,0 +1,206 @@
+{
+  "agent": [
+    {
+      "id": "q01",
+      "question": "What is the maximum file size limit supported when rendering Markdown content via the GitHub REST API?",
+      "needs_chain": false,
+      "answer": "The GitHub REST API\u2019s Markdown rendering endpoint accepts content up to **400\u202fKB** in size. Anything larger will be rejected.",
+      "passed": true,
+      "wall_seconds": 14.982882332988083,
+      "total_tokens": 5252,
+      "total_cost_usd": 0.0009183000000000001
+    },
+    {
+      "id": "q02",
+      "question": "What Maven group id is used to download the Swagger Codegen CLI jar for version 3.x?",
+      "needs_chain": false,
+      "answer": "The Maven group ID for Swagger\u202fCodegen\u202fCLI version\u202f3.x is **`io.swagger.codegen.v3`**.",
+      "passed": true,
+      "wall_seconds": 1.1703085419721901,
+      "total_tokens": 2088,
+      "total_cost_usd": 0.00039329999999999996
+    },
+    {
+      "id": "q03",
+      "question": "Which OAuth scopes are required to create a repository for an authenticated user using the GitHub REST API?",
+      "needs_chain": false,
+      "answer": "To create a repository for the authenticated user (POST\u202f/user/repos), the request must be authorized with either the **`public_repo`** scope (for public repositories) or the broader **`repo`** scope (which also covers private repositories).",
+      "passed": true,
+      "wall_seconds": 2.27126504201442,
+      "total_tokens": 2075,
+      "total_cost_usd": 0.0004179
+    },
+    {
+      "id": "q04",
+      "question": "In GitHub API version 2025-06-01, what parameter replaces the deprecated single assignee field when creating an issue?",
+      "needs_chain": false,
+      "answer": "In the\u202f2025\u201106\u201101 version of the API, the deprecated `assignee` field is replaced by the `assignees` parameter, which takes an array of user\u2011login strings.",
+      "passed": true,
+      "wall_seconds": 1.7813601250527427,
+      "total_tokens": 1489,
+      "total_cost_usd": 0.0003273
+    },
+    {
+      "id": "q05",
+      "question": "What parameter can be provided when creating a release in GitHub API version 2025-06-01 to automatically trigger a linked discussion?",
+      "needs_chain": false,
+      "answer": "When creating a release with the 2025\u201106\u201101 version of the GitHub API, you can include the **`discussion_category_name`** parameter. Providing this string\u2011valued parameter causes a discussion of the specified category to be created and automatically linked to the new release.",
+      "passed": true,
+      "wall_seconds": 1.8422590830596164,
+      "total_tokens": 1833,
+      "total_cost_usd": 0.00039014999999999997
+    },
+    {
+      "id": "q06",
+      "question": "Compare how the context parameter format changed between GitHub API version 2022-11-28 and 2025-06-01 for rendering Markdown.",
+      "needs_chain": true,
+      "answer": "**2022\u201111\u201128 (v1)**  \n- `context` is a **string**.  \n- It must contain the repository identifier in the form `owner/repo` (e.g., `\"octocat/Hello-World\"`).  \n- Used only when `mode` is `gfm` to resolve repository\u2011relative references.\n\n**2025\u201106\u201101 (v2)**  \n- `context` is now an **object**.  \n- The object has separate fields:  \n\n  ```json\n  {\n    \"owner\": \"octocat\",\n    \"repo\":  \"Hello-World\"\n  }\n  ```  \n\n- The same purpose (providing repository context for `gfm` mode) is kept, but the format shifted from a single\u2011string identifier to a structured object with explicit `owner` and `repo` properties.  \n\n**Summary**  \nThe `context` parameter changed from a plain `\"owner/repo\"` string to a JSON object `{ \"owner\": \"...\", \"repo\": \"...\" }`. This makes the repository information explicit and easier to validate. No other aspects of the `context` parameter (requiredness, default) changed.",
+      "passed": true,
+      "wall_seconds": 3.642038792022504,
+      "total_tokens": 2876,
+      "total_cost_usd": 0.00065865
+    },
+    {
+      "id": "q07",
+      "question": "How did setting maintainer_can_modify during pull request creation change between GitHub API 2022-11-28 and 2025-06-01?",
+      "needs_chain": true,
+      "answer": "In the 2022\u201111\u201128 version of the \u201cCreate a pull request\u201d endpoint the request body did **not** include a\u202f`maintainer_can_modify` field at all. To change that setting you had to make a separate\u202fPATCH request after the PR was created.\n\nIn the 2025\u201106\u201101 version a new optional boolean parameter\u202f`maintainer_can_modify` was added to the POST\u202f`/repos/{owner}/{repo}/pulls` call. It defaults to\u202f`true` and can be set directly when the pull request is created, eliminating the need for a follow\u2011up PATCH.",
+      "passed": true,
+      "wall_seconds": 9.323050041100942,
+      "total_tokens": 3069,
+      "total_cost_usd": 0.0006732
+    },
+    {
+      "id": "q08",
+      "question": "How does the make_latest parameter in GitHub API version 2025-06-01 release creation replace the undocumented heuristic used in 2022-11-28?",
+      "needs_chain": true,
+      "answer": "In the 2022\u201111\u201128 version of the **Create a release** endpoint the API decided which release was the repository\u2019s \u201cLatest\u201d release automatically. The decision was made by an undocumented heuristic that simply marked the release with the most recent\u202f`published_at` timestamp as the latest one.\n\nStarting with API version **2025\u201106\u201101**, the endpoint adds the **`make_latest`** parameter (type\u202fenum: `true`, `false`, `legacy`). This gives callers explicit control over the \u201clatest\u201d flag:\n\n* **`true`** \u2013 the new release is marked as the repository\u2019s latest release.  \n* **`false`** \u2013 the new release is **not** marked as latest.  \n* **`legacy`** \u2013 the API falls back to the previous behavior, applying the old heuristic based on publish date.\n\nThus, `make_latest` replaces the undocumented publish\u2011date\u2011only heuristic by letting the client decide whether the release should become the latest one, while still offering the `legacy` option for backward\u2011compatible behavior.",
+      "passed": true,
+      "wall_seconds": 13.985847624950111,
+      "total_tokens": 2479,
+      "total_cost_usd": 0.0006018
+    },
+    {
+      "id": "q09",
+      "question": "How did draft pull requests interact with auto-merge settings in GitHub API version 2022-11-28 versus 2025-06-01?",
+      "needs_chain": true,
+      "answer": "**2022\u201111\u201128** \u2013 In this version a pull request that is created with `draft: true` **cannot have auto\u2011merge turned on**. Auto\u2011merge can be enabled only after the draft is explicitly marked \u201cready for review\u201d.\n\n**2025\u201106\u201101** \u2013 Starting with this version the behavior changes: a draft pull request **may have auto\u2011merge pre\u2011armed** (i.e., you can set the auto\u2011merge options when the PR is created). The `draft` flag still exists (default\u202f`false`), but its interaction with auto\u2011merge is no longer a blocker; a draft can be created with auto\u2011merge already configured. \n\n*Source:* The combined reference notes that \u201ca draft PR could not have auto\u2011merge enabled until explicitly marked ready for review, whereas this version allows auto\u2011merge to be pre\u2011armed on a draft.\u201d\u3010search_docs\u20202\u2020L1-L3\u3011",
+      "passed": true,
+      "wall_seconds": 26.882264915970154,
+      "total_tokens": 5579,
+      "total_cost_usd": 0.00113115
+    },
+    {
+      "id": "q10",
+      "question": "How did setting issue types on creation change between GitHub API versions 2022-11-28 and 2025-06-01?",
+      "needs_chain": true,
+      "answer": "In the\u202f2022\u201111\u201128\u202fversion of the **Create Issue** endpoint there was no parameter for specifying an issue type \u2013 the request body could include title, body, assignee (single user), and labels only.\n\nIn the\u202f2025\u201106\u201101\u202fversion a new optional parameter was added:\n\n* **type** \u2013 *string* \u2013 \u201cThe name of the issue type to set on creation. Did not exist in the prior version.\u201d\n\nThus, setting the issue type at creation was not possible in the 2022\u201111\u201128 API, but from the 2025\u201106\u201101 API onward you can provide the `type` field to define the issue\u2019s type when you create it.",
+      "passed": true,
+      "wall_seconds": 22.634231208008714,
+      "total_tokens": 3207,
+      "total_cost_usd": 0.00072945
+    }
+  ],
+  "workflow": [
+    {
+      "id": "q01",
+      "question": "What is the maximum file size limit supported when rendering Markdown content via the GitHub REST API?",
+      "needs_chain": false,
+      "answer": "The GitHub REST API can render Markdown content only up to **400\u202fKB** in size (the response body must be 400\u202fKB or less).",
+      "passed": true,
+      "wall_seconds": 5.458376666996628,
+      "total_tokens": 1298,
+      "total_cost_usd": 0.0002487
+    },
+    {
+      "id": "q02",
+      "question": "What Maven group id is used to download the Swagger Codegen CLI jar for version 3.x?",
+      "needs_chain": false,
+      "answer": "The Maven group id is **`io.swagger.codegen.v3`**.",
+      "passed": true,
+      "wall_seconds": 10.133179584052414,
+      "total_tokens": 1392,
+      "total_cost_usd": 0.000279
+    },
+    {
+      "id": "q03",
+      "question": "Which OAuth scopes are required to create a repository for an authenticated user using the GitHub REST API?",
+      "needs_chain": false,
+      "answer": "The\u202fOAuth\u202fscope\u202frequired\u202fto\u202fcreate\u202fa\u202frepository\u202ffor\u202fthe\u202fauthenticated\u202fuser is either **`public_repo`** (for public repositories) or **`repo`** (for full\u2011control of private repositories).",
+      "passed": true,
+      "wall_seconds": 9.371047666994855,
+      "total_tokens": 1246,
+      "total_cost_usd": 0.00024
+    },
+    {
+      "id": "q04",
+      "question": "In GitHub API version 2025-06-01, what parameter replaces the deprecated single assignee field when creating an issue?",
+      "needs_chain": false,
+      "answer": "The deprecated single\u202f`assignee` field is replaced by the **`assignees`** parameter, which accepts an array of user login strings.",
+      "passed": true,
+      "wall_seconds": 9.40448137500789,
+      "total_tokens": 1369,
+      "total_cost_usd": 0.0002661
+    },
+    {
+      "id": "q05",
+      "question": "What parameter can be provided when creating a release in GitHub API version 2025-06-01 to automatically trigger a linked discussion?",
+      "needs_chain": false,
+      "answer": "The `discussion_category_name` parameter can be supplied to automatically create and link a discussion when a release is created.",
+      "passed": true,
+      "wall_seconds": 10.99669624993112,
+      "total_tokens": 1417,
+      "total_cost_usd": 0.00028634999999999994
+    },
+    {
+      "id": "q06",
+      "question": "Compare how the context parameter format changed between GitHub API version 2022-11-28 and 2025-06-01 for rendering Markdown.",
+      "needs_chain": true,
+      "answer": "**2022\u201111\u201128 API version**  \n- `context` is a **plain string**.  \n- Example value: `\"octocat/Hello-World\"` (the \u201cowner/repo\u201d pair encoded in one string).  \n- Defined in the OpenAPI spec as `type: string`, optional.\n\n**2025\u201106\u201101 API version**  \n- `context` is changed to a **structured object**.  \n- The object contains two separate fields: `owner` and `repo`, e.g.:\n\n```json\n{\n  \"owner\": \"octocat\",\n  \"repo\": \"Hello-World\"\n}\n```\n\n- This object is used for gfm\u2011mode reference linking.\n\n**Summary of the change**  \nThe `context` parameter moved from a single\u2011string representation of the repository to a JSON object with explicit `owner` and `repo` properties, giving a clearer, typed structure for the repository reference. The older string format is no longer used in the 2025\u201106\u201101 version.",
+      "passed": true,
+      "wall_seconds": 9.422585624968633,
+      "total_tokens": 1438,
+      "total_cost_usd": 0.00037995
+    },
+    {
+      "id": "q07",
+      "question": "How did setting maintainer_can_modify during pull request creation change between GitHub API 2022-11-28 and 2025-06-01?",
+      "needs_chain": true,
+      "answer": "In the 2022\u201111\u201128 version of the GitHub API the **maintainer_can_modify** flag could not be supplied when a pull request was created; it defaulted to **true** (for public repos) and could only be changed later with a separate **PATCH** request to the pull\u2011request resource.\n\nStarting with the 2025\u201106\u201101 version, the API added **maintainer_can_modify** as a writable field in the **POST\u202f/repos/{owner}/{repo}/pulls** request body. This makes it possible to set the flag at creation time (e.g., `\"maintainer_can_modify\": false`), eliminating the need for a follow\u2011up PATCH call. The default remains **true**, but it is now explicitly configurable during creation.",
+      "passed": true,
+      "wall_seconds": 11.47315995907411,
+      "total_tokens": 1475,
+      "total_cost_usd": 0.00039539999999999996
+    },
+    {
+      "id": "q08",
+      "question": "How does the make_latest parameter in GitHub API version 2025-06-01 release creation replace the undocumented heuristic used in 2022-11-28?",
+      "needs_chain": true,
+      "answer": "In the 2022\u201111\u201128 release\u2011creation API there was **no\u202f`make_latest` field**.  \nGitHub therefore decided which release was the repository\u2019s \u201cLatest\u201d release by an **undocumented heuristic**: it simply treated the release that had the most recent\u202f`published_at` timestamp as the \u201cLatest\u201d one, regardless of any other intent.\n\nStarting with API version **2025\u201106\u201101**, the request body now includes a **`make_latest`** parameter (an enum that can be `true`, `false`, or `legacy`). This parameter gives the caller **explicit control** over the \u201cLatest\u201d status:\n\n* **`make_latest: true`** \u2013 marks the new release as the repository\u2019s Latest release, replacing any previous release that was marked Latest.  \n* **`make_latest: false`** \u2013 creates the release without changing which release is considered Latest.  \n* **`make_latest: legacy`** \u2013 falls back to the previous behavior (the undocumented publish\u2011date heuristic).\n\nBy allowing the client to specify the desired behavior, `make_latest` **replaces the old heuristic** that automatically chose the most recent release based only on publish date. This makes the \u201cLatest\u201d designation deterministic and configurable rather than relying on an internal rule that was not documented.",
+      "passed": true,
+      "wall_seconds": 12.042931042029522,
+      "total_tokens": 1710,
+      "total_cost_usd": 0.0004563
+    },
+    {
+      "id": "q09",
+      "question": "How did draft pull requests interact with auto-merge settings in GitHub API version 2022-11-28 versus 2025-06-01?",
+      "needs_chain": true,
+      "answer": "In the earlier API version (2022\u201111\u201128), a draft pull request could **not** have auto\u2011merge turned on \u2013 the PR had to be marked \u201cready for review\u201d before auto\u2011merge could be enabled.\n\nIn the newer API version (2025\u201106\u201101), this restriction was removed: a draft pull request may be created with auto\u2011merge already \u201cpre\u2011armed,\u201d i.e., auto\u2011merge can be enabled even while the PR is still a draft.",
+      "passed": true,
+      "wall_seconds": 12.042165250051767,
+      "total_tokens": 1566,
+      "total_cost_usd": 0.00046484999999999994
+    },
+    {
+      "id": "q10",
+      "question": "How did setting issue types on creation change between GitHub API versions 2022-11-28 and 2025-06-01?",
+      "needs_chain": true,
+      "answer": "In the\u202f2022\u201111\u201128\u202fAPI version the **create\u2011issue** endpoint did **not** include a `type` field.  \nIssue types could not be set when the issue was created; you had to assign the type later with a separate API call.\n\nIn the newer **2025\u201106\u201101** version a new optional body parameter called **`type`** was added:\n\n* `type`\u202f\u2014\u202fa string that lets you specify the issue type (e.g.,\u202f\u201cBug\u201d,\u202f\u201cFeature\u201d, etc.) at the moment the issue is created.\n\nThus, between the two versions the ability to set an issue\u2019s type moved from \u201cnot possible at creation\u201d (2022\u201111\u201128) to \u201csupported directly on creation via the optional `type` field\u201d (2025\u201106\u201101).",
+      "passed": true,
+      "wall_seconds": 13.042650875053369,
+      "total_tokens": 1482,
+      "total_cost_usd": 0.0003744
+    }
+  ]
+}

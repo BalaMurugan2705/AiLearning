@@ -1,0 +1,32 @@
+[
+  {
+    "id": "issue-assignee-singular",
+    "label": "single `assignee` string field",
+    "kind": "field_replacement",
+    "endpoint": "create_issue",
+    "deprecated_in": "2025-06-01",
+    "replacement": "assignees (array of strings)",
+    "detail": "assignee is deprecated in favor of assignees, which takes an array of user logins.",
+    "source": "github_combined_reference.pdf p5"
+  },
+  {
+    "id": "repo-private-boolean",
+    "label": "boolean `private` field",
+    "kind": "field_replacement",
+    "endpoint": "create_repository",
+    "deprecated_in": "2025-06-01",
+    "replacement": "visibility (enum: public, private, internal)",
+    "detail": "private is deprecated in favor of visibility, though private continues to work for personal accounts.",
+    "source": "github_combined_reference.pdf p9"
+  },
+  {
+    "id": "markdown-context-string",
+    "label": "plain-string `context` parameter",
+    "kind": "format_change",
+    "endpoint": "render_markdown",
+    "deprecated_in": "2025-06-01",
+    "replacement": "structured {owner, repo} object",
+    "detail": "context changed from a plain string like 'octocat/Hello-World' to a structured {owner, repo} object.",
+    "source": "github_combined_reference.pdf p3"
+  }
+]
