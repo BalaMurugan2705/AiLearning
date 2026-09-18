@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Week 7 — Agent vs Workflow</title>
+<style>
+  :root { color-scheme: light dark; }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; font-family: -apple-system, Segoe UI, Roboto, sans-serif;
+    background: #f5f5f7; color: #1d1d1f; padding: 32px 24px 80px;
+  }
+  @media (prefers-color-scheme: dark) {
+    body { background: #17181c; color: #eee; }
+    .card { background: #24262b !important; border-color: #3a3c42 !important; }
+    table { border-color: #3a3c42 !important; }
+    th { background: #1d1e22 !important; }
+    td, th { border-color: #3a3c42 !important; }
+    tr.pass { background: #163722 !important; }
+    tr.fail { background: #3a1f1f !important; }
+    pre { background: #1d1e22 !important; color: #ddd !important; }
+    code { background: #2b2d33 !important; }
+  }
+  .wrap { max-width: 980px; margin: 0 auto; display: flex; flex-direction: column; gap: 28px; }
+  .top-nav { display: flex; justify-content: space-between; align-items: center; }
+  .top-nav a { color: #0071e3; text-decoration: none; font-size: 14px; }
+  h1 { font-size: 24px; margin: 0; }
+  h2 { font-size: 18px; margin: 0 0 4px; }
+  h3 { font-size: 15px; margin: 16px 0 8px; }
+  .subtitle { color: #86868b; font-size: 13px; margin: 4px 0 0; }
+  .card {
+    background: #fff; border: 1px solid #e2e2e5; border-radius: 14px;
+    padding: 20px 22px;
+  }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; margin-top: 10px; }
+  th, td { border: 1px solid #e2e2e5; padding: 8px 10px; text-align: left; }
+  th { background: #f5f5f7; font-weight: 600; }
+  .winner { font-weight: 700; }
+  tr.pass { background: #e9f7ee; }
+  tr.fail { background: #fbeaea; }
+  .badge { display: inline-block; padding: 1px 8px; border-radius: 999px; font-size: 11px; font-weight: 600; }
+  .badge.pass { background: #1f9d55; color: #fff; }
+  .badge.fail { background: #d0433f; color: #fff; }
+  .chain-tag { font-size: 11px; color: #86868b; }
+  details { margin-top: 12px; }
+  summary { cursor: pointer; font-size: 13px; color: #0071e3; }
+  pre {
+    background: #f5f5f7; border-radius: 10px; padding: 14px 16px; overflow-x: auto;
+    font-size: 12px; line-height: 1.5; white-space: pre-wrap; word-break: break-word;
+  }
+  code { background: #eee; padding: 1px 5px; border-radius: 4px; font-size: 0.9em; }
+  .verdict p, .verdict li { font-size: 14px; line-height: 1.6; }
+  .verdict ul { padding-left: 20px; }
+  .qtext { max-width: 360px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top-nav">
+    <h1>Week 7 — Agent Loop vs. Fixed Workflow</h1>
+    <a href="/">← Back to chat</a>
+  </div>
+  <p class="subtitle">Live results from racing the same 3 tools and the same model two ways: an adaptive ReAct agent vs. a hard-coded 4-step pipeline. Data read straight from <code>results/week7/*.csv</code> and <code>*.json</code> — nothing on this page is hand-typed.</p>
+
+  {% for race in races %}
+  <div class="card">
+    <h2>{{ race.label }}</h2>
+    <table>
+      <thead>
+        <tr><th>System</th><th>Pass rate</th><th>p50 latency</th><th>Total tokens</th><th>Cost / question</th></tr>
+      </thead>
+      <tbody>
+        {% for row in race.rows %}
+        <tr>
+          <td>{{ row.system }}</td>
+          <td>{{ (row.pass_rate|float * 100) | round(1) }}%</td>
+          <td>{{ row.p50_latency_seconds|float | round(2) }}s</td>
+          <td>{{ "{:,}".format(row.total_tokens|int) }}</td>
+          <td>${{ row.cost_per_question_usd|float | round(6) }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
+    {% if race.questions %}
+    <details>
+      <summary>Show all {{ race.questions|length }} question results</summary>
+      <table>
+        <thead>
+          <tr><th>#</th><th class="qtext">Question</th><th>Chain?</th><th>Agent</th><th>Workflow</th></tr>
+        </thead>
+        <tbody>
+          {% for q in race.questions %}
+          <tr>
+            <td>{{ q.id }}</td>
+            <td class="qtext">{{ q.question }}</td>
+            <td class="chain-tag">{{ "yes" if q.needs_chain else "—" }}</td>
+            <td><span class="badge {{ 'pass' if q.agent_passed else 'fail' }}">{{ 'PASS' if q.agent_passed else 'FAIL' }}</span></td>
+            <td><span class="badge {{ 'pass' if q.workflow_passed else 'fail' }}">{{ 'PASS' if q.workflow_passed else 'FAIL' }}</span></td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </details>
+    {% endif %}
+  </div>
+  {% endfor %}
+
+  {% if verdict_html %}
+  <div class="card verdict">
+    <h2>Verdict</h2>
+    {{ verdict_html | safe }}
+  </div>
+  {% endif %}
+
+  {% if tool_diff %}
+  <div class="card">
+    <h2>3rd tool description diff</h2>
+    <details open>
+      <summary>search_docs / get_openapi_spec / check_deprecation</summary>
+      <pre>{{ tool_diff }}</pre>
+    </details>
+  </div>
+  {% endif %}
+
+  {% if budget_log %}
+  <div class="card">
+    <h2>Budget-termination log</h2>
+    <p class="subtitle">One real run, deliberately starved of iterations, showing a clean stop instead of a spin.</p>
+    <details>
+      <summary>Show transcript</summary>
+      <pre>{{ budget_log }}</pre>
+    </details>
+  </div>
+  {% endif %}
+</div>
+</body>
+</html>

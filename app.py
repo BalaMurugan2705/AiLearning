@@ -7,6 +7,7 @@ from fastapi.templating import Jinja2Templates
 from starlette.requests import Request
 from pydantic import BaseModel
 
+from eval.week7 import dashboard_data
 from rag.config import DOCUMENTS_DIR, GROQ_API_KEY, SUPPORTED_EXTENSIONS, TOP_K
 from rag.pipeline import RAGPipeline
 
@@ -24,6 +25,21 @@ class AskRequest(BaseModel):
 async def index(request: Request):
     return templates.TemplateResponse(
         request, "index.html", {"document_count": pipeline.document_count()}
+    )
+
+
+@app.get("/week7", response_class=HTMLResponse)
+async def week7_dashboard(request: Request):
+    verdict_text = dashboard_data.load_text_file("verdict.md")
+    return templates.TemplateResponse(
+        request,
+        "week7.html",
+        {
+            "races": dashboard_data.load_race_sets(),
+            "verdict_html": dashboard_data.render_markdown(verdict_text) if verdict_text else None,
+            "tool_diff": dashboard_data.load_text_file("tool_diff.md"),
+            "budget_log": dashboard_data.load_text_file("budget_termination.log"),
+        },
     )
 
 
