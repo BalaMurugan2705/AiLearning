@@ -1,0 +1,392 @@
+{
+  "summary": {
+    "n": 10,
+    "tool_choice_accuracy": 0.9444444444444444,
+    "argument_validity_rate": 1.0,
+    "step_efficiency": 1.8,
+    "cost_p50_usd": 0.0006620249999999999,
+    "cost_max_usd": 0.00122325,
+    "outcome_pass_rate": 1.0,
+    "trajectory_pass_rate": 0.7,
+    "outcome_minus_trajectory_gap": 0.30000000000000004
+  },
+  "modes": {
+    "extra_steps": 3
+  },
+  "records": [
+    {
+      "id": "q01",
+      "question": "What is the maximum file size limit supported when rendering Markdown content via the GitHub REST API?",
+      "answer": "The GitHub REST API for rendering Markdown accepts content up to **400\u202fKB** in size. If the Markdown payload exceeds this limit, the request will be rejected.",
+      "tool_calls": [
+        {
+          "name": "search_docs",
+          "arguments": {
+            "k": 5,
+            "query": "GitHub REST API render markdown maximum file size limit"
+          }
+        },
+        {
+          "name": "get_openapi_spec",
+          "arguments": {
+            "api_version": "2022-11-28",
+            "endpoint": "render_markdown"
+          }
+        },
+        {
+          "name": "search_docs",
+          "arguments": {
+            "k": 5,
+            "query": "Content must be 400 KB or less markdown render github api"
+          }
+        }
+      ],
+      "tool_names": [
+        "search_docs",
+        "get_openapi_spec",
+        "search_docs"
+      ],
+      "steps_taken": 3,
+      "min_steps": 1,
+      "outcome_passed": true,
+      "trajectory_passed": false,
+      "failure_mode": "extra_steps",
+      "tool_choice_correct": 2,
+      "tool_choice_total": 3,
+      "valid_arg_calls": 1,
+      "total_arg_calls": 1,
+      "total_tokens": 6769,
+      "total_cost_usd": 0.00122325,
+      "wall_seconds": 16.394303249995573,
+      "terminated_by_budget": false,
+      "budget_reason": null
+    },
+    {
+      "id": "q02",
+      "question": "What Maven group id is used to download the Swagger Codegen CLI jar for version 3.x?",
+      "answer": "The Maven group ID for the Swagger\u202fCodegen\u202fCLI jar in the 3.x line is:\n\n**`io.swagger.codegen.v3`**",
+      "tool_calls": [
+        {
+          "name": "search_docs",
+          "arguments": {
+            "k": 5,
+            "query": "Swagger Codegen CLI jar Maven group id 3.x"
+          }
+        }
+      ],
+      "tool_names": [
+        "search_docs"
+      ],
+      "steps_taken": 1,
+      "min_steps": 1,
+      "outcome_passed": true,
+      "trajectory_passed": true,
+      "failure_mode": null,
+      "tool_choice_correct": 1,
+      "tool_choice_total": 1,
+      "valid_arg_calls": 0,
+      "total_arg_calls": 0,
+      "total_tokens": 2138,
+      "total_cost_usd": 0.00042375000000000003,
+      "wall_seconds": 9.060543625004357,
+      "terminated_by_budget": false,
+      "budget_reason": null
+    },
+    {
+      "id": "q03",
+      "question": "Which OAuth scopes are required to create a repository for an authenticated user using the GitHub REST API?",
+      "answer": "Creating a repository for the authenticated user (`POST /user/repos`) requires the **`public_repo`** scope for public repositories, or the broader **`repo`** scope for private repositories.",
+      "tool_calls": [
+        {
+          "name": "search_docs",
+          "arguments": {
+            "k": 5,
+            "query": "GitHub REST API create repository OAuth scopes required"
+          }
+        }
+      ],
+      "tool_names": [
+        "search_docs"
+      ],
+      "steps_taken": 1,
+      "min_steps": 1,
+      "outcome_passed": true,
+      "trajectory_passed": true,
+      "failure_mode": null,
+      "tool_choice_correct": 1,
+      "tool_choice_total": 1,
+      "valid_arg_calls": 0,
+      "total_arg_calls": 0,
+      "total_tokens": 2063,
+      "total_cost_usd": 0.00039225,
+      "wall_seconds": 12.066061250006896,
+      "terminated_by_budget": false,
+      "budget_reason": null
+    },
+    {
+      "id": "q04",
+      "question": "In GitHub API version 2025-06-01, what parameter replaces the deprecated single assignee field when creating an issue?",
+      "answer": "The deprecated `assignee` field is replaced by the `assignees` parameter, which accepts an array of user login strings.",
+      "tool_calls": [
+        {
+          "name": "check_deprecation",
+          "arguments": {
+            "api_version": "2025-06-01",
+            "endpoint": "create_issue"
+          }
+        }
+      ],
+      "tool_names": [
+        "check_deprecation"
+      ],
+      "steps_taken": 1,
+      "min_steps": 1,
+      "outcome_passed": true,
+      "trajectory_passed": true,
+      "failure_mode": null,
+      "tool_choice_correct": 1,
+      "tool_choice_total": 1,
+      "valid_arg_calls": 1,
+      "total_arg_calls": 1,
+      "total_tokens": 1462,
+      "total_cost_usd": 0.0003111,
+      "wall_seconds": 6.5529499590047635,
+      "terminated_by_budget": false,
+      "budget_reason": null
+    },
+    {
+      "id": "q05",
+      "question": "What parameter can be provided when creating a release in GitHub API version 2025-06-01 to automatically trigger a linked discussion?",
+      "answer": "The parameter is **`discussion_category_name`**. Providing this string when you create a release (API version\u202f2025\u201106\u201101) automatically creates and links a discussion of the specified category to the release.",
+      "tool_calls": [
+        {
+          "name": "search_docs",
+          "arguments": {
+            "k": 5,
+            "query": "GitHub API 2025-06-01 create_release linked discussion parameter automatically trigger discussion"
+          }
+        },
+        {
+          "name": "get_openapi_spec",
+          "arguments": {
+            "api_version": "2025-06-01",
+            "endpoint": "create_release"
+          }
+        }
+      ],
+      "tool_names": [
+        "search_docs",
+        "get_openapi_spec"
+      ],
+      "steps_taken": 2,
+      "min_steps": 1,
+      "outcome_passed": true,
+      "trajectory_passed": true,
+      "failure_mode": null,
+      "tool_choice_correct": 2,
+      "tool_choice_total": 2,
+      "valid_arg_calls": 1,
+      "total_arg_calls": 1,
+      "total_tokens": 4072,
+      "total_cost_usd": 0.0007741499999999999,
+      "wall_seconds": 27.37322700000368,
+      "terminated_by_budget": false,
+      "budget_reason": null
+    },
+    {
+      "id": "q06",
+      "question": "Compare how the context parameter format changed between GitHub API version 2022-11-28 and 2025-06-01 for rendering Markdown.",
+      "answer": "**`render_markdown` \u2013\u202f`context` parameter**\n\n| API version | Type of `context` | Typical value / structure | Notes |\n|-------------|-------------------|---------------------------|-------|\n| **2022\u201111\u201128** | `string` (optional) | A repository identifier in the form `\"owner/repo\"` (e.g., `\"octocat/Hello-World\"`). | Used only when `mode=gfm` to resolve references. |\n| **2025\u201106\u201101** | `object` (optional) | An object with two properties: <br>\u2022 `owner`: string \u2013 the repository owner <br>\u2022 `repo`: string \u2013 the repository name <br>Example: `{ \"owner\": \"octocat\", \"repo\": \"Hello-World\" }` | The same purpose (gfm\u2011mode reference linking) but the parameter is now a structured object rather than a single \u201cowner/repo\u201d string. |\n\n**Summary of the change**\n\n- The `context` field changed from a **plain string** representing the full repository name to a **JSON object** containing separate `owner` and `repo` fields.  \n- This makes the repository context explicit and easier to validate, while retaining the same functional role (providing repository context for GFM rendering).",
+      "tool_calls": [
+        {
+          "name": "get_openapi_spec",
+          "arguments": {
+            "api_version": "2022-11-28",
+            "endpoint": "render_markdown"
+          }
+        },
+        {
+          "name": "get_openapi_spec",
+          "arguments": {
+            "api_version": "2025-06-01",
+            "endpoint": "render_markdown"
+          }
+        }
+      ],
+      "tool_names": [
+        "get_openapi_spec",
+        "get_openapi_spec"
+      ],
+      "steps_taken": 2,
+      "min_steps": 1,
+      "outcome_passed": true,
+      "trajectory_passed": true,
+      "failure_mode": null,
+      "tool_choice_correct": 2,
+      "tool_choice_total": 2,
+      "valid_arg_calls": 2,
+      "total_arg_calls": 2,
+      "total_tokens": 2832,
+      "total_cost_usd": 0.00063225,
+      "wall_seconds": 20.513589542009868,
+      "terminated_by_budget": false,
+      "budget_reason": null
+    },
+    {
+      "id": "q07",
+      "question": "How did setting maintainer_can_modify during pull request creation change between GitHub API 2022-11-28 and 2025-06-01?",
+      "answer": "In the **2022\u201111\u201128** version of the GitHub REST API, the `create_pull_request` endpoint did **not** include a `maintainer_can_modify` parameter at all. The only fields you could set when creating a PR were `title`, `head`, `base`, `body` and `draft`.\n\nIn the **2025\u201106\u201101** version, the endpoint gained a new optional boolean parameter:\n\n- **`maintainer_can_modify`** \u2013 default\u202f`true` \u2013 \u201cNow settable at creation time; previously required a follow\u2011up PATCH call.\u201d\n\nSo the change is that `maintainer_can_modify` went from being unavailable (and thus only changeable later via an update request) to being a directly settable field when the pull request is created.",
+      "tool_calls": [
+        {
+          "name": "get_openapi_spec",
+          "arguments": {
+            "api_version": "2022-11-28",
+            "endpoint": "create_pull_request"
+          }
+        },
+        {
+          "name": "get_openapi_spec",
+          "arguments": {
+            "api_version": "2025-06-01",
+            "endpoint": "create_pull_request"
+          }
+        }
+      ],
+      "tool_names": [
+        "get_openapi_spec",
+        "get_openapi_spec"
+      ],
+      "steps_taken": 2,
+      "min_steps": 1,
+      "outcome_passed": true,
+      "trajectory_passed": true,
+      "failure_mode": null,
+      "tool_choice_correct": 2,
+      "tool_choice_total": 2,
+      "valid_arg_calls": 2,
+      "total_arg_calls": 2,
+      "total_tokens": 3025,
+      "total_cost_usd": 0.0006467999999999999,
+      "wall_seconds": 14.608381417012424,
+      "terminated_by_budget": false,
+      "budget_reason": null
+    },
+    {
+      "id": "q08",
+      "question": "How does the make_latest parameter in GitHub API version 2025-06-01 release creation replace the undocumented heuristic used in 2022-11-28?",
+      "answer": "In the\u202f2022\u201111\u201128 version of the **Create a release** endpoint the API decided which release should be marked as the repository\u2019s \u201cLatest\u201d release automatically. That decision was made by an undocumented heuristic that looked only at the release\u2019s **publish date**\u2014the most\u2011recently\u2011published release was treated as the latest one.\n\nStarting with API version\u202f**2025\u201106\u201101**, the endpoint adds a new body parameter called **`make_latest`**.\u202fThis parameter is an enum (`true`, `false`, `legacy`) that gives callers explicit control over the \u201clatest\u2011release\u201d flag:\n\n* **`true`** \u2013 the release is marked as the repository\u2019s latest release.  \n* **`false`** \u2013 the release is not marked as latest (even if it is the most recent by publish date).  \n* **`legacy`** \u2013 preserves the previous behavior, i.e., the API falls back to the old heuristic based on publish date.\n\nBy allowing the client to set `make_latest`, the API removes the hidden, date\u2011only rule and makes the \u201clatest\u201d designation a deliberate choice rather than an implicit side\u2011effect. This change eliminates the undocumented heuristic that existed in the 2022\u201111\u201128 version.",
+      "tool_calls": [
+        {
+          "name": "search_docs",
+          "arguments": {
+            "k": 5,
+            "query": "make_latest release creation GitHub API 2025-06-01 undocumented heuristic 2022-11-28"
+          }
+        },
+        {
+          "name": "search_docs",
+          "arguments": {
+            "k": 5,
+            "query": "2022-11-28 release creation latest heuristic publish date"
+          }
+        }
+      ],
+      "tool_names": [
+        "search_docs",
+        "search_docs"
+      ],
+      "steps_taken": 2,
+      "min_steps": 1,
+      "outcome_passed": true,
+      "trajectory_passed": false,
+      "failure_mode": "extra_steps",
+      "tool_choice_correct": 2,
+      "tool_choice_total": 2,
+      "valid_arg_calls": 0,
+      "total_arg_calls": 0,
+      "total_tokens": 4827,
+      "total_cost_usd": 0.0010336499999999999,
+      "wall_seconds": 30.417582709007547,
+      "terminated_by_budget": false,
+      "budget_reason": null
+    },
+    {
+      "id": "q09",
+      "question": "How did draft pull requests interact with auto-merge settings in GitHub API version 2022-11-28 versus 2025-06-01?",
+      "answer": "In the\u202f2022\u201111\u201128\u202fAPI a pull request that was created as a **draft** could not have auto\u2011merge turned on. Auto\u2011merge could only be enabled after the draft was explicitly marked \u201cready for review.\u201d  \n\nIn the newer\u202f2025\u201106\u201101\u202fAPI this restriction was removed \u2013 a draft pull request can be created with auto\u2011merge already \u201cpre\u2011armed,\u201d i.e., auto\u2011merge can be set even while the PR is still a draft.  \n\n*Source: GitHub REST API combined reference notes that \u201cauto\u2011merge settings also behaved differently: a draft PR could not have auto\u2011merge enabled until explicitly marked ready for review, whereas this version allows auto\u2011merge to be pre\u2011armed on a draft.\u201d*",
+      "tool_calls": [
+        {
+          "name": "search_docs",
+          "arguments": {
+            "k": 5,
+            "query": "draft pull request auto-merge GitHub API 2022-11-28"
+          }
+        },
+        {
+          "name": "search_docs",
+          "arguments": {
+            "k": 5,
+            "query": "auto-merge draft PR could not have auto-merge enabled until ready for review 2022-11-28"
+          }
+        }
+      ],
+      "tool_names": [
+        "search_docs",
+        "search_docs"
+      ],
+      "steps_taken": 2,
+      "min_steps": 1,
+      "outcome_passed": true,
+      "trajectory_passed": false,
+      "failure_mode": "extra_steps",
+      "tool_choice_correct": 2,
+      "tool_choice_total": 2,
+      "valid_arg_calls": 0,
+      "total_arg_calls": 0,
+      "total_tokens": 4793,
+      "total_cost_usd": 0.0009264,
+      "wall_seconds": 50.500490082995384,
+      "terminated_by_budget": false,
+      "budget_reason": null
+    },
+    {
+      "id": "q10",
+      "question": "How did setting issue types on creation change between GitHub API versions 2022-11-28 and 2025-06-01?",
+      "answer": "In the\u202f2022\u201111\u201128\u202fversion of **create_issue**, the request body had no way to specify an issue type \u2013 the parameters were limited to title, body, a single\u202f`assignee`, and labels.\n\nIn the\u202f2025\u201106\u201101\u202fversion a new optional parameter **`type`** was added:\n\n* **`type` (string, optional)** \u2013 the name of the issue type to set when the issue is created. This field did not exist in the earlier version, so you could not set an issue type at creation time before.\n\nAdditionally, the older single\u2011user\u202f`assignee` field was replaced with **`assignees`** (an array of strings) in the newer version, but the key change regarding issue types is the introduction of the `type` parameter.",
+      "tool_calls": [
+        {
+          "name": "get_openapi_spec",
+          "arguments": {
+            "api_version": "2022-11-28",
+            "endpoint": "create_issue"
+          }
+        },
+        {
+          "name": "get_openapi_spec",
+          "arguments": {
+            "api_version": "2025-06-01",
+            "endpoint": "create_issue"
+          }
+        }
+      ],
+      "tool_names": [
+        "get_openapi_spec",
+        "get_openapi_spec"
+      ],
+      "steps_taken": 2,
+      "min_steps": 1,
+      "outcome_passed": true,
+      "trajectory_passed": true,
+      "failure_mode": null,
+      "tool_choice_correct": 2,
+      "tool_choice_total": 2,
+      "valid_arg_calls": 2,
+      "total_arg_calls": 2,
+      "total_tokens": 3120,
+      "total_cost_usd": 0.0006772499999999999,
+      "wall_seconds": 14.85972637499799,
+      "terminated_by_budget": false,
+      "budget_reason": null
+    }
+  ]
+}

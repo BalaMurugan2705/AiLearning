@@ -25,4 +25,7 @@ class FakeGroqClient:
 
     def _create(self, **kwargs):
         self.calls.append(kwargs)
-        return self._responses.pop(0)
+        item = self._responses.pop(0)
+        if isinstance(item, Exception):
+            raise item
+        return item

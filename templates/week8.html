@@ -1,0 +1,222 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Week 8 — Trajectory Evals &amp; Failure Modes</title>
+<style>
+  :root { color-scheme: light dark; }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; font-family: -apple-system, Segoe UI, Roboto, sans-serif;
+    background: #f5f5f7; color: #1d1d1f; padding: 32px 24px 80px;
+  }
+  @media (prefers-color-scheme: dark) {
+    body { background: #17181c; color: #eee; }
+    .card { background: #24262b !important; border-color: #3a3c42 !important; }
+    table { border-color: #3a3c42 !important; }
+    th { background: #1d1e22 !important; }
+    td, th { border-color: #3a3c42 !important; }
+    tr.pass { background: #163722 !important; }
+    tr.fail { background: #3a1f1f !important; }
+    pre { background: #1d1e22 !important; color: #ddd !important; }
+    code { background: #2b2d33 !important; }
+    .metric-before { color: #aaa !important; }
+  }
+  .wrap { max-width: 1040px; margin: 0 auto; display: flex; flex-direction: column; gap: 28px; }
+  .top-nav { display: flex; justify-content: space-between; align-items: center; }
+  .top-nav a { color: #0071e3; text-decoration: none; font-size: 14px; }
+  h1 { font-size: 24px; margin: 0; }
+  h2 { font-size: 18px; margin: 0 0 4px; }
+  h3 { font-size: 15px; margin: 0 0 8px; }
+  .subtitle { color: #86868b; font-size: 13px; margin: 4px 0 0; }
+  .card {
+    background: #fff; border: 1px solid #e2e2e5; border-radius: 14px;
+    padding: 20px 22px;
+  }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; margin-top: 10px; }
+  th, td { border: 1px solid #e2e2e5; padding: 8px 10px; text-align: left; }
+  th { background: #f5f5f7; font-weight: 600; }
+  tr.pass { background: #e9f7ee; }
+  tr.fail { background: #fbeaea; }
+  .badge { display: inline-block; padding: 1px 8px; border-radius: 999px; font-size: 11px; font-weight: 600; white-space: nowrap; }
+  .badge.pass { background: #1f9d55; color: #fff; }
+  .badge.fail { background: #d0433f; color: #fff; }
+  .badge.fixed { background: #1f9d55; color: #fff; }
+  .badge.new { background: #d0433f; color: #fff; }
+  .badge.worse { background: #d0433f; color: #fff; }
+  .badge.unchanged { background: #8a8a8e; color: #fff; }
+  .badge.improved { background: #2f8fe0; color: #fff; }
+  .metric-before { color: #86868b; font-size: 12px; }
+  .arrow { color: #86868b; margin: 0 6px; }
+  .chain-tag { font-size: 11px; color: #86868b; }
+  details { margin-top: 12px; }
+  summary { cursor: pointer; font-size: 13px; color: #0071e3; }
+  pre {
+    background: #f5f5f7; border-radius: 10px; padding: 14px 16px; overflow-x: auto;
+    font-size: 12px; line-height: 1.5; white-space: pre-wrap; word-break: break-word;
+  }
+  code { background: #eee; padding: 1px 5px; border-radius: 4px; font-size: 0.9em; }
+  .qtext { max-width: 320px; }
+  .tools { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 12px; }
+  .callout { font-size: 14px; line-height: 1.6; }
+  .callout .label { font-weight: 600; }
+  .stat-row { display: flex; gap: 24px; flex-wrap: wrap; margin-top: 6px; }
+  .stat { font-size: 13px; }
+  .stat b { display: block; font-size: 18px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top-nav">
+    <h1>Week 8 — Trajectory Evals &amp; Failure Modes</h1>
+    <a href="/">← Back to chat</a>
+  </div>
+  <p class="subtitle">
+    Live results from grading the agent's <em>path</em> (which tools it called, in what
+    order, with what arguments) on top of Week 7's outcome eval. Data read straight from
+    <code>results/week8/*.json</code> — nothing on this page is hand-typed.
+    {{ comparison.before.n_runs }} baseline run(s) / {{ comparison.before.n_questions }}
+    question-attempts vs. {{ comparison.after.n_runs }} post-mitigation run(s) /
+    {{ comparison.after.n_questions }} question-attempts.
+  </p>
+
+  <div class="card">
+    <h2>The 4 trajectory numbers — before vs. after the mitigation</h2>
+    <table>
+      <thead>
+        <tr><th>metric</th><th>before</th><th>after</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>tool-choice accuracy</td>
+          <td>{{ (comparison.before.metrics.tool_choice_accuracy * 100) | round(1) }}%</td>
+          <td>{{ (comparison.after.metrics.tool_choice_accuracy * 100) | round(1) }}%</td>
+        </tr>
+        <tr>
+          <td>argument validity rate</td>
+          <td>{{ (comparison.before.metrics.argument_validity_rate * 100) | round(1) }}%</td>
+          <td>{{ (comparison.after.metrics.argument_validity_rate * 100) | round(1) }}%</td>
+        </tr>
+        <tr>
+          <td>step efficiency (steps taken / needed)</td>
+          <td>{{ comparison.before.metrics.step_efficiency | round(2) }}×</td>
+          <td>{{ comparison.after.metrics.step_efficiency | round(2) }}×</td>
+        </tr>
+        <tr>
+          <td>cost / question — p50</td>
+          <td>${{ comparison.before.metrics.cost_p50_usd | round(6) }}</td>
+          <td>${{ comparison.after.metrics.cost_p50_usd | round(6) }}</td>
+        </tr>
+        <tr>
+          <td>cost / question — max</td>
+          <td>${{ comparison.before.metrics.cost_max_usd | round(6) }}</td>
+          <td>${{ comparison.after.metrics.cost_max_usd | round(6) }}</td>
+        </tr>
+        <tr>
+          <td>outcome pass rate</td>
+          <td>{{ (comparison.before.metrics.outcome_pass_rate * 100) | round(1) }}%</td>
+          <td>{{ (comparison.after.metrics.outcome_pass_rate * 100) | round(1) }}%</td>
+        </tr>
+        <tr>
+          <td>trajectory pass rate</td>
+          <td>{{ (comparison.before.metrics.trajectory_pass_rate * 100) | round(1) }}%</td>
+          <td>{{ (comparison.after.metrics.trajectory_pass_rate * 100) | round(1) }}%</td>
+        </tr>
+        <tr>
+          <td><strong>outcome − trajectory gap</strong></td>
+          <td><strong>{{ comparison.before.metrics.outcome_minus_trajectory_gap | round(2) }}</strong></td>
+          <td><strong>{{ comparison.after.metrics.outcome_minus_trajectory_gap | round(2) }}</strong></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="card">
+    <h2>Right answer, wrong path</h2>
+    {% if gap_example %}
+    <div class="callout">
+      <p><span class="label">Question:</span> {{ gap_example.question }}</p>
+      <p><span class="label">What it did:</span>
+        <span class="tools">{{ gap_example.tool_names | join(' → ') }}</span>
+        ({{ gap_example.steps_taken }} steps, needed {{ gap_example.min_steps }})
+      </p>
+      <details open>
+        <summary>Tool calls made</summary>
+        <pre>{% for call in gap_example.tool_calls %}{{ call.name }}({{ call.arguments }})
+{% endfor %}</pre>
+      </details>
+      <p>
+        <span class="badge pass">OUTCOME: PASS</span>
+        <span class="badge fail">TRAJECTORY: FAIL — {{ gap_example.failure_mode }}</span>
+      </p>
+      <div class="stat-row">
+        <div class="stat"><b>${{ gap_example.total_cost_usd | round(6) }}</b>cost</div>
+        <div class="stat"><b>{{ "{:,}".format(gap_example.total_tokens) }}</b>tokens</div>
+        <div class="stat"><b>{{ gap_example.wall_seconds | round(1) }}s</b>wall time</div>
+      </div>
+    </div>
+    {% else %}
+    <p class="subtitle">No gap example loaded.</p>
+    {% endif %}
+  </div>
+
+  <div class="card">
+    <h2>Failure-mode regression check</h2>
+    <p class="subtitle">Every mode observed across all live runs, before the mitigation vs. after.</p>
+    <p class="subtitle">Verdict compares <em>rate</em>, not raw count — the before/after samples are 20 vs. 30 question-attempts, so a flat rate across a bigger sample must not read as "worse".</p>
+    <table>
+      <thead>
+        <tr><th>failure mode</th><th>before</th><th>after</th><th>verdict</th></tr>
+      </thead>
+      <tbody>
+        {% for m in modes %}
+        {% set rate_diff = m.after_rate - m.before_rate %}
+        <tr>
+          <td><code>{{ m.mode }}</code></td>
+          <td>{{ m.before }} <span class="metric-before">({{ (m.before_rate * 100) | round(1) }}%)</span></td>
+          <td>{{ m.after }} <span class="metric-before">({{ (m.after_rate * 100) | round(1) }}%)</span></td>
+          <td>
+            {% if m.before > 0 and m.after == 0 %}
+              <span class="badge fixed">FIXED</span>
+            {% elif m.before == 0 and m.after > 0 %}
+              <span class="badge new">NEW</span>
+            {% elif rate_diff > 0.01 %}
+              <span class="badge worse">WORSE</span>
+            {% elif rate_diff < -0.01 %}
+              <span class="badge improved">IMPROVED</span>
+            {% else %}
+              <span class="badge unchanged">UNCHANGED</span>
+            {% endif %}
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <div class="card">
+    <h2>Per-question breakdown</h2>
+    <p class="subtitle">One representative post-mitigation run, all 10 questions.</p>
+    <table>
+      <thead>
+        <tr><th>#</th><th class="qtext">Question</th><th>Tool path taken</th><th>Outcome</th><th>Trajectory</th><th>Failure mode</th></tr>
+      </thead>
+      <tbody>
+        {% for r in breakdown %}
+        <tr class="{{ 'pass' if r.trajectory_passed else 'fail' }}">
+          <td>{{ r.id }}</td>
+          <td class="qtext">{{ r.question }}</td>
+          <td class="tools">{{ r.tool_names | join(' → ') if r.tool_names else '(none)' }}</td>
+          <td><span class="badge {{ 'pass' if r.outcome_passed else 'fail' }}">{{ 'PASS' if r.outcome_passed else 'FAIL' }}</span></td>
+          <td><span class="badge {{ 'pass' if r.trajectory_passed else 'fail' }}">{{ 'PASS' if r.trajectory_passed else 'FAIL' }}</span></td>
+          <td>{{ r.failure_mode or '—' }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+</div>
+</body>
+</html>
