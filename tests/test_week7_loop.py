@@ -65,3 +65,53 @@ def test_agent_stops_cleanly_when_max_tokens_exceeded():
     result = run_agent("q", budget=tight_budget, client=client)
     assert result.terminated_by_budget is True
     assert "max_tokens" in result.budget_reason
+
+
+def test_agent_recovers_from_a_hallucinated_tool_name_instead_of_crashing():
+    # Real failure seen live on Groq: the model calls a tool ("open_file")
+    # that was never in TOOL_SCHEMAS, and Groq rejects the whole request
+    # with a 400 before any message reaches this loop at all.
+    bad_call_error = Exception(
+        "Error code: 400 - tool call validation failed: tool call validation "
+        "failed: attempted to call tool 'open_file' which was not in request.tools"
+    )
+    client = FakeGroqClient([bad_call_error, fake_response(content="The default mode is markdown.")])
+    result = run_agent("What is the default mode?", budget=_generous_budget(), client=client)
+    assert result.terminated_by_budget is False
+    assert result.answer == "The default mode is markdown."
+    # The recovery cost one extra iteration/API call over the happy path.
+    assert result.iterations == 2
+    assert len(client.calls) == 2
+    corrective_messages = [m for m in result.transcript if m.get("role") == "user" and "could not be used" in m["content"]]
+    assert len(corrective_messages) == 1
+
+
+def test_agent_recovers_from_an_unparseable_output_error():
+    # The other real crash seen live: Groq's output_parse_failed when the
+    # model emits raw reasoning text instead of a clean tool call or answer.
+    parse_error = Exception("Error code: 400 - Parsing failed. output_parse_failed")
+    client = FakeGroqClient([parse_error, fake_response(content="Answered on retry.")])
+    result = run_agent("q", budget=_generous_budget(), client=client)
+    assert result.answer == "Answered on retry."
+    assert result.iterations == 2
+
+
+def test_agent_still_raises_on_a_non_recoverable_error():
+    other_error = Exception("Error code: 500 - internal server error")
+    client = FakeGroqClient([other_error])
+    try:
+        run_agent("q", budget=_generous_budget(), client=client)
+        assert False, "expected the non-recoverable error to propagate"
+    except Exception as exc:
+        assert "internal server error" in str(exc)
+
+
+def test_agent_eventually_hits_budget_if_every_retry_keeps_failing():
+    # Bounded by the existing iteration budget rather than looping forever:
+    # a repeat offender degrades to a clean budget termination, not a hang.
+    bad_call_error = Exception("tool call validation failed: bad tool")
+    client = FakeGroqClient([bad_call_error, bad_call_error])
+    tight_budget = Budget(max_iterations=2, max_tokens=100_000, max_cost_usd=10.0, max_wall_seconds=60.0)
+    result = run_agent("q", budget=tight_budget, client=client)
+    assert result.terminated_by_budget is True
+    assert "max_iterations" in result.budget_reason

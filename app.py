@@ -8,6 +8,7 @@ from starlette.requests import Request
 from pydantic import BaseModel
 
 from eval.week7 import dashboard_data
+from eval.week8 import dashboard_data as week8_dashboard_data
 from rag.config import DOCUMENTS_DIR, GROQ_API_KEY, SUPPORTED_EXTENSIONS, TOP_K
 from rag.pipeline import RAGPipeline
 
@@ -39,6 +40,21 @@ async def week7_dashboard(request: Request):
             "verdict_html": dashboard_data.render_markdown(verdict_text) if verdict_text else None,
             "tool_diff": dashboard_data.load_text_file("tool_diff.md"),
             "budget_log": dashboard_data.load_text_file("budget_termination.log"),
+        },
+    )
+
+
+@app.get("/week8", response_class=HTMLResponse)
+async def week8_dashboard(request: Request):
+    return templates.TemplateResponse(
+        request,
+        "week8.html",
+        {
+            "comparison": week8_dashboard_data.load_comparison(),
+            "modes": week8_dashboard_data.load_mode_regression(),
+            "breakdown": week8_dashboard_data.load_breakdown(),
+            "gap_example": week8_dashboard_data.load_gap_example(),
+            "cases": {c["id"]: c for c in week8_dashboard_data.load_cases()},
         },
     )
 

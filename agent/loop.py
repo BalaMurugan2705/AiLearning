@@ -4,7 +4,22 @@ from dataclasses import dataclass, field
 
 from agent.budgets import Budget, BudgetExceeded, BudgetTracker
 from agent.config import AGENT_MODEL, price_for
-from agent.tools import TOOL_SCHEMAS, call_tool
+from agent.tools import TOOL_FUNCTIONS, TOOL_SCHEMAS, call_tool
+
+# Mitigation for the "hallucinated_tool" / "api_error" failure mode found by
+# eval/week8/trajectory_eval.py: this model, on Groq, occasionally (a)
+# invents a tool name that was never in TOOL_SCHEMAS (e.g. "open_file"
+# instead of search_docs), or (b) emits raw reasoning prose that Groq can't
+# parse as a turn at all. Both surface as the *entire* .create() call being
+# rejected with a 400 before any message ever reaches this loop -- previously
+# an unhandled exception that lost the whole run for one bad generation.
+# Re-planning: tell the model what went wrong and which tools actually
+# exist, then let it try again, instead of crashing.
+_RECOVERABLE_ERROR_SUBSTRINGS = ("tool call validation failed", "output_parse_failed")
+
+
+def _is_recoverable_turn_error(exc: Exception) -> bool:
+    return any(s in str(exc) for s in _RECOVERABLE_ERROR_SUBSTRINGS)
 
 SYSTEM_PROMPT = (
     "You help developers migrate code between GitHub API versions. You have "
@@ -60,9 +75,26 @@ def run_agent(question: str, budget: Budget, client=None) -> RunResult:
         except BudgetExceeded as exc:
             return _budget_result(tracker, exc.reason, transcript)
 
-        response = client.chat.completions.create(
-            model=AGENT_MODEL, messages=messages, tools=TOOL_SCHEMAS, tool_choice="auto"
-        )
+        try:
+            response = client.chat.completions.create(
+                model=AGENT_MODEL, messages=messages, tools=TOOL_SCHEMAS, tool_choice="auto"
+            )
+        except Exception as exc:
+            if not _is_recoverable_turn_error(exc):
+                raise
+            correction = {
+                "role": "user",
+                "content": (
+                    f"Your last turn could not be used ({exc}). The only tools "
+                    f"that exist are: {', '.join(TOOL_FUNCTIONS)}. Call one of "
+                    "them by its exact name, or answer in plain text with no "
+                    "tool call."
+                ),
+            }
+            messages.append(correction)
+            transcript.append(correction)
+            continue
+
         usage = response.usage
         price_in, price_out = price_for(AGENT_MODEL)
         try:
