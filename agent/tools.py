@@ -118,3 +118,23 @@ def call_tool(name: str, arguments: dict) -> str:
     if fn is None:
         return json.dumps({"error": f"Unknown tool: {name}"})
     return fn(**arguments)
+# Tools available to the Research Agent
+RESEARCH_TOOL_SCHEMAS = [
+    TOOL_SCHEMAS[0],  # search_docs
+]
+
+RESEARCH_TOOL_FUNCTIONS = {
+    "search_docs": search_docs,
+}
+
+
+# Tools available to the Package Agent
+PACKAGE_TOOL_SCHEMAS = [
+    TOOL_SCHEMAS[1],  # get_openapi_spec
+    TOOL_SCHEMAS[2],  # check_deprecation
+]
+
+PACKAGE_TOOL_FUNCTIONS = {
+    "get_openapi_spec": get_openapi_spec,
+    "check_deprecation": check_deprecation,
+}
