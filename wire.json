@@ -1,0 +1,456 @@
+[
+  {
+    "timestamp": "2026-09-29T14:30:14.439401+00:00",
+    "direction": "client_to_server",
+    "annotation": "MCP initialization handshake",
+    "raw_line": "{\"jsonrpc\":\"2.0\",\"id\":1,\"method\":\"initialize\",\"params\":{\"protocolVersion\":\"2025-11-25\",\"capabilities\":{},\"clientInfo\":{\"name\":\"wire-capture-client\",\"version\":\"1.0.0\"}}}",
+    "message": {
+      "jsonrpc": "2.0",
+      "id": 1,
+      "method": "initialize",
+      "params": {
+        "protocolVersion": "2025-11-25",
+        "capabilities": {},
+        "clientInfo": {
+          "name": "wire-capture-client",
+          "version": "1.0.0"
+        }
+      }
+    }
+  },
+  {
+    "timestamp": "2026-09-29T14:30:20.510082+00:00",
+    "direction": "server_to_client",
+    "annotation": "MCP initialization response",
+    "raw_line": "{\"jsonrpc\":\"2.0\",\"id\":1,\"result\":{\"protocolVersion\":\"2025-11-25\",\"capabilities\":{\"experimental\":{},\"prompts\":{\"listChanged\":false},\"resources\":{\"subscribe\":false,\"listChanged\":false},\"tools\":{\"listChanged\":false}},\"serverInfo\":{\"name\":\"package-registry-server\",\"version\":\"1.30.0\"}}}",
+    "message": {
+      "jsonrpc": "2.0",
+      "id": 1,
+      "result": {
+        "protocolVersion": "2025-11-25",
+        "capabilities": {
+          "experimental": {},
+          "prompts": {
+            "listChanged": false
+          },
+          "resources": {
+            "subscribe": false,
+            "listChanged": false
+          },
+          "tools": {
+            "listChanged": false
+          }
+        },
+        "serverInfo": {
+          "name": "package-registry-server",
+          "version": "1.30.0"
+        }
+      }
+    }
+  },
+  {
+    "timestamp": "2026-09-29T14:30:20.510982+00:00",
+    "direction": "client_to_server",
+    "annotation": "Initialization-complete notification",
+    "raw_line": "{\"jsonrpc\":\"2.0\",\"method\":\"notifications/initialized\"}",
+    "message": {
+      "jsonrpc": "2.0",
+      "method": "notifications/initialized"
+    }
+  },
+  {
+    "timestamp": "2026-09-29T14:30:20.511041+00:00",
+    "direction": "client_to_server",
+    "annotation": "Discovering server tools",
+    "raw_line": "{\"jsonrpc\":\"2.0\",\"id\":2,\"method\":\"tools/list\",\"params\":{}}",
+    "message": {
+      "jsonrpc": "2.0",
+      "id": 2,
+      "method": "tools/list",
+      "params": {}
+    }
+  },
+  {
+    "timestamp": "2026-09-29T14:30:20.514058+00:00",
+    "direction": "server_to_client",
+    "annotation": "Tool discovery response",
+    "raw_line": "{\"jsonrpc\":\"2.0\",\"id\":2,\"result\":{\"tools\":[{\"name\":\"get_package_api_spec\",\"description\":\"\\nReturn the exact API endpoint specification for a given version.\\n\\nArgs:\\n    endpoint: The endpoint identifier, such as create_issue.\\n    api_version: The API version to retrieve.\\n\",\"inputSchema\":{\"properties\":{\"endpoint\":{\"title\":\"Endpoint\",\"type\":\"string\"},\"api_version\":{\"title\":\"Api Version\",\"type\":\"string\"}},\"required\":[\"endpoint\",\"api_version\"],\"title\":\"get_package_api_specArguments\",\"type\":\"object\"},\"outputSchema\":{\"properties\":{\"result\":{\"title\":\"Result\",\"type\":\"string\"}},\"required\":[\"result\"],\"title\":\"get_package_api_specOutput\",\"type\":\"object\"}},{\"name\":\"check_package_deprecation\",\"description\":\"\\nCheck whether an API endpoint has deprecated fields.\\n\\nArgs:\\n    endpoint: The endpoint identifier to check.\\n    api_version: The API version to check against.\\n\",\"inputSchema\":{\"properties\":{\"endpoint\":{\"title\":\"Endpoint\",\"type\":\"string\"},\"api_version\":{\"title\":\"Api Version\",\"type\":\"string\"}},\"required\":[\"endpoint\",\"api_version\"],\"title\":\"check_package_deprecationArguments\",\"type\":\"object\"},\"outputSchema\":{\"properties\":{\"result\":{\"title\":\"Result\",\"type\":\"string\"}},\"required\":[\"result\"],\"title\":\"check_package_deprecationOutput\",\"type\":\"object\"}}]}}",
+    "message": {
+      "jsonrpc": "2.0",
+      "id": 2,
+      "result": {
+        "tools": [
+          {
+            "name": "get_package_api_spec",
+            "description": "\nReturn the exact API endpoint specification for a given version.\n\nArgs:\n    endpoint: The endpoint identifier, such as create_issue.\n    api_version: The API version to retrieve.\n",
+            "inputSchema": {
+              "properties": {
+                "endpoint": {
+                  "title": "Endpoint",
+                  "type": "string"
+                },
+                "api_version": {
+                  "title": "Api Version",
+                  "type": "string"
+                }
+              },
+              "required": [
+                "endpoint",
+                "api_version"
+              ],
+              "title": "get_package_api_specArguments",
+              "type": "object"
+            },
+            "outputSchema": {
+              "properties": {
+                "result": {
+                  "title": "Result",
+                  "type": "string"
+                }
+              },
+              "required": [
+                "result"
+              ],
+              "title": "get_package_api_specOutput",
+              "type": "object"
+            }
+          },
+          {
+            "name": "check_package_deprecation",
+            "description": "\nCheck whether an API endpoint has deprecated fields.\n\nArgs:\n    endpoint: The endpoint identifier to check.\n    api_version: The API version to check against.\n",
+            "inputSchema": {
+              "properties": {
+                "endpoint": {
+                  "title": "Endpoint",
+                  "type": "string"
+                },
+                "api_version": {
+                  "title": "Api Version",
+                  "type": "string"
+                }
+              },
+              "required": [
+                "endpoint",
+                "api_version"
+              ],
+              "title": "check_package_deprecationArguments",
+              "type": "object"
+            },
+            "outputSchema": {
+              "properties": {
+                "result": {
+                  "title": "Result",
+                  "type": "string"
+                }
+              },
+              "required": [
+                "result"
+              ],
+              "title": "check_package_deprecationOutput",
+              "type": "object"
+            }
+          }
+        ]
+      }
+    }
+  },
+  {
+    "timestamp": "2026-09-29T14:30:20.514094+00:00",
+    "direction": "client_to_server",
+    "annotation": "Calling MCP tool: get_package_api_spec",
+    "raw_line": "{\"jsonrpc\":\"2.0\",\"id\":3,\"method\":\"tools/call\",\"params\":{\"name\":\"get_package_api_spec\",\"arguments\":{\"endpoint\":\"create_issue\",\"api_version\":\"2025-06-01\"}}}",
+    "message": {
+      "jsonrpc": "2.0",
+      "id": 3,
+      "method": "tools/call",
+      "params": {
+        "name": "get_package_api_spec",
+        "arguments": {
+          "endpoint": "create_issue",
+          "api_version": "2025-06-01"
+        }
+      }
+    }
+  },
+  {
+    "timestamp": "2026-09-29T14:30:20.515980+00:00",
+    "direction": "server_to_client",
+    "annotation": "Tool execution response: get_package_api_spec",
+    "raw_line": "{\"jsonrpc\":\"2.0\",\"id\":3,\"result\":{\"content\":[{\"type\":\"text\",\"text\":\"{\\\"endpoint\\\": \\\"create_issue\\\", \\\"method\\\": \\\"POST\\\", \\\"path\\\": \\\"/repos/{owner}/{repo}/issues\\\", \\\"api_version\\\": \\\"2025-06-01\\\", \\\"params\\\": [{\\\"name\\\": \\\"owner\\\", \\\"type\\\": \\\"string\\\", \\\"required\\\": true, \\\"default\\\": null, \\\"description\\\": \\\"Path parameter. The account owner of the repository.\\\"}, {\\\"name\\\": \\\"repo\\\", \\\"type\\\": \\\"string\\\", \\\"required\\\": true, \\\"default\\\": null, \\\"description\\\": \\\"Path parameter. The name of the repository.\\\"}, {\\\"name\\\": \\\"title\\\", \\\"type\\\": \\\"string or integer\\\", \\\"required\\\": true, \\\"default\\\": null, \\\"description\\\": \\\"The title of the issue.\\\"}, {\\\"name\\\": \\\"body\\\", \\\"type\\\": \\\"string\\\", \\\"required\\\": false, \\\"default\\\": null, \\\"description\\\": \\\"The contents of the issue.\\\"}, {\\\"name\\\": \\\"assignees\\\", \\\"type\\\": \\\"array of strings\\\", \\\"required\\\": false, \\\"default\\\": [], \\\"description\\\": \\\"Logins for the users assigned to this issue. Replaces the deprecated assignee field.\\\"}, {\\\"name\\\": \\\"labels\\\", \\\"type\\\": \\\"array of strings\\\", \\\"required\\\": false, \\\"default\\\": [], \\\"description\\\": \\\"Labels to associate with this issue.\\\"}, {\\\"name\\\": \\\"type\\\", \\\"type\\\": \\\"string\\\", \\\"required\\\": false, \\\"default\\\": null, \\\"description\\\": \\\"The name of the issue type to set on creation. Did not exist in the prior version.\\\"}], \\\"x_source\\\": \\\"github_combined_reference.pdf p5\\\"}\"}],\"structuredContent\":{\"result\":\"{\\\"endpoint\\\": \\\"create_issue\\\", \\\"method\\\": \\\"POST\\\", \\\"path\\\": \\\"/repos/{owner}/{repo}/issues\\\", \\\"api_version\\\": \\\"2025-06-01\\\", \\\"params\\\": [{\\\"name\\\": \\\"owner\\\", \\\"type\\\": \\\"string\\\", \\\"required\\\": true, \\\"default\\\": null, \\\"description\\\": \\\"Path parameter. The account owner of the repository.\\\"}, {\\\"name\\\": \\\"repo\\\", \\\"type\\\": \\\"string\\\", \\\"required\\\": true, \\\"default\\\": null, \\\"description\\\": \\\"Path parameter. The name of the repository.\\\"}, {\\\"name\\\": \\\"title\\\", \\\"type\\\": \\\"string or integer\\\", \\\"required\\\": true, \\\"default\\\": null, \\\"description\\\": \\\"The title of the issue.\\\"}, {\\\"name\\\": \\\"body\\\", \\\"type\\\": \\\"string\\\", \\\"required\\\": false, \\\"default\\\": null, \\\"description\\\": \\\"The contents of the issue.\\\"}, {\\\"name\\\": \\\"assignees\\\", \\\"type\\\": \\\"array of strings\\\", \\\"required\\\": false, \\\"default\\\": [], \\\"description\\\": \\\"Logins for the users assigned to this issue. Replaces the deprecated assignee field.\\\"}, {\\\"name\\\": \\\"labels\\\", \\\"type\\\": \\\"array of strings\\\", \\\"required\\\": false, \\\"default\\\": [], \\\"description\\\": \\\"Labels to associate with this issue.\\\"}, {\\\"name\\\": \\\"type\\\", \\\"type\\\": \\\"string\\\", \\\"required\\\": false, \\\"default\\\": null, \\\"description\\\": \\\"The name of the issue type to set on creation. Did not exist in the prior version.\\\"}], \\\"x_source\\\": \\\"github_combined_reference.pdf p5\\\"}\"},\"isError\":false}}",
+    "message": {
+      "jsonrpc": "2.0",
+      "id": 3,
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "{\"endpoint\": \"create_issue\", \"method\": \"POST\", \"path\": \"/repos/{owner}/{repo}/issues\", \"api_version\": \"2025-06-01\", \"params\": [{\"name\": \"owner\", \"type\": \"string\", \"required\": true, \"default\": null, \"description\": \"Path parameter. The account owner of the repository.\"}, {\"name\": \"repo\", \"type\": \"string\", \"required\": true, \"default\": null, \"description\": \"Path parameter. The name of the repository.\"}, {\"name\": \"title\", \"type\": \"string or integer\", \"required\": true, \"default\": null, \"description\": \"The title of the issue.\"}, {\"name\": \"body\", \"type\": \"string\", \"required\": false, \"default\": null, \"description\": \"The contents of the issue.\"}, {\"name\": \"assignees\", \"type\": \"array of strings\", \"required\": false, \"default\": [], \"description\": \"Logins for the users assigned to this issue. Replaces the deprecated assignee field.\"}, {\"name\": \"labels\", \"type\": \"array of strings\", \"required\": false, \"default\": [], \"description\": \"Labels to associate with this issue.\"}, {\"name\": \"type\", \"type\": \"string\", \"required\": false, \"default\": null, \"description\": \"The name of the issue type to set on creation. Did not exist in the prior version.\"}], \"x_source\": \"github_combined_reference.pdf p5\"}"
+          }
+        ],
+        "structuredContent": {
+          "result": "{\"endpoint\": \"create_issue\", \"method\": \"POST\", \"path\": \"/repos/{owner}/{repo}/issues\", \"api_version\": \"2025-06-01\", \"params\": [{\"name\": \"owner\", \"type\": \"string\", \"required\": true, \"default\": null, \"description\": \"Path parameter. The account owner of the repository.\"}, {\"name\": \"repo\", \"type\": \"string\", \"required\": true, \"default\": null, \"description\": \"Path parameter. The name of the repository.\"}, {\"name\": \"title\", \"type\": \"string or integer\", \"required\": true, \"default\": null, \"description\": \"The title of the issue.\"}, {\"name\": \"body\", \"type\": \"string\", \"required\": false, \"default\": null, \"description\": \"The contents of the issue.\"}, {\"name\": \"assignees\", \"type\": \"array of strings\", \"required\": false, \"default\": [], \"description\": \"Logins for the users assigned to this issue. Replaces the deprecated assignee field.\"}, {\"name\": \"labels\", \"type\": \"array of strings\", \"required\": false, \"default\": [], \"description\": \"Labels to associate with this issue.\"}, {\"name\": \"type\", \"type\": \"string\", \"required\": false, \"default\": null, \"description\": \"The name of the issue type to set on creation. Did not exist in the prior version.\"}], \"x_source\": \"github_combined_reference.pdf p5\"}"
+        },
+        "isError": false
+      }
+    }
+  },
+  {
+    "timestamp": "2026-09-29T14:53:38.199456+00:00",
+    "direction": "client_to_server",
+    "annotation": "MCP session initialized; SDK handles the handshake",
+    "message": {
+      "method": "initialize",
+      "server": "/Users/balamurugan/Documents/Projects/pythom/AiLearning/agent/mcp_servers/docs_server.py"
+    }
+  },
+  {
+    "timestamp": "2026-09-29T14:53:38.201799+00:00",
+    "direction": "client_to_server",
+    "annotation": "Calling MCP tool: search_documentation",
+    "message": {
+      "method": "tools/call",
+      "params": {
+        "name": "search_documentation",
+        "arguments": {
+          "k": 5,
+          "query": "create_issue endpoint API parameters"
+        }
+      }
+    }
+  },
+  {
+    "timestamp": "2026-09-29T14:53:46.035706+00:00",
+    "direction": "server_to_client",
+    "annotation": "Tool execution response: search_documentation",
+    "message": {
+      "result": {
+        "isError": false,
+        "content": [
+          "{\"results\": [{\"source_file\": \"input_files/developer_documentations/github_combined_reference.pdf\", \"text\": \"Create an issue\\nPOST /repos/{owner}/{repo}/issues\\nAPI version 2025-06-01\\nCreates an issue on the specified repository . Any user with pull access can create one. Starting in this version, assignee is deprecated in favor of assignees (array), and a new optional\\ntype field lets you set the issue type at creation time instead of via a separate call. Path parameters\\nName T ype Description\\nowner string The account owner of the repository . repo string The name of the repository . Body parameters\\nName\"}, {\"source_file\": \"input_files/developer_documentations/github_combined_reference.pdf\", \"text\": \"s assigned\\nto this issue. Replaces the\\ndeprecated assi\\ngnee field. labels array of strings No [] Labels to\\nassociate with\\nthis issue. type string No null The name of the\\nissue type to set\\non creation.\\n\\ncurl -L -X POST \\\\\\n-H \\\"X-GitHub-Api-Version: 2025-06-01\\\" \\\\\\nhttps://api.github.com/repos/octocat/Hello-World/issues \\\\\\n-d '{\\\"title\\\":\\\"Found a bug\\\",\\\"assignees\\\":[\\\"octocat\\\"],\\\"type\\\":\\\"Bug\\\"}'\\nPrevious version (2022-11-28)\\nThe prior version of this endpoint only accepted a single assignee (string) rather tha\"}, {\"source_file\": \"input_files/developer_documentations/github_combined_reference.pdf\", \"text\": \"Create an issue\\nPOST /repos/{owner}/{repo}/issues\\nAny user with pull access to a repository can create an issue.\\nParameters\\nName In T ype Description\\nowner path string Required. The\\naccount owner of the\\nrepository .\\nrepo path string Required. The\\nname of the\\nrepository without\\nthe .git extension.\\ntitle body string or integer Required. The title\\nof the issue.\\nbody body string The contents of the\\nissue.\\nassignee body string Login for the user\\nthat this issue should\\nbe assigned to.\\nlabels body arra\"}, {\"source_file\": \"input_files/developer_documentations/github_combined_reference.pdf\", \"text\": \"GitHub REST API Reference - Combined (v2022-11-28\\nand v2025-06-01)\\nContents\\nRender a Markdown document 1\\nRender a Markdown document 3\\nCreate an issue 4\\nCreate an issue 5\\nCreate a pull request 6\\nCreate a pull request 7\\nCreate a repository for the authenticated user 8\\nCreate a repository for the authenticated user 9\\nCreate a release 10\\nCreate a release 12\\nRender a Markdown document\\nUse the REST API to render a Markdown document as an HTML page or as raw text.\\nThis endpoint accepts a JSON body desc\"}, {\"source_file\": \"input_files/developer_documentations/github_combined_reference.pdf\", \"text\": \"Create a repository for the authenticated user\\nPOST /user/repos \\u2014 API version 2025-06-01\\nWhat changed\\nAs of this version, has_issues defaults to true only for public repositories; private repositories\\nnow default has_issues to false unless explicitly set. A new visibility enum field supersedes\\nthe boolean private for organizations offering internal repositories, though private continues\\nto work for personal accounts. Parameters\\n\\u2022 name (string, required) \\u2014 Repository name. \\u2022 description (string, \"}]}"
+        ]
+      }
+    }
+  },
+  {
+    "timestamp": "2026-09-29T14:53:51.752297+00:00",
+    "direction": "client_to_server",
+    "annotation": "MCP session initialized; SDK handles the handshake",
+    "message": {
+      "method": "initialize",
+      "server": "/Users/balamurugan/Documents/Projects/pythom/AiLearning/agent/mcp_servers/package_server.py"
+    }
+  },
+  {
+    "timestamp": "2026-09-29T14:53:51.753174+00:00",
+    "direction": "client_to_server",
+    "annotation": "Calling MCP tool: check_package_deprecation",
+    "message": {
+      "method": "tools/call",
+      "params": {
+        "name": "check_package_deprecation",
+        "arguments": {
+          "api_version": "2025-06-01",
+          "endpoint": "create_issue"
+        }
+      }
+    }
+  },
+  {
+    "timestamp": "2026-09-29T14:53:51.759276+00:00",
+    "direction": "server_to_client",
+    "annotation": "Tool execution response: check_package_deprecation",
+    "message": {
+      "result": {
+        "isError": false,
+        "content": [
+          "{\"endpoint\": \"create_issue\", \"api_version\": \"2025-06-01\", \"deprecated\": true, \"id\": \"issue-assignee-singular\", \"label\": \"single `assignee` string field\", \"kind\": \"field_replacement\", \"deprecated_in\": \"2025-06-01\", \"replacement\": \"assignees (array of strings)\", \"detail\": \"assignee is deprecated in favor of assignees, which takes an array of user logins.\", \"source\": \"github_combined_reference.pdf p5\"}"
+        ]
+      }
+    }
+  },
+  {
+    "timestamp": "2026-09-29T14:53:58.546885+00:00",
+    "direction": "client_to_server",
+    "annotation": "MCP session initialized; SDK handles the handshake",
+    "message": {
+      "method": "initialize",
+      "server": "/Users/balamurugan/Documents/Projects/pythom/AiLearning/agent/mcp_servers/docs_server.py"
+    }
+  },
+  {
+    "timestamp": "2026-09-29T14:53:58.547858+00:00",
+    "direction": "client_to_server",
+    "annotation": "Calling MCP tool: search_documentation",
+    "message": {
+      "method": "tools/call",
+      "params": {
+        "name": "search_documentation",
+        "arguments": {
+          "k": 10,
+          "query": "Create an issue POST /repos/{owner}/{repo}/issues body parameters"
+        }
+      }
+    }
+  },
+  {
+    "timestamp": "2026-09-29T14:54:05.824763+00:00",
+    "direction": "server_to_client",
+    "annotation": "Tool execution response: search_documentation",
+    "message": {
+      "result": {
+        "isError": false,
+        "content": [
+          "{\"results\": [{\"source_file\": \"input_files/developer_documentations/github_combined_reference.pdf\", \"text\": \"Create an issue\\nPOST /repos/{owner}/{repo}/issues\\nAny user with pull access to a repository can create an issue.\\nParameters\\nName In T ype Description\\nowner path string Required. The\\naccount owner of the\\nrepository .\\nrepo path string Required. The\\nname of the\\nrepository without\\nthe .git extension.\\ntitle body string or integer Required. The title\\nof the issue.\\nbody body string The contents of the\\nissue.\\nassignee body string Login for the user\\nthat this issue should\\nbe assigned to.\\nlabels body arra\"}, {\"source_file\": \"input_files/developer_documentations/github_combined_reference.pdf\", \"text\": \"Create an issue\\nPOST /repos/{owner}/{repo}/issues\\nAPI version 2025-06-01\\nCreates an issue on the specified repository . Any user with pull access can create one. Starting in this version, assignee is deprecated in favor of assignees (array), and a new optional\\ntype field lets you set the issue type at creation time instead of via a separate call. Path parameters\\nName T ype Description\\nowner string The account owner of the repository . repo string The name of the repository . Body parameters\\nName\"}, {\"source_file\": \"input_files/developer_documentations/github_combined_reference.pdf\", \"text\": \"s assigned\\nto this issue. Replaces the\\ndeprecated assi\\ngnee field. labels array of strings No [] Labels to\\nassociate with\\nthis issue. type string No null The name of the\\nissue type to set\\non creation.\\n\\ncurl -L -X POST \\\\\\n-H \\\"X-GitHub-Api-Version: 2025-06-01\\\" \\\\\\nhttps://api.github.com/repos/octocat/Hello-World/issues \\\\\\n-d '{\\\"title\\\":\\\"Found a bug\\\",\\\"assignees\\\":[\\\"octocat\\\"],\\\"type\\\":\\\"Bug\\\"}'\\nPrevious version (2022-11-28)\\nThe prior version of this endpoint only accepted a single assignee (string) rather tha\"}, {\"source_file\": \"input_files/developer_documentations/github_combined_reference.pdf\", \"text\": \"GitHub REST API Reference - Combined (v2022-11-28\\nand v2025-06-01)\\nContents\\nRender a Markdown document 1\\nRender a Markdown document 3\\nCreate an issue 4\\nCreate an issue 5\\nCreate a pull request 6\\nCreate a pull request 7\\nCreate a repository for the authenticated user 8\\nCreate a repository for the authenticated user 9\\nCreate a release 10\\nCreate a release 12\\nRender a Markdown document\\nUse the REST API to render a Markdown document as an HTML page or as raw text.\\nThis endpoint accepts a JSON body desc\"}, {\"source_file\": \"input_files/developer_documentations/github_combined_reference.pdf\", \"text\": \"uto-merge settings also behaved differently: a draft PR could not have auto-merge\\nenabled until explicitly marked ready for review, whereas this version allows auto-merge to be\\npre-armed on a draft. 7\\n\\nCreate a repository for the authenticated user\\nPOST /user/repos\\nCreates a new repository for the authenticated user.\\nOAuth scope required: public_repo or repo scope.\\nParameter T ype Required Description\\nname string yes The name of the\\nrepository .\\ndescription string no A short description of\\nthe r\"}, {\"source_file\": \"input_files/developer_documentations/github_combined_reference.pdf\", \"text\": \"Create a pull request\\nDraft pull requests are available in public repositories with GitHub Free and GitHub Free for\\norganizations, and in public and private repositories with GitHub Pro, GitHub T eam and GitHub\\nEnterprise Cloud. For more information, see the GitHub products page. T o create a pull request you provide a title, base and head branches, and optionally a body\\ndescribing the change. Endpoint: POST /repos/{owner}/{repo}/pulls\\nParameters:\\n\\u2022 title \\u2014 string \\u2014 required \\u2014 The title of the n\"}, {\"source_file\": \"input_files/developer_documentations/github_combined_reference.pdf\", \"text\": \"Create a pull request\\nVersion 2025-06-01 \\u00b7 reference\\nOverview\\nOpens a pull request against the given repository . Since 2025-06-01, the API supports speci-\\nfying maintainer_can_modify at creation time (previously this required a follow-up PATCH call),\\nand draft pull requests can be created directly as ready-for-review by omitting the field entirely\\n\\u2014 its default has not changed but its interaction with auto-merge settings has. Path parameters\\nName T ype\\nowner string\\nrepo string\\nRequest body\\nFiel\"}, {\"source_file\": \"input_files/developer_documentations/github_combined_reference.pdf\", \"text\": \"Create a repository for the authenticated user\\nPOST /user/repos \\u2014 API version 2025-06-01\\nWhat changed\\nAs of this version, has_issues defaults to true only for public repositories; private repositories\\nnow default has_issues to false unless explicitly set. A new visibility enum field supersedes\\nthe boolean private for organizations offering internal repositories, though private continues\\nto work for personal accounts. Parameters\\n\\u2022 name (string, required) \\u2014 Repository name. \\u2022 description (string, \"}, {\"source_file\": \"input_files/developer_documentations/github_combined_reference.pdf\", \"text\": \" release creation. Name T ype Required Description\\ntag_name string Y es The name of the tag. target_commitish string No Specifies the\\ncommitish value that\\ndetermines where\\nthe Git tag is created\\nfrom.\\n\\nDefault: the\\nrepository\\u2019s default\\nbranch. name string No The name of the\\nrelease. body string No T ext describing the\\ncontents of the tag. draft boolean No true makes the\\nrelease a draft. Default: false. prerelease boolean No true identifies the\\nrelease as a\\nprerelease. Default: f\\nalse. 10\\n\\nName T\"}, {\"source_file\": \"input_files/developer_documentations/github_combined_reference.pdf\", \"text\": \"zations offering \\u201cinternal\\u201d visibility had no way to request it through this endpoint. has_iss\\nues also defaulted to true unconditionally, regardless of whether the repository was public or\\nprivate. 9\\n\\nCreate a release\\nUsers with push access to the repository can create a release. This endpoint triggers notifications. Creating content too quickly using this endpoint may result\\nin secondary rate limiting. Parameters for \\u201cCreate a release\\u201d\\nPath parameters\\nName T ype Description\\nowner string The ac\"}]}"
+        ]
+      }
+    }
+  },
+  {
+    "timestamp": "2026-09-29T14:57:50.560577+00:00",
+    "direction": "client_to_server",
+    "annotation": "MCP session initialized; SDK handles the handshake",
+    "message": {
+      "method": "initialize",
+      "server": "/Users/balamurugan/Documents/Projects/pythom/AiLearning/agent/mcp_servers/package_server.py"
+    }
+  },
+  {
+    "timestamp": "2026-09-29T14:57:50.562463+00:00",
+    "direction": "client_to_server",
+    "annotation": "Calling MCP tool: get_package_api_spec",
+    "message": {
+      "method": "tools/call",
+      "params": {
+        "name": "get_package_api_spec",
+        "arguments": {
+          "api_version": "2025-06-01",
+          "endpoint": "create_issue"
+        }
+      }
+    }
+  },
+  {
+    "timestamp": "2026-09-29T14:57:50.569948+00:00",
+    "direction": "server_to_client",
+    "annotation": "Tool execution response: get_package_api_spec",
+    "message": {
+      "result": {
+        "isError": false,
+        "content": [
+          "{\"endpoint\": \"create_issue\", \"method\": \"POST\", \"path\": \"/repos/{owner}/{repo}/issues\", \"api_version\": \"2025-06-01\", \"params\": [{\"name\": \"owner\", \"type\": \"string\", \"required\": true, \"default\": null, \"description\": \"Path parameter. The account owner of the repository.\"}, {\"name\": \"repo\", \"type\": \"string\", \"required\": true, \"default\": null, \"description\": \"Path parameter. The name of the repository.\"}, {\"name\": \"title\", \"type\": \"string or integer\", \"required\": true, \"default\": null, \"description\": \"The title of the issue.\"}, {\"name\": \"body\", \"type\": \"string\", \"required\": false, \"default\": null, \"description\": \"The contents of the issue.\"}, {\"name\": \"assignees\", \"type\": \"array of strings\", \"required\": false, \"default\": [], \"description\": \"Logins for the users assigned to this issue. Replaces the deprecated assignee field.\"}, {\"name\": \"labels\", \"type\": \"array of strings\", \"required\": false, \"default\": [], \"description\": \"Labels to associate with this issue.\"}, {\"name\": \"type\", \"type\": \"string\", \"required\": false, \"default\": null, \"description\": \"The name of the issue type to set on creation. Did not exist in the prior version.\"}], \"x_source\": \"github_combined_reference.pdf p5\"}"
+        ]
+      }
+    }
+  },
+  {
+    "timestamp": "2026-09-29T14:57:55.509090+00:00",
+    "direction": "client_to_server",
+    "annotation": "MCP session initialized; SDK handles the handshake",
+    "message": {
+      "method": "initialize",
+      "server": "/Users/balamurugan/Documents/Projects/pythom/AiLearning/agent/mcp_servers/package_server.py"
+    }
+  },
+  {
+    "timestamp": "2026-09-29T14:57:55.510566+00:00",
+    "direction": "client_to_server",
+    "annotation": "Calling MCP tool: check_package_deprecation",
+    "message": {
+      "method": "tools/call",
+      "params": {
+        "name": "check_package_deprecation",
+        "arguments": {
+          "api_version": "2025-06-01",
+          "endpoint": "create_issue"
+        }
+      }
+    }
+  },
+  {
+    "timestamp": "2026-09-29T14:57:55.517051+00:00",
+    "direction": "server_to_client",
+    "annotation": "Tool execution response: check_package_deprecation",
+    "message": {
+      "result": {
+        "isError": false,
+        "content": [
+          "{\"endpoint\": \"create_issue\", \"api_version\": \"2025-06-01\", \"deprecated\": true, \"id\": \"issue-assignee-singular\", \"label\": \"single `assignee` string field\", \"kind\": \"field_replacement\", \"deprecated_in\": \"2025-06-01\", \"replacement\": \"assignees (array of strings)\", \"detail\": \"assignee is deprecated in favor of assignees, which takes an array of user logins.\", \"source\": \"github_combined_reference.pdf p5\"}"
+        ]
+      }
+    }
+  },
+  {
+    "timestamp": "2026-09-29T15:06:15.288860+00:00",
+    "direction": "client_to_server",
+    "annotation": "MCP session initialized; SDK handles the handshake",
+    "message": {
+      "method": "initialize",
+      "server": "/Users/balamurugan/Documents/Projects/pythom/AiLearning/agent/mcp_servers/package_server.py"
+    }
+  },
+  {
+    "timestamp": "2026-09-29T15:06:15.290618+00:00",
+    "direction": "client_to_server",
+    "annotation": "Calling MCP tool: get_package_api_spec",
+    "message": {
+      "method": "tools/call",
+      "params": {
+        "name": "get_package_api_spec",
+        "arguments": {
+          "api_version": "2025-06-01",
+          "endpoint": "create_issue"
+        }
+      }
+    }
+  },
+  {
+    "timestamp": "2026-09-29T15:06:15.297606+00:00",
+    "direction": "server_to_client",
+    "annotation": "Tool execution response: get_package_api_spec",
+    "message": {
+      "result": {
+        "isError": false,
+        "content": [
+          "{\"endpoint\": \"create_issue\", \"method\": \"POST\", \"path\": \"/repos/{owner}/{repo}/issues\", \"api_version\": \"2025-06-01\", \"params\": [{\"name\": \"owner\", \"type\": \"string\", \"required\": true, \"default\": null, \"description\": \"Path parameter. The account owner of the repository.\"}, {\"name\": \"repo\", \"type\": \"string\", \"required\": true, \"default\": null, \"description\": \"Path parameter. The name of the repository.\"}, {\"name\": \"title\", \"type\": \"string or integer\", \"required\": true, \"default\": null, \"description\": \"The title of the issue.\"}, {\"name\": \"body\", \"type\": \"string\", \"required\": false, \"default\": null, \"description\": \"The contents of the issue.\"}, {\"name\": \"assignees\", \"type\": \"array of strings\", \"required\": false, \"default\": [], \"description\": \"Logins for the users assigned to this issue. Replaces the deprecated assignee field.\"}, {\"name\": \"labels\", \"type\": \"array of strings\", \"required\": false, \"default\": [], \"description\": \"Labels to associate with this issue.\"}, {\"name\": \"type\", \"type\": \"string\", \"required\": false, \"default\": null, \"description\": \"The name of the issue type to set on creation. Did not exist in the prior version.\"}], \"x_source\": \"github_combined_reference.pdf p5\"}"
+        ]
+      }
+    }
+  },
+  {
+    "timestamp": "2026-09-29T15:06:21.014562+00:00",
+    "direction": "client_to_server",
+    "annotation": "MCP session initialized; SDK handles the handshake",
+    "message": {
+      "method": "initialize",
+      "server": "/Users/balamurugan/Documents/Projects/pythom/AiLearning/agent/mcp_servers/package_server.py"
+    }
+  },
+  {
+    "timestamp": "2026-09-29T15:06:21.015756+00:00",
+    "direction": "client_to_server",
+    "annotation": "Calling MCP tool: check_package_deprecation",
+    "message": {
+      "method": "tools/call",
+      "params": {
+        "name": "check_package_deprecation",
+        "arguments": {
+          "api_version": "2025-06-01",
+          "endpoint": "create_issue"
+        }
+      }
+    }
+  },
+  {
+    "timestamp": "2026-09-29T15:06:21.021381+00:00",
+    "direction": "server_to_client",
+    "annotation": "Tool execution response: check_package_deprecation",
+    "message": {
+      "result": {
+        "isError": false,
+        "content": [
+          "{\"endpoint\": \"create_issue\", \"api_version\": \"2025-06-01\", \"deprecated\": true, \"id\": \"issue-assignee-singular\", \"label\": \"single `assignee` string field\", \"kind\": \"field_replacement\", \"deprecated_in\": \"2025-06-01\", \"replacement\": \"assignees (array of strings)\", \"detail\": \"assignee is deprecated in favor of assignees, which takes an array of user logins.\", \"source\": \"github_combined_reference.pdf p5\"}"
+        ]
+      }
+    }
+  }
+]
