@@ -1,9 +1,17 @@
 import json
+import re
 
 from agent.corpus import get_pipeline, search_docs_raw
 from agent.spec import API_VERSIONS, ENDPOINT_NAMES, find_deprecation, get_endpoint_spec
 
 _pipeline = None
+
+# GitHub API versions look like YYYY-MM-DD. Catching this in the query lets
+# us tell "asked about a version we don't have" apart from "asked something
+# broad" -- without it, search_docs silently hands back the nearest
+# semantic match for a version that was never indexed, and the model has no
+# way to know the chunk it got doesn't actually apply to that version.
+_VERSION_PATTERN = re.compile(r"\b\d{4}-\d{2}-\d{2}\b")
 
 
 def _get_or_build_pipeline():
@@ -14,6 +22,20 @@ def _get_or_build_pipeline():
 
 
 def search_docs(query: str, k: int = 4) -> str:
+    requested_versions = set(_VERSION_PATTERN.findall(query))
+    unknown_versions = requested_versions - set(API_VERSIONS)
+    if unknown_versions:
+        return json.dumps({
+            "results": [],
+            "error": (
+                f"No documentation indexed for API version(s) "
+                f"{', '.join(sorted(unknown_versions))}. Latest indexed "
+                f"version is {max(API_VERSIONS)}. Known indexed versions: "
+                f"{', '.join(API_VERSIONS)}. Re-ask using one of the known "
+                "versions -- do not assume a nearby version's docs apply."
+            ),
+        })
+
     results = search_docs_raw(_get_or_build_pipeline(), query, k=k)
     trimmed = [
         {"source_file": r["metadata"].get("source_file", "unknown"), "text": r["text"][:500]}

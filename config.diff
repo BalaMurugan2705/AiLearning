@@ -1,0 +1,10 @@
+--- /tmp/mcp_config_before.json	2026-10-01 14:50:33
++++ /tmp/mcp_config_after.json	2026-10-01 14:50:33
+@@ -1,5 +1,6 @@
+ {
+   "mcp_servers": [
+-    "agent/mcp_servers/docs_server.py"
++    "agent/mcp_servers/docs_server.py",
++    "agent/mcp_servers/package_server.py"
+   ]
+ }

@@ -1,6 +1,9 @@
 # Import Path so we can construct the MCP server's location reliably.
 from pathlib import Path
 
+# Import json to read the MCP server list from the external config file.
+import json
+
 # Import Budget to limit the agent's token usage and execution cost.
 from agent.budgets import Budget
 
@@ -9,18 +12,18 @@ from agent.specialists import ResearchAgent
 # Import os so this test can enable optional host-level tool capture.
 import os
 
-# Import Path so the capture file is written to the project root.
-from pathlib import Path
-
 # Resolve the project root so the server path works from any directory.
 PROJECT_ROOT = Path(__file__).resolve().parent
 
-# Point to the documentation MCP server that exposes search_documentation.
-# Configure both independent MCP servers for dynamic tool discovery.
-MCP_SERVERS = [
-    str(PROJECT_ROOT / "agent" / "mcp_servers" / "docs_server.py"),
-    str(PROJECT_ROOT / "agent" / "mcp_servers" / "package_server.py"),
-]
+# The set of MCP servers the agent connects to lives entirely in
+# mcp_config.json. Adding/removing a server is a config edit here -- it
+# never requires touching agent/specialists.py or agent/mcp_adapter.py,
+# which discover tools dynamically from whatever servers are listed.
+with open(PROJECT_ROOT / "mcp_config.json", encoding="utf-8") as config_file:
+    MCP_SERVERS = [
+        str(PROJECT_ROOT / server_path)
+        for server_path in json.load(config_file)["mcp_servers"]
+    ]
 
 # Create a research agent that discovers tools from both MCP servers.
 

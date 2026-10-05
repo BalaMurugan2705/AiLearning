@@ -1,0 +1,74 @@
+{
+  "question": "What are the body parameters for create_issue in API version 2026-01-01, and is anything deprecated at that version?",
+  "answer": null,
+  "transcript": [
+    {
+      "role": "system",
+      "content": "You help developers migrate code between GitHub API versions. Only state facts a tool call returned to you -- never guess a parameter name, default, or deprecation status."
+    },
+    {
+      "role": "user",
+      "content": "What are the body parameters for create_issue in API version 2026-01-01, and is anything deprecated at that version?"
+    },
+    {
+      "role": "assistant",
+      "content": null,
+      "tool_calls": [
+        {
+          "id": "fc_467410b5-7701-4cc5-9cd0-b245627de8e7",
+          "type": "function",
+          "function": {
+            "name": "search_documentation",
+            "arguments": "{\"k\":5,\"query\":\"GitHub API 2026-01-01 create_issue body parameters\"}"
+          }
+        }
+      ]
+    },
+    {
+      "role": "tool",
+      "tool_call_id": "fc_467410b5-7701-4cc5-9cd0-b245627de8e7",
+      "name": "search_documentation",
+      "content": "{\"content\": [\"{\\\"results\\\": [{\\\"source_file\\\": \\\"input_files/developer_documentations/github_combined_reference.pdf\\\", \\\"text\\\": \\\"GitHub REST API Reference - Combined (v2022-11-28\\\\nand v2025-06-01)\\\\nContents\\\\nRender a Markdown document 1\\\\nRender a Markdown document 3\\\\nCreate an issue 4\\\\nCreate an issue 5\\\\nCreate a pull request 6\\\\nCreate a pull request 7\\\\nCreate a repository for the authenticated user 8\\\\nCreate a repository for the authenticated user 9\\\\nCreate a release 10\\\\nCreate a release 12\\\\nRender a Markdown document\\\\nUse the REST API to render a Markdown document as an HTML page or as raw text.\\\\nThis endpoint accepts a JSON body desc\\\"}, {\\\"source_file\\\": \\\"input_files/developer_documentations/github_combined_reference.pdf\\\", \\\"text\\\": \\\"s assigned\\\\nto this issue. Replaces the\\\\ndeprecated assi\\\\ngnee field. labels array of strings No [] Labels to\\\\nassociate with\\\\nthis issue. type string No null The name of the\\\\nissue type to set\\\\non creation.\\\\n\\\\ncurl -L -X POST \\\\\\\\\\\\n-H \\\\\\\"X-GitHub-Api-Version: 2025-06-01\\\\\\\" \\\\\\\\\\\\nhttps://api.github.com/repos/octocat/Hello-World/issues \\\\\\\\\\\\n-d '{\\\\\\\"title\\\\\\\":\\\\\\\"Found a bug\\\\\\\",\\\\\\\"assignees\\\\\\\":[\\\\\\\"octocat\\\\\\\"],\\\\\\\"type\\\\\\\":\\\\\\\"Bug\\\\\\\"}'\\\\nPrevious version (2022-11-28)\\\\nThe prior version of this endpoint only accepted a single assignee (string) rather tha\\\"}, {\\\"source_file\\\": \\\"input_files/developer_documentations/github_combined_reference.pdf\\\", \\\"text\\\": \\\"Create an issue\\\\nPOST /repos/{owner}/{repo}/issues\\\\nAny user with pull access to a repository can create an issue.\\\\nParameters\\\\nName In T ype Description\\\\nowner path string Required. The\\\\naccount owner of the\\\\nrepository .\\\\nrepo path string Required. The\\\\nname of the\\\\nrepository without\\\\nthe .git extension.\\\\ntitle body string or integer Required. The title\\\\nof the issue.\\\\nbody body string The contents of the\\\\nissue.\\\\nassignee body string Login for the user\\\\nthat this issue should\\\\nbe assigned to.\\\\nlabels body arra\\\"}, {\\\"source_file\\\": \\\"input_files/developer_documentations/github_combined_reference.pdf\\\", \\\"text\\\": \\\"Create an issue\\\\nPOST /repos/{owner}/{repo}/issues\\\\nAPI version 2025-06-01\\\\nCreates an issue on the specified repository . Any user with pull access can create one. Starting in this version, assignee is deprecated in favor of assignees (array), and a new optional\\\\ntype field lets you set the issue type at creation time instead of via a separate call. Path parameters\\\\nName T ype Description\\\\nowner string The account owner of the repository . repo string The name of the repository . Body parameters\\\\nName\\\"}, {\\\"source_file\\\": \\\"input_files/developer_documentations/github_combined_reference.pdf\\\", \\\"text\\\": \\\"ean, optional) \\\\u2014 Default depends on visibility: true for public, false for\\\\nprivate/internal. \\\\u2022 auto_init (boolean, optional) \\\\u2014 Default: false. Creates an initial commit with an empty\\\\nREADME when true.\\\\n\\\\nRequest\\\\ncurl -X POST -H \\\\\\\"X-GitHub-Api-Version: 2025-06-01\\\\\\\" \\\\\\\\\\\\nhttps://api.github.com/user/repos \\\\\\\\\\\\n-d '{\\\\\\\"name\\\\\\\":\\\\\\\"Hello-World\\\\\\\",\\\\\\\"visibility\\\\\\\":\\\\\\\"internal\\\\\\\",\\\\\\\"auto_init\\\\\\\":true}'\\\\nResponse\\\\nReturns 201 Created with the full repository object. Previous version (2022-11-28)\\\\nThe prior version only had the boolean p\\\"}]}\"]}"
+    },
+    {
+      "role": "assistant",
+      "content": null,
+      "tool_calls": [
+        {
+          "id": "fc_ba35fd7d-cd31-46a3-9291-c319a2dd45f5",
+          "type": "function",
+          "function": {
+            "name": "search_documentation",
+            "arguments": "{\"k\":5,\"query\":\"2026-01-01 create issue GitHub API\"}"
+          }
+        }
+      ]
+    },
+    {
+      "role": "tool",
+      "tool_call_id": "fc_ba35fd7d-cd31-46a3-9291-c319a2dd45f5",
+      "name": "search_documentation",
+      "content": "{\"content\": [\"{\\\"results\\\": [{\\\"source_file\\\": \\\"input_files/developer_documentations/github_combined_reference.pdf\\\", \\\"text\\\": \\\"s assigned\\\\nto this issue. Replaces the\\\\ndeprecated assi\\\\ngnee field. labels array of strings No [] Labels to\\\\nassociate with\\\\nthis issue. type string No null The name of the\\\\nissue type to set\\\\non creation.\\\\n\\\\ncurl -L -X POST \\\\\\\\\\\\n-H \\\\\\\"X-GitHub-Api-Version: 2025-06-01\\\\\\\" \\\\\\\\\\\\nhttps://api.github.com/repos/octocat/Hello-World/issues \\\\\\\\\\\\n-d '{\\\\\\\"title\\\\\\\":\\\\\\\"Found a bug\\\\\\\",\\\\\\\"assignees\\\\\\\":[\\\\\\\"octocat\\\\\\\"],\\\\\\\"type\\\\\\\":\\\\\\\"Bug\\\\\\\"}'\\\\nPrevious version (2022-11-28)\\\\nThe prior version of this endpoint only accepted a single assignee (string) rather tha\\\"}, {\\\"source_file\\\": \\\"input_files/developer_documentations/github_combined_reference.pdf\\\", \\\"text\\\": \\\"GitHub REST API Reference - Combined (v2022-11-28\\\\nand v2025-06-01)\\\\nContents\\\\nRender a Markdown document 1\\\\nRender a Markdown document 3\\\\nCreate an issue 4\\\\nCreate an issue 5\\\\nCreate a pull request 6\\\\nCreate a pull request 7\\\\nCreate a repository for the authenticated user 8\\\\nCreate a repository for the authenticated user 9\\\\nCreate a release 10\\\\nCreate a release 12\\\\nRender a Markdown document\\\\nUse the REST API to render a Markdown document as an HTML page or as raw text.\\\\nThis endpoint accepts a JSON body desc\\\"}, {\\\"source_file\\\": \\\"input_files/developer_documentations/github_combined_reference.pdf\\\", \\\"text\\\": \\\"Create an issue\\\\nPOST /repos/{owner}/{repo}/issues\\\\nAny user with pull access to a repository can create an issue.\\\\nParameters\\\\nName In T ype Description\\\\nowner path string Required. The\\\\naccount owner of the\\\\nrepository .\\\\nrepo path string Required. The\\\\nname of the\\\\nrepository without\\\\nthe .git extension.\\\\ntitle body string or integer Required. The title\\\\nof the issue.\\\\nbody body string The contents of the\\\\nissue.\\\\nassignee body string Login for the user\\\\nthat this issue should\\\\nbe assigned to.\\\\nlabels body arra\\\"}, {\\\"source_file\\\": \\\"input_files/developer_documentations/github_combined_reference.pdf\\\", \\\"text\\\": \\\"Create an issue\\\\nPOST /repos/{owner}/{repo}/issues\\\\nAPI version 2025-06-01\\\\nCreates an issue on the specified repository . Any user with pull access can create one. Starting in this version, assignee is deprecated in favor of assignees (array), and a new optional\\\\ntype field lets you set the issue type at creation time instead of via a separate call. Path parameters\\\\nName T ype Description\\\\nowner string The account owner of the repository . repo string The name of the repository . Body parameters\\\\nName\\\"}, {\\\"source_file\\\": \\\"input_files/developer_documentations/github_combined_reference.pdf\\\", \\\"text\\\": \\\"ean, optional) \\\\u2014 Default depends on visibility: true for public, false for\\\\nprivate/internal. \\\\u2022 auto_init (boolean, optional) \\\\u2014 Default: false. Creates an initial commit with an empty\\\\nREADME when true.\\\\n\\\\nRequest\\\\ncurl -X POST -H \\\\\\\"X-GitHub-Api-Version: 2025-06-01\\\\\\\" \\\\\\\\\\\\nhttps://api.github.com/user/repos \\\\\\\\\\\\n-d '{\\\\\\\"name\\\\\\\":\\\\\\\"Hello-World\\\\\\\",\\\\\\\"visibility\\\\\\\":\\\\\\\"internal\\\\\\\",\\\\\\\"auto_init\\\\\\\":true}'\\\\nResponse\\\\nReturns 201 Created with the full repository object. Previous version (2022-11-28)\\\\nThe prior version only had the boolean p\\\"}]}\"]}"
+    },
+    {
+      "role": "assistant",
+      "content": null,
+      "tool_calls": [
+        {
+          "id": "fc_9234f545-b24b-4b48-a50e-093a60ea62a5",
+          "type": "function",
+          "function": {
+            "name": "search_documentation",
+            "arguments": "{\"k\":5,\"query\":\"2026-01-01 \\\"Create an issue\\\"\"}"
+          }
+        }
+      ]
+    },
+    {
+      "role": "tool",
+      "tool_call_id": "fc_9234f545-b24b-4b48-a50e-093a60ea62a5",
+      "name": "search_documentation",
+      "content": "{\"content\": [\"{\\\"results\\\": [{\\\"source_file\\\": \\\"input_files/developer_documentations/github_combined_reference.pdf\\\", \\\"text\\\": \\\"Create an issue\\\\nPOST /repos/{owner}/{repo}/issues\\\\nAPI version 2025-06-01\\\\nCreates an issue on the specified repository . Any user with pull access can create one. Starting in this version, assignee is deprecated in favor of assignees (array), and a new optional\\\\ntype field lets you set the issue type at creation time instead of via a separate call. Path parameters\\\\nName T ype Description\\\\nowner string The account owner of the repository . repo string The name of the repository . Body parameters\\\\nName\\\"}, {\\\"source_file\\\": \\\"input_files/developer_documentations/github_combined_reference.pdf\\\", \\\"text\\\": \\\"s assigned\\\\nto this issue. Replaces the\\\\ndeprecated assi\\\\ngnee field. labels array of strings No [] Labels to\\\\nassociate with\\\\nthis issue. type string No null The name of the\\\\nissue type to set\\\\non creation.\\\\n\\\\ncurl -L -X POST \\\\\\\\\\\\n-H \\\\\\\"X-GitHub-Api-Version: 2025-06-01\\\\\\\" \\\\\\\\\\\\nhttps://api.github.com/repos/octocat/Hello-World/issues \\\\\\\\\\\\n-d '{\\\\\\\"title\\\\\\\":\\\\\\\"Found a bug\\\\\\\",\\\\\\\"assignees\\\\\\\":[\\\\\\\"octocat\\\\\\\"],\\\\\\\"type\\\\\\\":\\\\\\\"Bug\\\\\\\"}'\\\\nPrevious version (2022-11-28)\\\\nThe prior version of this endpoint only accepted a single assignee (string) rather tha\\\"}, {\\\"source_file\\\": \\\"input_files/developer_documentations/github_combined_reference.pdf\\\", \\\"text\\\": \\\"Create a release\\\\nAPI version 2025-06-01\\\\nSummary\\\\nPublishes a new release against an existing or new tag. As of this version, discussion_categ\\\\nory_name can be supplied to automatically open a linked discussion, and make_latest gives\\\\nexplicit control over whether the release becomes the repository\\\\u2019s \\\\u201cLatest\\\\u201d release, replacing\\\\nan older undocumented heuristic based purely on publish date. Body parameters\\\\nName T ype Required Default Description\\\\ntag_name string Y es \\\\u2014 The name of the\\\\ntag. target_commi\\\"}, {\\\"source_file\\\": \\\"input_files/developer_documentations/github_combined_reference.pdf\\\", \\\"text\\\": \\\"Create an issue\\\\nPOST /repos/{owner}/{repo}/issues\\\\nAny user with pull access to a repository can create an issue.\\\\nParameters\\\\nName In T ype Description\\\\nowner path string Required. The\\\\naccount owner of the\\\\nrepository .\\\\nrepo path string Required. The\\\\nname of the\\\\nrepository without\\\\nthe .git extension.\\\\ntitle body string or integer Required. The title\\\\nof the issue.\\\\nbody body string The contents of the\\\\nissue.\\\\nassignee body string Login for the user\\\\nthat this issue should\\\\nbe assigned to.\\\\nlabels body arra\\\"}, {\\\"source_file\\\": \\\"input_files/developer_documentations/github_combined_reference.pdf\\\", \\\"text\\\": \\\"Create a pull request\\\\nVersion 2025-06-01 \\\\u00b7 reference\\\\nOverview\\\\nOpens a pull request against the given repository . Since 2025-06-01, the API supports speci-\\\\nfying maintainer_can_modify at creation time (previously this required a follow-up PATCH call),\\\\nand draft pull requests can be created directly as ready-for-review by omitting the field entirely\\\\n\\\\u2014 its default has not changed but its interaction with auto-merge settings has. Path parameters\\\\nName T ype\\\\nowner string\\\\nrepo string\\\\nRequest body\\\\nFiel\\\"}]}\"]}"
+    }
+  ]
+}

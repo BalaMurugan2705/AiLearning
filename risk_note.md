@@ -1,5 +1,5 @@
-1. Tool execution failures: MCP tools may time out or return errors; the host must return recoverable error results to the agent.
-2. Tool security: Validate tool arguments and enforce authorization before executing tools.
-3. Data exposure: Avoid logging secrets, credentials, or sensitive tool arguments in traces and wire captures.
-4. Resource limits: Enforce iteration, token, cost, and execution-time budgets to prevent runaway agent loops.
-5. External dependencies: MCP servers and third-party APIs may be unavailable or return stale data; handle failures and validate results.
+1. **Who wrote it:** DevRel's package-registry server (`package_server.py`, reports itself as `package-registry-server` v1.30.0 in `initialize` — see `wire.json`) — a team we don't control, shipping independently of our agent's release cycle.
+2. **What it can reach:** Runs as a subprocess our host spawns and talks to over stdio with our `PYTHONPATH`/env/cwd (see `mcp_adapter.py`); it only exposes `get_package_api_spec`/`check_package_deprecation` today, but nothing in the stdio transport stops a future version from reading local files or making outbound network calls once it's in our trust boundary.
+3. **What it logs:** Unknown — it's their process, not ours; our own wire capture records every argument we send it (including full query text) into `wire.json`, so nothing secret should ever be passed as a tool argument.
+4. **Stolen/forged token impact:** No auth token is sent to this server today (plain stdio subprocess) — the real risk is a compromised PyPI-style publish of `package_server.py` itself, which would run with our process's full filesystem/env access the next time we launch it.
+5. **Verdict: ship for the read-only lookup tools, with the stdio transport sandboxed/resource-limited** — do not add write-capable or networked tools from this server without re-reviewing, and treat any update to it as a new review, not an auto-pulled dependency.

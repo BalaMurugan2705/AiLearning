@@ -1,129 +1,75 @@
 [
   {
     "event": "llm_tool_selected",
-    "tool_call_id": "fc_b7c185eb-39c9-4dec-abe0-79f58f444c7e",
+    "tool_call_id": "fc_2f7f68e4-b13f-4e38-89ff-e7b949bb03d7",
     "tool_name": "get_package_api_spec",
     "arguments": {
       "api_version": "2025-06-01",
       "endpoint": "create_issue"
     },
     "execution_status": "pending",
-    "timestamp": "2026-09-29T14:42:03.185432+00:00"
+    "timestamp": "2026-10-01T09:18:05.980595+00:00"
   },
   {
     "event": "host_tool_execution",
-    "tool_call_id": "fc_b7c185eb-39c9-4dec-abe0-79f58f444c7e",
+    "tool_call_id": "fc_2f7f68e4-b13f-4e38-89ff-e7b949bb03d7",
     "tool_name": "get_package_api_spec",
     "execution_status": "completed",
-    "timestamp": "2026-09-29T14:42:07.235893+00:00"
+    "timestamp": "2026-10-01T09:18:10.547252+00:00"
   },
   {
     "event": "llm_tool_selected",
-    "tool_call_id": "fc_0ef95816-3e02-49b2-b80b-59f00e59c3fa",
+    "tool_call_id": "fc_20ce600d-a7af-444c-807d-8a1f9c2e382f",
     "tool_name": "check_package_deprecation",
     "arguments": {
       "api_version": "2025-06-01",
       "endpoint": "create_issue"
     },
     "execution_status": "pending",
-    "timestamp": "2026-09-29T14:42:08.120048+00:00"
+    "timestamp": "2026-10-01T09:18:11.073002+00:00"
   },
   {
     "event": "host_tool_execution",
-    "tool_call_id": "fc_0ef95816-3e02-49b2-b80b-59f00e59c3fa",
+    "tool_call_id": "fc_20ce600d-a7af-444c-807d-8a1f9c2e382f",
     "tool_name": "check_package_deprecation",
     "execution_status": "completed",
-    "timestamp": "2026-09-29T14:42:13.015811+00:00"
+    "timestamp": "2026-10-01T09:18:15.609804+00:00"
   },
   {
     "event": "llm_tool_selected",
-    "tool_call_id": "fc_19b6ddd7-5865-4f0a-b8b2-52c9bfb5355e",
-    "tool_name": "search_documentation",
-    "arguments": {
-      "k": 5,
-      "query": "create_issue endpoint API parameters"
-    },
-    "execution_status": "pending",
-    "timestamp": "2026-09-29T14:53:34.626376+00:00"
-  },
-  {
-    "event": "host_tool_execution",
-    "tool_call_id": "fc_19b6ddd7-5865-4f0a-b8b2-52c9bfb5355e",
-    "tool_name": "search_documentation",
-    "execution_status": "completed",
-    "timestamp": "2026-09-29T14:53:46.761153+00:00"
-  },
-  {
-    "event": "llm_tool_selected",
-    "tool_call_id": "fc_a8e263d2-cab4-4212-ba68-e53a0cc783fc",
-    "tool_name": "check_package_deprecation",
-    "arguments": {
-      "api_version": "2025-06-01",
-      "endpoint": "create_issue"
-    },
-    "execution_status": "pending",
-    "timestamp": "2026-09-29T14:53:47.468958+00:00"
-  },
-  {
-    "event": "host_tool_execution",
-    "tool_call_id": "fc_a8e263d2-cab4-4212-ba68-e53a0cc783fc",
-    "tool_name": "check_package_deprecation",
-    "execution_status": "completed",
-    "timestamp": "2026-09-29T14:53:52.517930+00:00"
-  },
-  {
-    "event": "llm_tool_selected",
-    "tool_call_id": "fc_a19e96c0-0b79-4a6d-9412-58773c853336",
+    "tool_call_id": "fc_1d45f2bd-1af4-4130-8602-1eeaf850b80e",
     "tool_name": "search_documentation",
     "arguments": {
       "k": 10,
-      "query": "Create an issue POST /repos/{owner}/{repo}/issues body parameters"
+      "query": "GitHub API 2026-01-01 create_issue body parameters deprecated"
     },
     "execution_status": "pending",
-    "timestamp": "2026-09-29T14:53:53.777733+00:00"
+    "timestamp": "2026-10-01T09:22:23.819769+00:00"
   },
   {
     "event": "host_tool_execution",
-    "tool_call_id": "fc_a19e96c0-0b79-4a6d-9412-58773c853336",
+    "tool_call_id": "fc_1d45f2bd-1af4-4130-8602-1eeaf850b80e",
     "tool_name": "search_documentation",
     "execution_status": "completed",
-    "timestamp": "2026-09-29T14:54:06.635194+00:00"
+    "timestamp": "2026-10-01T09:22:37.982369+00:00"
   },
   {
     "event": "llm_tool_selected",
-    "tool_call_id": "fc_caed22ba-2fdb-467b-b25e-98f2a0417f85",
-    "tool_name": "get_package_api_spec",
+    "tool_call_id": "fc_e19ab8e6-ccea-4222-a7d8-612be1e29cae",
+    "tool_name": "search_documentation",
     "arguments": {
-      "api_version": "2025-06-01",
-      "endpoint": "create_issue"
+      "k": 10,
+      "query": "2026-01-01 create an issue body parameters"
     },
     "execution_status": "pending",
-    "timestamp": "2026-09-29T14:57:46.977342+00:00"
+    "timestamp": "2026-10-01T09:22:39.007524+00:00"
   },
   {
     "event": "host_tool_execution",
-    "tool_call_id": "fc_caed22ba-2fdb-467b-b25e-98f2a0417f85",
-    "tool_name": "get_package_api_spec",
+    "tool_call_id": "fc_e19ab8e6-ccea-4222-a7d8-612be1e29cae",
+    "tool_name": "search_documentation",
     "execution_status": "completed",
-    "timestamp": "2026-09-29T14:57:51.266587+00:00"
-  },
-  {
-    "event": "llm_tool_selected",
-    "tool_call_id": "fc_ba112dec-bde3-4650-8738-2c3782e18d56",
-    "tool_name": "check_package_deprecation",
-    "arguments": {
-      "api_version": "2025-06-01",
-      "endpoint": "create_issue"
-    },
-    "execution_status": "pending",
-    "timestamp": "2026-09-29T14:57:51.698535+00:00"
-  },
-  {
-    "event": "host_tool_execution",
-    "tool_call_id": "fc_ba112dec-bde3-4650-8738-2c3782e18d56",
-    "tool_name": "check_package_deprecation",
-    "execution_status": "completed",
-    "timestamp": "2026-09-29T14:57:56.204060+00:00"
+    "timestamp": "2026-10-01T09:22:53.122986+00:00"
   },
   {
     "event": "llm_tool_selected",
@@ -133,7 +79,7 @@
       "package_name": "example-package"
     },
     "execution_status": "pending",
-    "timestamp": "2026-09-29T15:04:04.302431+00:00"
+    "timestamp": "2026-10-01T09:29:04.049817+00:00"
   },
   {
     "event": "host_tool_execution",
@@ -141,132 +87,6 @@
     "tool_name": "get_package_api_spec",
     "execution_status": "failed",
     "error": "Simulated package registry timeout",
-    "timestamp": "2026-09-29T15:04:04.302913+00:00"
-  },
-  {
-    "event": "llm_tool_selected",
-    "tool_call_id": "fc_79541c54-899b-4f01-be3b-243f773c948d",
-    "tool_name": "get_package_api_spec",
-    "arguments": {
-      "api_version": "2025-06-01",
-      "endpoint": "create_issue"
-    },
-    "execution_status": "pending",
-    "timestamp": "2026-09-29T15:06:11.705689+00:00"
-  },
-  {
-    "event": "host_tool_execution",
-    "tool_call_id": "fc_79541c54-899b-4f01-be3b-243f773c948d",
-    "tool_name": "get_package_api_spec",
-    "execution_status": "completed",
-    "timestamp": "2026-09-29T15:06:16.011028+00:00"
-  },
-  {
-    "event": "llm_tool_selected",
-    "tool_call_id": "fc_634980ac-f0d4-4507-b914-681239a35c3f",
-    "tool_name": "check_package_deprecation",
-    "arguments": {
-      "api_version": "2025-06-01",
-      "endpoint": "create_issue"
-    },
-    "execution_status": "pending",
-    "timestamp": "2026-09-29T15:06:17.288441+00:00"
-  },
-  {
-    "event": "host_tool_execution",
-    "tool_call_id": "fc_634980ac-f0d4-4507-b914-681239a35c3f",
-    "tool_name": "check_package_deprecation",
-    "execution_status": "completed",
-    "timestamp": "2026-09-29T15:06:21.745269+00:00"
-  },
-  {
-    "event": "llm_tool_selected",
-    "tool_call_id": "call_test_001",
-    "tool_name": "get_package_api_spec",
-    "arguments": {
-      "package_name": "example-package"
-    },
-    "execution_status": "pending",
-    "timestamp": "2026-09-29T15:06:25.242859+00:00"
-  },
-  {
-    "event": "host_tool_execution",
-    "tool_call_id": "call_test_001",
-    "tool_name": "get_package_api_spec",
-    "execution_status": "failed",
-    "error": "Simulated package registry timeout",
-    "timestamp": "2026-09-29T15:06:25.243926+00:00"
-  },
-  {
-    "event": "llm_tool_selected",
-    "tool_call_id": "call_1",
-    "tool_name": "check_deprecation",
-    "arguments": {
-      "endpoint": "create_issue",
-      "api_version": "2025-06-01"
-    },
-    "execution_status": "pending",
-    "timestamp": "2026-09-29T15:06:33.332109+00:00"
-  },
-  {
-    "event": "host_tool_execution",
-    "tool_call_id": "call_1",
-    "tool_name": "check_deprecation",
-    "execution_status": "completed",
-    "timestamp": "2026-09-29T15:06:33.332611+00:00"
-  },
-  {
-    "event": "llm_tool_selected",
-    "tool_call_id": "call_1",
-    "tool_name": "check_deprecation",
-    "arguments": {
-      "endpoint": "create_issue",
-      "api_version": "2025-06-01"
-    },
-    "execution_status": "pending",
-    "timestamp": "2026-09-29T15:06:34.072255+00:00"
-  },
-  {
-    "event": "host_tool_execution",
-    "tool_call_id": "call_1",
-    "tool_name": "check_deprecation",
-    "execution_status": "completed",
-    "timestamp": "2026-09-29T15:06:34.072708+00:00"
-  },
-  {
-    "event": "llm_tool_selected",
-    "tool_call_id": "call_1",
-    "tool_name": "check_deprecation",
-    "arguments": {
-      "endpoint": "create_issue",
-      "api_version": "2025-06-01"
-    },
-    "execution_status": "pending",
-    "timestamp": "2026-09-29T15:06:34.073802+00:00"
-  },
-  {
-    "event": "host_tool_execution",
-    "tool_call_id": "call_1",
-    "tool_name": "check_deprecation",
-    "execution_status": "completed",
-    "timestamp": "2026-09-29T15:06:34.074235+00:00"
-  },
-  {
-    "event": "llm_tool_selected",
-    "tool_call_id": "call_1",
-    "tool_name": "check_deprecation",
-    "arguments": {
-      "endpoint": "create_issue",
-      "api_version": "2025-06-01"
-    },
-    "execution_status": "pending",
-    "timestamp": "2026-09-29T15:06:34.075219+00:00"
-  },
-  {
-    "event": "host_tool_execution",
-    "tool_call_id": "call_1",
-    "tool_name": "check_deprecation",
-    "execution_status": "completed",
-    "timestamp": "2026-09-29T15:06:34.075643+00:00"
+    "timestamp": "2026-10-01T09:29:04.050426+00:00"
   }
 ]

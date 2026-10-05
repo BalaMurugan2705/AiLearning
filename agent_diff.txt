@@ -1,0 +1,114 @@
+Proof: adding the package-registry server changes zero lines in agent/
+
+Method
+------
+1. With mcp_config.json listing only docs_server.py ("server one"), captured:
+     git diff -- agent/  > snapshot A
+2. Edited ONLY mcp_config.json to add package_server.py ("server one + two"),
+   no files under agent/ touched. Captured:
+     git diff -- agent/  > snapshot B
+3. Compared the two snapshots:
+     diff snapshot_A snapshot_B
+   Exit code: 0 (snapshots are byte-identical)
+
+Why this works: agent/specialists.py's ResearchAgent takes mcp_server_scripts
+as a parameter, and agent/mcp_adapter.py's build_multi_mcp_tool_registry()
+discovers tools from however many servers that list contains via a live
+tools/list call. Neither file knows or cares how many servers are configured,
+so the count only ever changes in mcp_config.json (see config.diff).
+
+Snapshot A and B content (identical; these are pre-existing, unrelated fixes
+to docs_server.py/package_server.py/tools.py made in this same session --
+NOT caused by adding the second server):
+diff --git a/agent/mcp_servers/docs_server.py b/agent/mcp_servers/docs_server.py
+index 7ec6682..9ba8219 100644
+--- a/agent/mcp_servers/docs_server.py
++++ b/agent/mcp_servers/docs_server.py
+@@ -10,13 +10,23 @@ mcp = FastMCP("documentation-server")
+ @mcp.tool()
+ def search_documentation(query: str, k: int = 4) -> str:
+     """
+-    Search the indexed developer documentation.
++    Search the indexed GitHub REST API developer documentation for prose
++    relevant to a natural-language question.
+ 
+-    Use this tool to find relevant documentation
+-    for a natural-language technical question.
++    Use this first for anything that is not about one specific endpoint's
++    exact parameter shape -- explanations, "how does X work", or
++    version-to-version behavior changes.
++
++    This server only has documentation indexed for API versions
++    2022-11-28 and 2025-06-01. If your query names a different version
++    (e.g. 2026-01-01, v3, v4), the result will contain an "error" field
++    instead of "results", naming the latest indexed version and the full
++    list of known versions. Re-ask using one of those versions -- do not
++    substitute a nearby version's docs and present them as if they apply
++    to the version that was actually asked about.
+ 
+     Args:
+-        query: The documentation question to search.
++        query: The natural-language documentation question to search.
+         k: Number of relevant chunks to return.
+     """
+     result = search_docs(query=query, k=k)
+diff --git a/agent/mcp_servers/package_server.py b/agent/mcp_servers/package_server.py
+index bc474a0..aff3af8 100644
+--- a/agent/mcp_servers/package_server.py
++++ b/agent/mcp_servers/package_server.py
+@@ -27,8 +27,6 @@ def get_package_api_spec(endpoint: str, api_version: str) -> str:
+     )
+ 
+ 
+-@mcp.tool()
+-
+ @mcp.tool()
+ def check_package_deprecation(endpoint: str, api_version: str) -> str:
+     """
+diff --git a/agent/tools.py b/agent/tools.py
+index 8f1ad1c..a490a55 100644
+--- a/agent/tools.py
++++ b/agent/tools.py
+@@ -1,10 +1,18 @@
+ import json
++import re
+ 
+ from agent.corpus import get_pipeline, search_docs_raw
+ from agent.spec import API_VERSIONS, ENDPOINT_NAMES, find_deprecation, get_endpoint_spec
+ 
+ _pipeline = None
+ 
++# GitHub API versions look like YYYY-MM-DD. Catching this in the query lets
++# us tell "asked about a version we don't have" apart from "asked something
++# broad" -- without it, search_docs silently hands back the nearest
++# semantic match for a version that was never indexed, and the model has no
++# way to know the chunk it got doesn't actually apply to that version.
++_VERSION_PATTERN = re.compile(r"\b\d{4}-\d{2}-\d{2}\b")
++
+ 
+ def _get_or_build_pipeline():
+     global _pipeline
+@@ -14,6 +22,20 @@ def _get_or_build_pipeline():
+ 
+ 
+ def search_docs(query: str, k: int = 4) -> str:
++    requested_versions = set(_VERSION_PATTERN.findall(query))
++    unknown_versions = requested_versions - set(API_VERSIONS)
++    if unknown_versions:
++        return json.dumps({
++            "results": [],
++            "error": (
++                f"No documentation indexed for API version(s) "
++                f"{', '.join(sorted(unknown_versions))}. Latest indexed "
++                f"version is {max(API_VERSIONS)}. Known indexed versions: "
++                f"{', '.join(API_VERSIONS)}. Re-ask using one of the known "
++                "versions -- do not assume a nearby version's docs apply."
++            ),
++        })
++
+     results = search_docs_raw(_get_or_build_pipeline(), query, k=k)
+     trimmed = [
+         {"source_file": r["metadata"].get("source_file", "unknown"), "text": r["text"][:500]}
+
+=== diff between snapshot A and snapshot B (should be empty) ===
+(no output above = zero lines differ)

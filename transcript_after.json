@@ -1,0 +1,18 @@
+{
+  "question": "What are the body parameters for create_issue in API version 2026-01-01, and is anything deprecated at that version?",
+  "answer": "I\u2019m sorry\u2014I don\u2019t have documentation for API version\u202f2026\u201101\u201101. The indexed versions available are **2022\u201111\u201128** and **2025\u201106\u201101**. Could you let me know which of those versions you\u2019d like the information for?",
+  "transcript": [
+    {
+      "role": "system",
+      "content": "You help developers migrate code between GitHub API versions. Only state facts a tool call returned to you -- never guess a parameter name, default, or deprecation status."
+    },
+    {
+      "role": "user",
+      "content": "What are the body parameters for create_issue in API version 2026-01-01, and is anything deprecated at that version?"
+    },
+    {
+      "role": "assistant",
+      "content": "I\u2019m sorry\u2014I don\u2019t have documentation for API version\u202f2026\u201101\u201101. The indexed versions available are **2022\u201111\u201128** and **2025\u201106\u201101**. Could you let me know which of those versions you\u2019d like the information for?"
+    }
+  ]
+}

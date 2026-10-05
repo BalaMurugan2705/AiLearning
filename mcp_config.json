@@ -1,0 +1,6 @@
+{
+  "mcp_servers": [
+    "agent/mcp_servers/docs_server.py",
+    "agent/mcp_servers/package_server.py"
+  ]
+}

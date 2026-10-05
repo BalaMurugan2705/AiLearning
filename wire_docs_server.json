@@ -1,0 +1,162 @@
+[
+  {
+    "timestamp": "2026-10-01T09:21:02.237268+00:00",
+    "direction": "client_to_server",
+    "annotation": "MCP initialization handshake",
+    "raw_line": "{\"jsonrpc\":\"2.0\",\"id\":1,\"method\":\"initialize\",\"params\":{\"protocolVersion\":\"2025-11-25\",\"capabilities\":{},\"clientInfo\":{\"name\":\"wire-capture-client\",\"version\":\"1.0.0\"}}}",
+    "message": {
+      "jsonrpc": "2.0",
+      "id": 1,
+      "method": "initialize",
+      "params": {
+        "protocolVersion": "2025-11-25",
+        "capabilities": {},
+        "clientInfo": {
+          "name": "wire-capture-client",
+          "version": "1.0.0"
+        }
+      }
+    }
+  },
+  {
+    "timestamp": "2026-10-01T09:21:06.217003+00:00",
+    "direction": "server_to_client",
+    "annotation": "MCP initialization response",
+    "raw_line": "{\"jsonrpc\":\"2.0\",\"id\":1,\"result\":{\"protocolVersion\":\"2025-11-25\",\"capabilities\":{\"experimental\":{},\"prompts\":{\"listChanged\":false},\"resources\":{\"subscribe\":false,\"listChanged\":false},\"tools\":{\"listChanged\":false}},\"serverInfo\":{\"name\":\"documentation-server\",\"version\":\"1.30.0\"}}}",
+    "message": {
+      "jsonrpc": "2.0",
+      "id": 1,
+      "result": {
+        "protocolVersion": "2025-11-25",
+        "capabilities": {
+          "experimental": {},
+          "prompts": {
+            "listChanged": false
+          },
+          "resources": {
+            "subscribe": false,
+            "listChanged": false
+          },
+          "tools": {
+            "listChanged": false
+          }
+        },
+        "serverInfo": {
+          "name": "documentation-server",
+          "version": "1.30.0"
+        }
+      }
+    }
+  },
+  {
+    "timestamp": "2026-10-01T09:21:06.217195+00:00",
+    "direction": "client_to_server",
+    "annotation": "Initialization-complete notification",
+    "raw_line": "{\"jsonrpc\":\"2.0\",\"method\":\"notifications/initialized\"}",
+    "message": {
+      "jsonrpc": "2.0",
+      "method": "notifications/initialized"
+    }
+  },
+  {
+    "timestamp": "2026-10-01T09:21:06.217214+00:00",
+    "direction": "client_to_server",
+    "annotation": "Discovering server tools",
+    "raw_line": "{\"jsonrpc\":\"2.0\",\"id\":2,\"method\":\"tools/list\",\"params\":{}}",
+    "message": {
+      "jsonrpc": "2.0",
+      "id": 2,
+      "method": "tools/list",
+      "params": {}
+    }
+  },
+  {
+    "timestamp": "2026-10-01T09:21:06.220494+00:00",
+    "direction": "server_to_client",
+    "annotation": "Tool discovery response",
+    "raw_line": "{\"jsonrpc\":\"2.0\",\"id\":2,\"result\":{\"tools\":[{\"name\":\"search_documentation\",\"description\":\"\\nSearch the indexed GitHub REST API developer documentation for prose\\nrelevant to a natural-language question.\\n\\nUse this first for anything that is not about one specific endpoint's\\nexact parameter shape -- explanations, \\\"how does X work\\\", or\\nversion-to-version behavior changes.\\n\\nThis server only has documentation indexed for API versions\\n2022-11-28 and 2025-06-01. If your query names a different version\\n(e.g. 2026-01-01, v3, v4), the result will contain an \\\"error\\\" field\\ninstead of \\\"results\\\", naming the latest indexed version and the full\\nlist of known versions. Re-ask using one of those versions -- do not\\nsubstitute a nearby version's docs and present them as if they apply\\nto the version that was actually asked about.\\n\\nArgs:\\n    query: The natural-language documentation question to search.\\n    k: Number of relevant chunks to return.\\n\",\"inputSchema\":{\"properties\":{\"query\":{\"title\":\"Query\",\"type\":\"string\"},\"k\":{\"default\":4,\"title\":\"K\",\"type\":\"integer\"}},\"required\":[\"query\"],\"title\":\"search_documentationArguments\",\"type\":\"object\"},\"outputSchema\":{\"properties\":{\"result\":{\"title\":\"Result\",\"type\":\"string\"}},\"required\":[\"result\"],\"title\":\"search_documentationOutput\",\"type\":\"object\"}}]}}",
+    "message": {
+      "jsonrpc": "2.0",
+      "id": 2,
+      "result": {
+        "tools": [
+          {
+            "name": "search_documentation",
+            "description": "\nSearch the indexed GitHub REST API developer documentation for prose\nrelevant to a natural-language question.\n\nUse this first for anything that is not about one specific endpoint's\nexact parameter shape -- explanations, \"how does X work\", or\nversion-to-version behavior changes.\n\nThis server only has documentation indexed for API versions\n2022-11-28 and 2025-06-01. If your query names a different version\n(e.g. 2026-01-01, v3, v4), the result will contain an \"error\" field\ninstead of \"results\", naming the latest indexed version and the full\nlist of known versions. Re-ask using one of those versions -- do not\nsubstitute a nearby version's docs and present them as if they apply\nto the version that was actually asked about.\n\nArgs:\n    query: The natural-language documentation question to search.\n    k: Number of relevant chunks to return.\n",
+            "inputSchema": {
+              "properties": {
+                "query": {
+                  "title": "Query",
+                  "type": "string"
+                },
+                "k": {
+                  "default": 4,
+                  "title": "K",
+                  "type": "integer"
+                }
+              },
+              "required": [
+                "query"
+              ],
+              "title": "search_documentationArguments",
+              "type": "object"
+            },
+            "outputSchema": {
+              "properties": {
+                "result": {
+                  "title": "Result",
+                  "type": "string"
+                }
+              },
+              "required": [
+                "result"
+              ],
+              "title": "search_documentationOutput",
+              "type": "object"
+            }
+          }
+        ]
+      }
+    }
+  },
+  {
+    "timestamp": "2026-10-01T09:21:06.220534+00:00",
+    "direction": "client_to_server",
+    "annotation": "Calling MCP tool: search_documentation",
+    "raw_line": "{\"jsonrpc\":\"2.0\",\"id\":3,\"method\":\"tools/call\",\"params\":{\"name\":\"search_documentation\",\"arguments\":{\"query\":\"create_issue endpoint parameters\",\"k\":3}}}",
+    "message": {
+      "jsonrpc": "2.0",
+      "id": 3,
+      "method": "tools/call",
+      "params": {
+        "name": "search_documentation",
+        "arguments": {
+          "query": "create_issue endpoint parameters",
+          "k": 3
+        }
+      }
+    }
+  },
+  {
+    "timestamp": "2026-10-01T09:21:12.067851+00:00",
+    "direction": "server_to_client",
+    "annotation": "Tool execution response: search_documentation",
+    "raw_line": "{\"jsonrpc\":\"2.0\",\"id\":3,\"result\":{\"content\":[{\"type\":\"text\",\"text\":\"{\\\"results\\\": [{\\\"source_file\\\": \\\"input_files/developer_documentations/github_combined_reference.pdf\\\", \\\"text\\\": \\\"Create an issue\\\\nPOST /repos/{owner}/{repo}/issues\\\\nAPI version 2025-06-01\\\\nCreates an issue on the specified repository . Any user with pull access can create one. Starting in this version, assignee is deprecated in favor of assignees (array), and a new optional\\\\ntype field lets you set the issue type at creation time instead of via a separate call. Path parameters\\\\nName T ype Description\\\\nowner string The account owner of the repository . repo string The name of the repository . Body parameters\\\\nName\\\"}, {\\\"source_file\\\": \\\"input_files/developer_documentations/github_combined_reference.pdf\\\", \\\"text\\\": \\\"s assigned\\\\nto this issue. Replaces the\\\\ndeprecated assi\\\\ngnee field. labels array of strings No [] Labels to\\\\nassociate with\\\\nthis issue. type string No null The name of the\\\\nissue type to set\\\\non creation.\\\\n\\\\ncurl -L -X POST \\\\\\\\\\\\n-H \\\\\\\"X-GitHub-Api-Version: 2025-06-01\\\\\\\" \\\\\\\\\\\\nhttps://api.github.com/repos/octocat/Hello-World/issues \\\\\\\\\\\\n-d '{\\\\\\\"title\\\\\\\":\\\\\\\"Found a bug\\\\\\\",\\\\\\\"assignees\\\\\\\":[\\\\\\\"octocat\\\\\\\"],\\\\\\\"type\\\\\\\":\\\\\\\"Bug\\\\\\\"}'\\\\nPrevious version (2022-11-28)\\\\nThe prior version of this endpoint only accepted a single assignee (string) rather tha\\\"}, {\\\"source_file\\\": \\\"input_files/developer_documentations/github_combined_reference.pdf\\\", \\\"text\\\": \\\"Create an issue\\\\nPOST /repos/{owner}/{repo}/issues\\\\nAny user with pull access to a repository can create an issue.\\\\nParameters\\\\nName In T ype Description\\\\nowner path string Required. The\\\\naccount owner of the\\\\nrepository .\\\\nrepo path string Required. The\\\\nname of the\\\\nrepository without\\\\nthe .git extension.\\\\ntitle body string or integer Required. The title\\\\nof the issue.\\\\nbody body string The contents of the\\\\nissue.\\\\nassignee body string Login for the user\\\\nthat this issue should\\\\nbe assigned to.\\\\nlabels body arra\\\"}]}\"}],\"structuredContent\":{\"result\":\"{\\\"results\\\": [{\\\"source_file\\\": \\\"input_files/developer_documentations/github_combined_reference.pdf\\\", \\\"text\\\": \\\"Create an issue\\\\nPOST /repos/{owner}/{repo}/issues\\\\nAPI version 2025-06-01\\\\nCreates an issue on the specified repository . Any user with pull access can create one. Starting in this version, assignee is deprecated in favor of assignees (array), and a new optional\\\\ntype field lets you set the issue type at creation time instead of via a separate call. Path parameters\\\\nName T ype Description\\\\nowner string The account owner of the repository . repo string The name of the repository . Body parameters\\\\nName\\\"}, {\\\"source_file\\\": \\\"input_files/developer_documentations/github_combined_reference.pdf\\\", \\\"text\\\": \\\"s assigned\\\\nto this issue. Replaces the\\\\ndeprecated assi\\\\ngnee field. labels array of strings No [] Labels to\\\\nassociate with\\\\nthis issue. type string No null The name of the\\\\nissue type to set\\\\non creation.\\\\n\\\\ncurl -L -X POST \\\\\\\\\\\\n-H \\\\\\\"X-GitHub-Api-Version: 2025-06-01\\\\\\\" \\\\\\\\\\\\nhttps://api.github.com/repos/octocat/Hello-World/issues \\\\\\\\\\\\n-d '{\\\\\\\"title\\\\\\\":\\\\\\\"Found a bug\\\\\\\",\\\\\\\"assignees\\\\\\\":[\\\\\\\"octocat\\\\\\\"],\\\\\\\"type\\\\\\\":\\\\\\\"Bug\\\\\\\"}'\\\\nPrevious version (2022-11-28)\\\\nThe prior version of this endpoint only accepted a single assignee (string) rather tha\\\"}, {\\\"source_file\\\": \\\"input_files/developer_documentations/github_combined_reference.pdf\\\", \\\"text\\\": \\\"Create an issue\\\\nPOST /repos/{owner}/{repo}/issues\\\\nAny user with pull access to a repository can create an issue.\\\\nParameters\\\\nName In T ype Description\\\\nowner path string Required. The\\\\naccount owner of the\\\\nrepository .\\\\nrepo path string Required. The\\\\nname of the\\\\nrepository without\\\\nthe .git extension.\\\\ntitle body string or integer Required. The title\\\\nof the issue.\\\\nbody body string The contents of the\\\\nissue.\\\\nassignee body string Login for the user\\\\nthat this issue should\\\\nbe assigned to.\\\\nlabels body arra\\\"}]}\"},\"isError\":false}}",
+    "message": {
+      "jsonrpc": "2.0",
+      "id": 3,
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "{\"results\": [{\"source_file\": \"input_files/developer_documentations/github_combined_reference.pdf\", \"text\": \"Create an issue\\nPOST /repos/{owner}/{repo}/issues\\nAPI version 2025-06-01\\nCreates an issue on the specified repository . Any user with pull access can create one. Starting in this version, assignee is deprecated in favor of assignees (array), and a new optional\\ntype field lets you set the issue type at creation time instead of via a separate call. Path parameters\\nName T ype Description\\nowner string The account owner of the repository . repo string The name of the repository . Body parameters\\nName\"}, {\"source_file\": \"input_files/developer_documentations/github_combined_reference.pdf\", \"text\": \"s assigned\\nto this issue. Replaces the\\ndeprecated assi\\ngnee field. labels array of strings No [] Labels to\\nassociate with\\nthis issue. type string No null The name of the\\nissue type to set\\non creation.\\n\\ncurl -L -X POST \\\\\\n-H \\\"X-GitHub-Api-Version: 2025-06-01\\\" \\\\\\nhttps://api.github.com/repos/octocat/Hello-World/issues \\\\\\n-d '{\\\"title\\\":\\\"Found a bug\\\",\\\"assignees\\\":[\\\"octocat\\\"],\\\"type\\\":\\\"Bug\\\"}'\\nPrevious version (2022-11-28)\\nThe prior version of this endpoint only accepted a single assignee (string) rather tha\"}, {\"source_file\": \"input_files/developer_documentations/github_combined_reference.pdf\", \"text\": \"Create an issue\\nPOST /repos/{owner}/{repo}/issues\\nAny user with pull access to a repository can create an issue.\\nParameters\\nName In T ype Description\\nowner path string Required. The\\naccount owner of the\\nrepository .\\nrepo path string Required. The\\nname of the\\nrepository without\\nthe .git extension.\\ntitle body string or integer Required. The title\\nof the issue.\\nbody body string The contents of the\\nissue.\\nassignee body string Login for the user\\nthat this issue should\\nbe assigned to.\\nlabels body arra\"}]}"
+          }
+        ],
+        "structuredContent": {
+          "result": "{\"results\": [{\"source_file\": \"input_files/developer_documentations/github_combined_reference.pdf\", \"text\": \"Create an issue\\nPOST /repos/{owner}/{repo}/issues\\nAPI version 2025-06-01\\nCreates an issue on the specified repository . Any user with pull access can create one. Starting in this version, assignee is deprecated in favor of assignees (array), and a new optional\\ntype field lets you set the issue type at creation time instead of via a separate call. Path parameters\\nName T ype Description\\nowner string The account owner of the repository . repo string The name of the repository . Body parameters\\nName\"}, {\"source_file\": \"input_files/developer_documentations/github_combined_reference.pdf\", \"text\": \"s assigned\\nto this issue. Replaces the\\ndeprecated assi\\ngnee field. labels array of strings No [] Labels to\\nassociate with\\nthis issue. type string No null The name of the\\nissue type to set\\non creation.\\n\\ncurl -L -X POST \\\\\\n-H \\\"X-GitHub-Api-Version: 2025-06-01\\\" \\\\\\nhttps://api.github.com/repos/octocat/Hello-World/issues \\\\\\n-d '{\\\"title\\\":\\\"Found a bug\\\",\\\"assignees\\\":[\\\"octocat\\\"],\\\"type\\\":\\\"Bug\\\"}'\\nPrevious version (2022-11-28)\\nThe prior version of this endpoint only accepted a single assignee (string) rather tha\"}, {\"source_file\": \"input_files/developer_documentations/github_combined_reference.pdf\", \"text\": \"Create an issue\\nPOST /repos/{owner}/{repo}/issues\\nAny user with pull access to a repository can create an issue.\\nParameters\\nName In T ype Description\\nowner path string Required. The\\naccount owner of the\\nrepository .\\nrepo path string Required. The\\nname of the\\nrepository without\\nthe .git extension.\\ntitle body string or integer Required. The title\\nof the issue.\\nbody body string The contents of the\\nissue.\\nassignee body string Login for the user\\nthat this issue should\\nbe assigned to.\\nlabels body arra\"}]}"
+        },
+        "isError": false
+      }
+    }
+  }
+]

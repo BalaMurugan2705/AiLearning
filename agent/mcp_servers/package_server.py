@@ -28,8 +28,6 @@ def get_package_api_spec(endpoint: str, api_version: str) -> str:
 
 
 @mcp.tool()
-
-@mcp.tool()
 def check_package_deprecation(endpoint: str, api_version: str) -> str:
     """
     Identify deprecated or removed fields for a specific API endpoint

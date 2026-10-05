@@ -1,0 +1,23 @@
+{
+  "before": {
+    "servers": [
+      "/Users/balamurugan/Documents/Projects/pythom/AiLearning/agent/mcp_servers/docs_server.py"
+    ],
+    "count": 1,
+    "names": [
+      "search_documentation"
+    ]
+  },
+  "after": {
+    "servers": [
+      "/Users/balamurugan/Documents/Projects/pythom/AiLearning/agent/mcp_servers/docs_server.py",
+      "/Users/balamurugan/Documents/Projects/pythom/AiLearning/agent/mcp_servers/package_server.py"
+    ],
+    "count": 3,
+    "names": [
+      "search_documentation",
+      "get_package_api_spec",
+      "check_package_deprecation"
+    ]
+  }
+}
