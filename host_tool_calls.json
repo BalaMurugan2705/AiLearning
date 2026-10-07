@@ -88,5 +88,1211 @@
     "execution_status": "failed",
     "error": "Simulated package registry timeout",
     "timestamp": "2026-10-01T09:29:04.050426+00:00"
+  },
+  {
+    "event": "llm_tool_selected",
+    "tool_call_id": "fc_4689a91a-374f-4e6a-8c2b-82fa09556a7c",
+    "tool_name": "check_deprecation",
+    "arguments": {
+      "api_version": "2025-06-01",
+      "endpoint": "create_issue"
+    },
+    "execution_status": "pending",
+    "timestamp": "2026-10-07T07:42:19.550541+00:00"
+  },
+  {
+    "event": "host_tool_execution",
+    "tool_call_id": "fc_4689a91a-374f-4e6a-8c2b-82fa09556a7c",
+    "tool_name": "check_deprecation",
+    "execution_status": "completed",
+    "timestamp": "2026-10-07T07:42:19.551654+00:00"
+  },
+  {
+    "event": "llm_tool_selected",
+    "tool_call_id": "fc_54eee351-10ea-49e3-a18e-8655b0d45987",
+    "tool_name": "search_docs",
+    "arguments": {
+      "k": 5,
+      "query": "GitHub API 2025-06-01 create issue deprecated single assignee field replaces parameter"
+    },
+    "execution_status": "pending",
+    "timestamp": "2026-10-07T07:42:20.902862+00:00"
+  },
+  {
+    "event": "host_tool_execution",
+    "tool_call_id": "fc_54eee351-10ea-49e3-a18e-8655b0d45987",
+    "tool_name": "search_docs",
+    "execution_status": "completed",
+    "timestamp": "2026-10-07T07:42:26.815109+00:00"
+  },
+  {
+    "event": "llm_tool_selected",
+    "tool_call_id": "fc_fe9e1ff3-8617-4f52-bf04-5f8b804e2138",
+    "tool_name": "get_openapi_spec",
+    "arguments": {
+      "api_version": "2022-11-28",
+      "endpoint": "render_markdown"
+    },
+    "execution_status": "pending",
+    "timestamp": "2026-10-07T10:38:15.773651+00:00"
+  },
+  {
+    "event": "host_tool_execution",
+    "tool_call_id": "fc_fe9e1ff3-8617-4f52-bf04-5f8b804e2138",
+    "tool_name": "get_openapi_spec",
+    "execution_status": "completed",
+    "timestamp": "2026-10-07T10:38:15.775389+00:00"
+  },
+  {
+    "event": "llm_tool_selected",
+    "tool_call_id": "fc_5bd9e814-dfbb-42a9-bb49-b09038b5cdd7",
+    "tool_name": "get_openapi_spec",
+    "arguments": {
+      "api_version": "2025-06-01",
+      "endpoint": "render_markdown"
+    },
+    "execution_status": "pending",
+    "timestamp": "2026-10-07T10:48:50.553931+00:00"
+  },
+  {
+    "event": "host_tool_execution",
+    "tool_call_id": "fc_5bd9e814-dfbb-42a9-bb49-b09038b5cdd7",
+    "tool_name": "get_openapi_spec",
+    "execution_status": "completed",
+    "timestamp": "2026-10-07T10:48:50.555478+00:00"
+  },
+  {
+    "event": "llm_tool_selected",
+    "tool_call_id": "fc_1c547327-8d30-454b-98f1-3a611e5f5f37",
+    "tool_name": "search_docs",
+    "arguments": {
+      "k": 5,
+      "query": "maximum file size limit rendering markdown content via the GitHub REST API"
+    },
+    "execution_status": "pending",
+    "timestamp": "2026-10-07T10:51:11.619046+00:00"
+  },
+  {
+    "event": "host_tool_execution",
+    "tool_call_id": "fc_1c547327-8d30-454b-98f1-3a611e5f5f37",
+    "tool_name": "search_docs",
+    "execution_status": "completed",
+    "timestamp": "2026-10-07T10:51:17.336506+00:00"
+  },
+  {
+    "event": "llm_tool_selected",
+    "tool_call_id": "fc_8ee423e0-f4b8-40fe-afbd-b3d8a8d675a6",
+    "tool_name": "search_docs",
+    "arguments": {
+      "k": 5,
+      "query": "GitHub REST API render markdown maximum file size limit"
+    },
+    "execution_status": "pending",
+    "timestamp": "2026-10-07T10:54:18.575785+00:00"
+  },
+  {
+    "event": "host_tool_execution",
+    "tool_call_id": "fc_8ee423e0-f4b8-40fe-afbd-b3d8a8d675a6",
+    "tool_name": "search_docs",
+    "execution_status": "completed",
+    "timestamp": "2026-10-07T10:54:25.923411+00:00"
+  },
+  {
+    "event": "llm_tool_selected",
+    "tool_call_id": "fc_bac209a5-4e5d-4872-8cf3-b573590cedc6",
+    "tool_name": "get_openapi_spec",
+    "arguments": {
+      "api_version": "2025-06-01",
+      "endpoint": "render_markdown"
+    },
+    "execution_status": "pending",
+    "timestamp": "2026-10-07T10:54:27.382939+00:00"
+  },
+  {
+    "event": "host_tool_execution",
+    "tool_call_id": "fc_bac209a5-4e5d-4872-8cf3-b573590cedc6",
+    "tool_name": "get_openapi_spec",
+    "execution_status": "completed",
+    "timestamp": "2026-10-07T10:54:27.384308+00:00"
+  },
+  {
+    "event": "llm_tool_selected",
+    "tool_call_id": "fc_866381b3-712e-4392-9e1f-eebd0e9ea691",
+    "tool_name": "search_docs",
+    "arguments": {
+      "k": 5,
+      "query": "Content must be 400 KB or less markdown endpoint"
+    },
+    "execution_status": "pending",
+    "timestamp": "2026-10-07T10:54:27.931831+00:00"
+  },
+  {
+    "event": "host_tool_execution",
+    "tool_call_id": "fc_866381b3-712e-4392-9e1f-eebd0e9ea691",
+    "tool_name": "search_docs",
+    "execution_status": "completed",
+    "timestamp": "2026-10-07T10:54:27.946595+00:00"
+  },
+  {
+    "event": "llm_tool_selected",
+    "tool_call_id": "fc_2b09d0fe-d4fe-41ca-8f16-13df3df887be",
+    "tool_name": "search_docs",
+    "arguments": {
+      "k": 5,
+      "query": "Swagger Codegen CLI jar Maven group id version 3.x"
+    },
+    "execution_status": "pending",
+    "timestamp": "2026-10-07T10:54:32.365772+00:00"
+  },
+  {
+    "event": "host_tool_execution",
+    "tool_call_id": "fc_2b09d0fe-d4fe-41ca-8f16-13df3df887be",
+    "tool_name": "search_docs",
+    "execution_status": "completed",
+    "timestamp": "2026-10-07T10:54:32.398757+00:00"
+  },
+  {
+    "event": "llm_tool_selected",
+    "tool_call_id": "fc_16327024-2c50-43e6-be8c-bf9691de63d0",
+    "tool_name": "search_docs",
+    "arguments": {
+      "k": 10,
+      "query": "SwaggerCodegen3.x uses Maven group id"
+    },
+    "execution_status": "pending",
+    "timestamp": "2026-10-07T10:54:44.104505+00:00"
+  },
+  {
+    "event": "host_tool_execution",
+    "tool_call_id": "fc_16327024-2c50-43e6-be8c-bf9691de63d0",
+    "tool_name": "search_docs",
+    "execution_status": "completed",
+    "timestamp": "2026-10-07T10:54:44.134412+00:00"
+  },
+  {
+    "event": "llm_tool_selected",
+    "tool_call_id": "fc_6fa19f47-3b27-497b-963b-a22c4f02c5a2",
+    "tool_name": "search_docs",
+    "arguments": {
+      "k": 5,
+      "query": "GitHub REST API create repository OAuth scopes required"
+    },
+    "execution_status": "pending",
+    "timestamp": "2026-10-07T10:55:10.847600+00:00"
+  },
+  {
+    "event": "host_tool_execution",
+    "tool_call_id": "fc_6fa19f47-3b27-497b-963b-a22c4f02c5a2",
+    "tool_name": "search_docs",
+    "execution_status": "completed",
+    "timestamp": "2026-10-07T10:55:10.887900+00:00"
+  },
+  {
+    "event": "llm_tool_selected",
+    "tool_call_id": "fc_4e3e0bb4-196e-4175-ad9b-f5989c588153",
+    "tool_name": "check_deprecation",
+    "arguments": {
+      "api_version": "2025-06-01",
+      "endpoint": "create_issue"
+    },
+    "execution_status": "pending",
+    "timestamp": "2026-10-07T10:55:27.425325+00:00"
+  },
+  {
+    "event": "host_tool_execution",
+    "tool_call_id": "fc_4e3e0bb4-196e-4175-ad9b-f5989c588153",
+    "tool_name": "check_deprecation",
+    "execution_status": "completed",
+    "timestamp": "2026-10-07T10:55:27.427868+00:00"
+  },
+  {
+    "event": "llm_tool_selected",
+    "tool_call_id": "fc_a09b1724-2d91-461d-adaa-bf5b0965c328",
+    "tool_name": "get_openapi_spec",
+    "arguments": {
+      "api_version": "2025-06-01",
+      "endpoint": "create_release"
+    },
+    "execution_status": "pending",
+    "timestamp": "2026-10-07T10:55:35.545096+00:00"
+  },
+  {
+    "event": "host_tool_execution",
+    "tool_call_id": "fc_a09b1724-2d91-461d-adaa-bf5b0965c328",
+    "tool_name": "get_openapi_spec",
+    "execution_status": "completed",
+    "timestamp": "2026-10-07T10:55:35.547476+00:00"
+  },
+  {
+    "event": "llm_tool_selected",
+    "tool_call_id": "fc_56c5607a-d36a-436d-b7dd-f46959303ff3",
+    "tool_name": "get_openapi_spec",
+    "arguments": {
+      "api_version": "2022-11-28",
+      "endpoint": "render_markdown"
+    },
+    "execution_status": "pending",
+    "timestamp": "2026-10-07T10:55:44.005145+00:00"
+  },
+  {
+    "event": "host_tool_execution",
+    "tool_call_id": "fc_56c5607a-d36a-436d-b7dd-f46959303ff3",
+    "tool_name": "get_openapi_spec",
+    "execution_status": "completed",
+    "timestamp": "2026-10-07T10:55:44.006628+00:00"
+  },
+  {
+    "event": "llm_tool_selected",
+    "tool_call_id": "fc_cd1b3178-e749-4351-96a8-4dfbd7a56841",
+    "tool_name": "get_openapi_spec",
+    "arguments": {
+      "api_version": "2025-06-01",
+      "endpoint": "render_markdown"
+    },
+    "execution_status": "pending",
+    "timestamp": "2026-10-07T10:55:51.777884+00:00"
+  },
+  {
+    "event": "host_tool_execution",
+    "tool_call_id": "fc_cd1b3178-e749-4351-96a8-4dfbd7a56841",
+    "tool_name": "get_openapi_spec",
+    "execution_status": "completed",
+    "timestamp": "2026-10-07T10:55:51.779422+00:00"
+  },
+  {
+    "event": "llm_tool_selected",
+    "tool_call_id": "fc_570ec148-5b8a-4785-9134-387201cc5a33",
+    "tool_name": "get_openapi_spec",
+    "arguments": {
+      "api_version": "2022-11-28",
+      "endpoint": "create_pull_request"
+    },
+    "execution_status": "pending",
+    "timestamp": "2026-10-07T10:56:06.989158+00:00"
+  },
+  {
+    "event": "host_tool_execution",
+    "tool_call_id": "fc_570ec148-5b8a-4785-9134-387201cc5a33",
+    "tool_name": "get_openapi_spec",
+    "execution_status": "completed",
+    "timestamp": "2026-10-07T10:56:06.990747+00:00"
+  },
+  {
+    "event": "llm_tool_selected",
+    "tool_call_id": "fc_278f60fb-6561-49ce-ad0c-c0c0c70f21e9",
+    "tool_name": "get_openapi_spec",
+    "arguments": {
+      "api_version": "2025-06-01",
+      "endpoint": "create_pull_request"
+    },
+    "execution_status": "pending",
+    "timestamp": "2026-10-07T10:56:13.823743+00:00"
+  },
+  {
+    "event": "host_tool_execution",
+    "tool_call_id": "fc_278f60fb-6561-49ce-ad0c-c0c0c70f21e9",
+    "tool_name": "get_openapi_spec",
+    "execution_status": "completed",
+    "timestamp": "2026-10-07T10:56:13.826402+00:00"
+  },
+  {
+    "event": "llm_tool_selected",
+    "tool_call_id": "fc_fbf0fd9d-387e-46b7-a388-03f4c2aae7eb",
+    "tool_name": "search_docs",
+    "arguments": {
+      "k": 5,
+      "query": "make_latest parameter release creation GitHub API 2025-06-01 undocumented heuristic 2022-11-28"
+    },
+    "execution_status": "pending",
+    "timestamp": "2026-10-07T10:56:24.912660+00:00"
+  },
+  {
+    "event": "host_tool_execution",
+    "tool_call_id": "fc_fbf0fd9d-387e-46b7-a388-03f4c2aae7eb",
+    "tool_name": "search_docs",
+    "execution_status": "completed",
+    "timestamp": "2026-10-07T10:56:24.956334+00:00"
+  },
+  {
+    "event": "llm_tool_selected",
+    "tool_call_id": "fc_7c95ccdd-c96a-4766-89e1-19332fbfea56",
+    "tool_name": "search_docs",
+    "arguments": {
+      "k": 10,
+      "query": "draft pull request auto-merge GitHub API 2022-11-28"
+    },
+    "execution_status": "pending",
+    "timestamp": "2026-10-07T10:56:40.923942+00:00"
+  },
+  {
+    "event": "host_tool_execution",
+    "tool_call_id": "fc_7c95ccdd-c96a-4766-89e1-19332fbfea56",
+    "tool_name": "search_docs",
+    "execution_status": "completed",
+    "timestamp": "2026-10-07T10:56:40.948735+00:00"
+  },
+  {
+    "event": "llm_tool_selected",
+    "tool_call_id": "fc_b3d48093-b0c6-48e4-ab32-998786225571",
+    "tool_name": "get_openapi_spec",
+    "arguments": {
+      "api_version": "2022-11-28",
+      "endpoint": "create_issue"
+    },
+    "execution_status": "pending",
+    "timestamp": "2026-10-07T10:57:01.227866+00:00"
+  },
+  {
+    "event": "host_tool_execution",
+    "tool_call_id": "fc_b3d48093-b0c6-48e4-ab32-998786225571",
+    "tool_name": "get_openapi_spec",
+    "execution_status": "completed",
+    "timestamp": "2026-10-07T10:57:01.230834+00:00"
+  },
+  {
+    "event": "llm_tool_selected",
+    "tool_call_id": "fc_fe0cafcf-6b13-425e-8098-1276899efbb4",
+    "tool_name": "get_openapi_spec",
+    "arguments": {
+      "api_version": "2025-06-01",
+      "endpoint": "create_issue"
+    },
+    "execution_status": "pending",
+    "timestamp": "2026-10-07T10:57:05.051126+00:00"
+  },
+  {
+    "event": "host_tool_execution",
+    "tool_call_id": "fc_fe0cafcf-6b13-425e-8098-1276899efbb4",
+    "tool_name": "get_openapi_spec",
+    "execution_status": "completed",
+    "timestamp": "2026-10-07T10:57:05.053910+00:00"
+  },
+  {
+    "event": "llm_tool_selected",
+    "tool_call_id": "fc_0d122ddd-aad8-4ddc-9d28-8c22e298c1f4",
+    "tool_name": "search_docs",
+    "arguments": {
+      "k": 5,
+      "query": "maximum file size limit rendering markdown content GitHub REST API"
+    },
+    "execution_status": "pending",
+    "timestamp": "2026-10-07T10:57:19.612335+00:00"
+  },
+  {
+    "event": "host_tool_execution",
+    "tool_call_id": "fc_0d122ddd-aad8-4ddc-9d28-8c22e298c1f4",
+    "tool_name": "search_docs",
+    "execution_status": "completed",
+    "timestamp": "2026-10-07T10:57:19.649006+00:00"
+  },
+  {
+    "event": "llm_tool_selected",
+    "tool_call_id": "fc_7cc4f3be-e9e5-4bf4-bcd8-f4542d26baaf",
+    "tool_name": "search_docs",
+    "arguments": {
+      "k": 5,
+      "query": "Maven group id Swagger Codegen CLI jar version 3.x"
+    },
+    "execution_status": "pending",
+    "timestamp": "2026-10-07T10:57:40.360961+00:00"
+  },
+  {
+    "event": "host_tool_execution",
+    "tool_call_id": "fc_7cc4f3be-e9e5-4bf4-bcd8-f4542d26baaf",
+    "tool_name": "search_docs",
+    "execution_status": "completed",
+    "timestamp": "2026-10-07T10:57:40.393820+00:00"
+  },
+  {
+    "event": "llm_tool_selected",
+    "tool_call_id": "fc_2ccc2e74-310c-4fcc-97c5-c9450ab3ffdd",
+    "tool_name": "search_docs",
+    "arguments": {
+      "k": 5,
+      "query": "OAuth scopes required to create a repository for an authenticated user GitHub REST API"
+    },
+    "execution_status": "pending",
+    "timestamp": "2026-10-07T10:58:01.736235+00:00"
+  },
+  {
+    "event": "host_tool_execution",
+    "tool_call_id": "fc_2ccc2e74-310c-4fcc-97c5-c9450ab3ffdd",
+    "tool_name": "search_docs",
+    "execution_status": "completed",
+    "timestamp": "2026-10-07T10:58:01.775069+00:00"
+  },
+  {
+    "event": "llm_tool_selected",
+    "tool_call_id": "fc_272a1513-d289-4c61-97cb-579b16d773c0",
+    "tool_name": "check_deprecation",
+    "arguments": {
+      "api_version": "2025-06-01",
+      "endpoint": "create_issue"
+    },
+    "execution_status": "pending",
+    "timestamp": "2026-10-07T10:58:24.613984+00:00"
+  },
+  {
+    "event": "host_tool_execution",
+    "tool_call_id": "fc_272a1513-d289-4c61-97cb-579b16d773c0",
+    "tool_name": "check_deprecation",
+    "execution_status": "completed",
+    "timestamp": "2026-10-07T10:58:24.617043+00:00"
+  },
+  {
+    "event": "llm_tool_selected",
+    "tool_call_id": "fc_1864318a-182a-49b5-afc7-13e750d647a4",
+    "tool_name": "get_openapi_spec",
+    "arguments": {
+      "api_version": "2025-06-01",
+      "endpoint": "create_release"
+    },
+    "execution_status": "pending",
+    "timestamp": "2026-10-07T10:58:43.414551+00:00"
+  },
+  {
+    "event": "host_tool_execution",
+    "tool_call_id": "fc_1864318a-182a-49b5-afc7-13e750d647a4",
+    "tool_name": "get_openapi_spec",
+    "execution_status": "completed",
+    "timestamp": "2026-10-07T10:58:43.417607+00:00"
+  },
+  {
+    "event": "llm_tool_selected",
+    "tool_call_id": "fc_3b882f62-c0d3-4fb0-a29a-c6faeec157a4",
+    "tool_name": "get_openapi_spec",
+    "arguments": {
+      "api_version": "2022-11-28",
+      "endpoint": "render_markdown"
+    },
+    "execution_status": "pending",
+    "timestamp": "2026-10-07T10:59:06.216932+00:00"
+  },
+  {
+    "event": "host_tool_execution",
+    "tool_call_id": "fc_3b882f62-c0d3-4fb0-a29a-c6faeec157a4",
+    "tool_name": "get_openapi_spec",
+    "execution_status": "completed",
+    "timestamp": "2026-10-07T10:59:06.219511+00:00"
+  },
+  {
+    "event": "llm_tool_selected",
+    "tool_call_id": "fc_b471789d-a4d5-487d-94c1-b048bfcab9f6",
+    "tool_name": "get_openapi_spec",
+    "arguments": {
+      "api_version": "2025-06-01",
+      "endpoint": "render_markdown"
+    },
+    "execution_status": "pending",
+    "timestamp": "2026-10-07T10:59:09.803313+00:00"
+  },
+  {
+    "event": "host_tool_execution",
+    "tool_call_id": "fc_b471789d-a4d5-487d-94c1-b048bfcab9f6",
+    "tool_name": "get_openapi_spec",
+    "execution_status": "completed",
+    "timestamp": "2026-10-07T10:59:09.805880+00:00"
+  },
+  {
+    "event": "llm_tool_selected",
+    "tool_call_id": "fc_8e5d3b75-7fdc-48e6-8f63-01ac47b2da7e",
+    "tool_name": "check_deprecation",
+    "arguments": {
+      "api_version": "2022-11-28",
+      "endpoint": "create_pull_request"
+    },
+    "execution_status": "pending",
+    "timestamp": "2026-10-07T10:59:38.872897+00:00"
+  },
+  {
+    "event": "host_tool_execution",
+    "tool_call_id": "fc_8e5d3b75-7fdc-48e6-8f63-01ac47b2da7e",
+    "tool_name": "check_deprecation",
+    "execution_status": "completed",
+    "timestamp": "2026-10-07T10:59:38.876060+00:00"
+  },
+  {
+    "event": "llm_tool_selected",
+    "tool_call_id": "fc_2e8304aa-48e7-4ea8-adb1-3b8f429562b4",
+    "tool_name": "get_openapi_spec",
+    "arguments": {
+      "api_version": "2022-11-28",
+      "endpoint": "create_pull_request"
+    },
+    "execution_status": "pending",
+    "timestamp": "2026-10-07T10:59:42.542784+00:00"
+  },
+  {
+    "event": "host_tool_execution",
+    "tool_call_id": "fc_2e8304aa-48e7-4ea8-adb1-3b8f429562b4",
+    "tool_name": "get_openapi_spec",
+    "execution_status": "completed",
+    "timestamp": "2026-10-07T10:59:42.546025+00:00"
+  },
+  {
+    "event": "llm_tool_selected",
+    "tool_call_id": "fc_5140a7fe-4269-454c-9c27-131b8cca5945",
+    "tool_name": "check_deprecation",
+    "arguments": {
+      "api_version": "2025-06-01",
+      "endpoint": "create_pull_request"
+    },
+    "execution_status": "pending",
+    "timestamp": "2026-10-07T10:59:50.089314+00:00"
+  },
+  {
+    "event": "host_tool_execution",
+    "tool_call_id": "fc_5140a7fe-4269-454c-9c27-131b8cca5945",
+    "tool_name": "check_deprecation",
+    "execution_status": "completed",
+    "timestamp": "2026-10-07T10:59:50.090261+00:00"
+  },
+  {
+    "event": "llm_tool_selected",
+    "tool_call_id": "fc_71a23016-137c-4e81-8e8c-8e28a99eeb62",
+    "tool_name": "get_openapi_spec",
+    "arguments": {
+      "api_version": "2025-06-01",
+      "endpoint": "create_pull_request"
+    },
+    "execution_status": "pending",
+    "timestamp": "2026-10-07T10:59:54.815048+00:00"
+  },
+  {
+    "event": "host_tool_execution",
+    "tool_call_id": "fc_71a23016-137c-4e81-8e8c-8e28a99eeb62",
+    "tool_name": "get_openapi_spec",
+    "execution_status": "completed",
+    "timestamp": "2026-10-07T10:59:54.817342+00:00"
+  },
+  {
+    "event": "llm_tool_selected",
+    "tool_call_id": "fc_9ffd52e7-5ca0-4e6e-98c5-86cb860b9a53",
+    "tool_name": "search_docs",
+    "arguments": {
+      "k": 10,
+      "query": "maintainer_can_modify pull request creation API version 2022-11-28 2025-06-01"
+    },
+    "execution_status": "pending",
+    "timestamp": "2026-10-07T11:00:08.086120+00:00"
+  },
+  {
+    "event": "host_tool_execution",
+    "tool_call_id": "fc_9ffd52e7-5ca0-4e6e-98c5-86cb860b9a53",
+    "tool_name": "search_docs",
+    "execution_status": "completed",
+    "timestamp": "2026-10-07T11:00:08.122807+00:00"
+  },
+  {
+    "event": "llm_tool_selected",
+    "tool_call_id": "fc_6e32dc3a-8709-4d62-ab76-dd8b58a39dd9",
+    "tool_name": "search_docs",
+    "arguments": {
+      "k": 5,
+      "query": "maintainer_can_modify 2022-11-28 pull request"
+    },
+    "execution_status": "pending",
+    "timestamp": "2026-10-07T11:00:21.065053+00:00"
+  },
+  {
+    "event": "host_tool_execution",
+    "tool_call_id": "fc_6e32dc3a-8709-4d62-ab76-dd8b58a39dd9",
+    "tool_name": "search_docs",
+    "execution_status": "completed",
+    "timestamp": "2026-10-07T11:00:21.088655+00:00"
+  },
+  {
+    "event": "llm_tool_selected",
+    "tool_call_id": "fc_b88dc0c5-48f4-41b0-a3aa-366d603f82de",
+    "tool_name": "search_docs",
+    "arguments": {
+      "k": 5,
+      "query": "make_latest parameter GitHub API 2025-06-01 release creation replace undocumented heuristic 2022-11-28"
+    },
+    "execution_status": "pending",
+    "timestamp": "2026-10-07T11:01:02.211766+00:00"
+  },
+  {
+    "event": "host_tool_execution",
+    "tool_call_id": "fc_b88dc0c5-48f4-41b0-a3aa-366d603f82de",
+    "tool_name": "search_docs",
+    "execution_status": "completed",
+    "timestamp": "2026-10-07T11:01:02.247947+00:00"
+  },
+  {
+    "event": "llm_tool_selected",
+    "tool_call_id": "fc_6aa2cecf-fcd8-48bf-875b-37c99a22a8ae",
+    "tool_name": "search_docs",
+    "arguments": {
+      "k": 10,
+      "query": "draft pull requests auto-merge settings API version 2022-11-28 2025-06-01"
+    },
+    "execution_status": "pending",
+    "timestamp": "2026-10-07T11:01:28.621836+00:00"
+  },
+  {
+    "event": "host_tool_execution",
+    "tool_call_id": "fc_6aa2cecf-fcd8-48bf-875b-37c99a22a8ae",
+    "tool_name": "search_docs",
+    "execution_status": "completed",
+    "timestamp": "2026-10-07T11:01:28.652617+00:00"
+  },
+  {
+    "event": "llm_tool_selected",
+    "tool_call_id": "fc_74ec8b2c-a4b7-4e50-8a71-dd4ce957740e",
+    "tool_name": "search_docs",
+    "arguments": {
+      "k": 5,
+      "query": "issue types on creation GitHub API 2022-11-28 2025-06-01"
+    },
+    "execution_status": "pending",
+    "timestamp": "2026-10-07T11:02:04.162096+00:00"
+  },
+  {
+    "event": "host_tool_execution",
+    "tool_call_id": "fc_74ec8b2c-a4b7-4e50-8a71-dd4ce957740e",
+    "tool_name": "search_docs",
+    "execution_status": "completed",
+    "timestamp": "2026-10-07T11:02:04.186453+00:00"
+  },
+  {
+    "event": "llm_tool_selected",
+    "tool_call_id": "fc_b1a00e8b-4b4e-4718-9352-a11e1788f924",
+    "tool_name": "search_docs",
+    "arguments": {
+      "k": 5,
+      "query": "maximum file size limit rendering markdown GitHub REST API"
+    },
+    "execution_status": "pending",
+    "timestamp": "2026-10-07T11:36:41.584352+00:00"
+  },
+  {
+    "event": "host_tool_execution",
+    "tool_call_id": "fc_b1a00e8b-4b4e-4718-9352-a11e1788f924",
+    "tool_name": "search_docs",
+    "execution_status": "completed",
+    "timestamp": "2026-10-07T11:36:48.632527+00:00"
+  },
+  {
+    "event": "llm_tool_selected",
+    "tool_call_id": "fc_65b2e1b5-db00-4e74-a9f4-316eaf5bde48",
+    "tool_name": "search_docs",
+    "arguments": {
+      "k": 10,
+      "query": "render markdown content 400 KB limit"
+    },
+    "execution_status": "pending",
+    "timestamp": "2026-10-07T11:36:49.346298+00:00"
+  },
+  {
+    "event": "host_tool_execution",
+    "tool_call_id": "fc_65b2e1b5-db00-4e74-a9f4-316eaf5bde48",
+    "tool_name": "search_docs",
+    "execution_status": "completed",
+    "timestamp": "2026-10-07T11:36:49.366610+00:00"
+  },
+  {
+    "event": "llm_tool_selected",
+    "tool_call_id": "fc_065320cd-f9dd-4350-ae48-76799c3d3fdf",
+    "tool_name": "search_docs",
+    "arguments": {
+      "k": 5,
+      "query": "GitHub REST API create repository OAuth scopes required"
+    },
+    "execution_status": "pending",
+    "timestamp": "2026-10-07T11:36:51.490311+00:00"
+  },
+  {
+    "event": "host_tool_execution",
+    "tool_call_id": "fc_065320cd-f9dd-4350-ae48-76799c3d3fdf",
+    "tool_name": "search_docs",
+    "execution_status": "completed",
+    "timestamp": "2026-10-07T11:36:51.512287+00:00"
+  },
+  {
+    "event": "llm_tool_selected",
+    "tool_call_id": "fc_4533551a-cee0-4e63-ad26-8c5a63c81380",
+    "tool_name": "check_deprecation",
+    "arguments": {
+      "api_version": "2025-06-01",
+      "endpoint": "create_issue"
+    },
+    "execution_status": "pending",
+    "timestamp": "2026-10-07T11:36:53.075087+00:00"
+  },
+  {
+    "event": "host_tool_execution",
+    "tool_call_id": "fc_4533551a-cee0-4e63-ad26-8c5a63c81380",
+    "tool_name": "check_deprecation",
+    "execution_status": "completed",
+    "timestamp": "2026-10-07T11:36:53.079575+00:00"
+  },
+  {
+    "event": "llm_tool_selected",
+    "tool_call_id": "fc_e8754db4-26c3-4136-8646-bbc32a27a319",
+    "tool_name": "get_openapi_spec",
+    "arguments": {
+      "api_version": "2025-06-01",
+      "endpoint": "create_release"
+    },
+    "execution_status": "pending",
+    "timestamp": "2026-10-07T11:36:58.760926+00:00"
+  },
+  {
+    "event": "host_tool_execution",
+    "tool_call_id": "fc_e8754db4-26c3-4136-8646-bbc32a27a319",
+    "tool_name": "get_openapi_spec",
+    "execution_status": "completed",
+    "timestamp": "2026-10-07T11:36:58.764645+00:00"
+  },
+  {
+    "event": "llm_tool_selected",
+    "tool_call_id": "fc_da18e34d-f444-4d82-bf75-f2b307bee0e2",
+    "tool_name": "get_openapi_spec",
+    "arguments": {
+      "api_version": "2022-11-28",
+      "endpoint": "render_markdown"
+    },
+    "execution_status": "pending",
+    "timestamp": "2026-10-07T11:37:09.672535+00:00"
+  },
+  {
+    "event": "host_tool_execution",
+    "tool_call_id": "fc_da18e34d-f444-4d82-bf75-f2b307bee0e2",
+    "tool_name": "get_openapi_spec",
+    "execution_status": "completed",
+    "timestamp": "2026-10-07T11:37:09.674962+00:00"
+  },
+  {
+    "event": "llm_tool_selected",
+    "tool_call_id": "fc_c54ed54d-ec94-43e0-9cf3-2d4ff45e8936",
+    "tool_name": "get_openapi_spec",
+    "arguments": {
+      "api_version": "2025-06-01",
+      "endpoint": "render_markdown"
+    },
+    "execution_status": "pending",
+    "timestamp": "2026-10-07T11:37:10.525316+00:00"
+  },
+  {
+    "event": "host_tool_execution",
+    "tool_call_id": "fc_c54ed54d-ec94-43e0-9cf3-2d4ff45e8936",
+    "tool_name": "get_openapi_spec",
+    "execution_status": "completed",
+    "timestamp": "2026-10-07T11:37:10.529338+00:00"
+  },
+  {
+    "event": "llm_tool_selected",
+    "tool_call_id": "fc_ccf4ce0e-af0a-4a5a-bc10-5425dfd245a0",
+    "tool_name": "get_openapi_spec",
+    "arguments": {
+      "api_version": "2022-11-28",
+      "endpoint": "create_pull_request"
+    },
+    "execution_status": "pending",
+    "timestamp": "2026-10-07T11:37:19.370539+00:00"
+  },
+  {
+    "event": "host_tool_execution",
+    "tool_call_id": "fc_ccf4ce0e-af0a-4a5a-bc10-5425dfd245a0",
+    "tool_name": "get_openapi_spec",
+    "execution_status": "completed",
+    "timestamp": "2026-10-07T11:37:19.374205+00:00"
+  },
+  {
+    "event": "llm_tool_selected",
+    "tool_call_id": "fc_70a33b88-9528-486c-be59-042d83442686",
+    "tool_name": "get_openapi_spec",
+    "arguments": {
+      "api_version": "2025-06-01",
+      "endpoint": "create_pull_request"
+    },
+    "execution_status": "pending",
+    "timestamp": "2026-10-07T11:37:24.931003+00:00"
+  },
+  {
+    "event": "host_tool_execution",
+    "tool_call_id": "fc_70a33b88-9528-486c-be59-042d83442686",
+    "tool_name": "get_openapi_spec",
+    "execution_status": "completed",
+    "timestamp": "2026-10-07T11:37:24.934189+00:00"
+  },
+  {
+    "event": "llm_tool_selected",
+    "tool_call_id": "fc_4bc33316-ae2d-451a-a1d5-91f84e3ed235",
+    "tool_name": "search_docs",
+    "arguments": {
+      "k": 5,
+      "query": "make_latest parameter release creation GitHub API 2025-06-01 undocumented heuristic 2022-11-28"
+    },
+    "execution_status": "pending",
+    "timestamp": "2026-10-07T11:37:38.022758+00:00"
+  },
+  {
+    "event": "host_tool_execution",
+    "tool_call_id": "fc_4bc33316-ae2d-451a-a1d5-91f84e3ed235",
+    "tool_name": "search_docs",
+    "execution_status": "completed",
+    "timestamp": "2026-10-07T11:37:38.061879+00:00"
+  },
+  {
+    "event": "llm_tool_selected",
+    "tool_call_id": "fc_7ba21ba7-8aed-47c0-940f-3c424b67726b",
+    "tool_name": "get_openapi_spec",
+    "arguments": {
+      "api_version": "2025-06-01",
+      "endpoint": "create_release"
+    },
+    "execution_status": "pending",
+    "timestamp": "2026-10-07T11:37:50.066915+00:00"
+  },
+  {
+    "event": "host_tool_execution",
+    "tool_call_id": "fc_7ba21ba7-8aed-47c0-940f-3c424b67726b",
+    "tool_name": "get_openapi_spec",
+    "execution_status": "completed",
+    "timestamp": "2026-10-07T11:37:50.071059+00:00"
+  },
+  {
+    "event": "llm_tool_selected",
+    "tool_call_id": "fc_d9ecb2dd-1676-44da-af14-568cc7ec302a",
+    "tool_name": "search_docs",
+    "arguments": {
+      "k": 5,
+      "query": "draft pull request auto-merge parameter GitHub API 2022-11-28"
+    },
+    "execution_status": "pending",
+    "timestamp": "2026-10-07T11:38:08.738378+00:00"
+  },
+  {
+    "event": "host_tool_execution",
+    "tool_call_id": "fc_d9ecb2dd-1676-44da-af14-568cc7ec302a",
+    "tool_name": "search_docs",
+    "execution_status": "completed",
+    "timestamp": "2026-10-07T11:38:08.762237+00:00"
+  },
+  {
+    "event": "llm_tool_selected",
+    "tool_call_id": "fc_c6b8cf9b-d46f-4c44-a1bf-0b442e677b5b",
+    "tool_name": "search_docs",
+    "arguments": {
+      "k": 5,
+      "query": "draft auto-merge 2022-11-28 pull request"
+    },
+    "execution_status": "pending",
+    "timestamp": "2026-10-07T11:38:19.690931+00:00"
+  },
+  {
+    "event": "host_tool_execution",
+    "tool_call_id": "fc_c6b8cf9b-d46f-4c44-a1bf-0b442e677b5b",
+    "tool_name": "search_docs",
+    "execution_status": "completed",
+    "timestamp": "2026-10-07T11:38:19.749334+00:00"
+  },
+  {
+    "event": "llm_tool_selected",
+    "tool_call_id": "fc_11a34249-ad57-4c53-bc09-bb7b5042c430",
+    "tool_name": "get_openapi_spec",
+    "arguments": {
+      "api_version": "2022-11-28",
+      "endpoint": "create_issue"
+    },
+    "execution_status": "pending",
+    "timestamp": "2026-10-07T11:38:44.042537+00:00"
+  },
+  {
+    "event": "host_tool_execution",
+    "tool_call_id": "fc_11a34249-ad57-4c53-bc09-bb7b5042c430",
+    "tool_name": "get_openapi_spec",
+    "execution_status": "completed",
+    "timestamp": "2026-10-07T11:38:44.047100+00:00"
+  },
+  {
+    "event": "llm_tool_selected",
+    "tool_call_id": "fc_e48e0473-c6ab-4d4d-b985-04f19f2bde6e",
+    "tool_name": "get_openapi_spec",
+    "arguments": {
+      "api_version": "2025-06-01",
+      "endpoint": "create_issue"
+    },
+    "execution_status": "pending",
+    "timestamp": "2026-10-07T11:38:47.816783+00:00"
+  },
+  {
+    "event": "host_tool_execution",
+    "tool_call_id": "fc_e48e0473-c6ab-4d4d-b985-04f19f2bde6e",
+    "tool_name": "get_openapi_spec",
+    "execution_status": "completed",
+    "timestamp": "2026-10-07T11:38:47.819845+00:00"
+  },
+  {
+    "event": "llm_tool_selected",
+    "tool_call_id": "fc_1d4b5f83-e488-4c05-8b88-d67f44a471ac",
+    "tool_name": "search_docs",
+    "arguments": {
+      "k": 5,
+      "query": "maximum file size limit rendering Markdown content GitHub REST API"
+    },
+    "execution_status": "pending",
+    "timestamp": "2026-10-07T11:39:01.474163+00:00"
+  },
+  {
+    "event": "host_tool_execution",
+    "tool_call_id": "fc_1d4b5f83-e488-4c05-8b88-d67f44a471ac",
+    "tool_name": "search_docs",
+    "execution_status": "completed",
+    "timestamp": "2026-10-07T11:39:01.510015+00:00"
+  },
+  {
+    "event": "llm_tool_selected",
+    "tool_call_id": "fc_7126de22-dbab-4b17-bfe6-2c45de593749",
+    "tool_name": "search_docs",
+    "arguments": {
+      "k": 5,
+      "query": "Swagger Codegen CLI jar Maven group id version 3.x"
+    },
+    "execution_status": "pending",
+    "timestamp": "2026-10-07T11:39:21.475748+00:00"
+  },
+  {
+    "event": "host_tool_execution",
+    "tool_call_id": "fc_7126de22-dbab-4b17-bfe6-2c45de593749",
+    "tool_name": "search_docs",
+    "execution_status": "completed",
+    "timestamp": "2026-10-07T11:39:21.521816+00:00"
+  },
+  {
+    "event": "llm_tool_selected",
+    "tool_call_id": "fc_a91130dd-53ec-4268-98e1-13893ec5aa74",
+    "tool_name": "search_docs",
+    "arguments": {
+      "k": 5,
+      "query": "Create a repository for the authenticated user OAuth scopes required"
+    },
+    "execution_status": "pending",
+    "timestamp": "2026-10-07T11:39:40.653349+00:00"
+  },
+  {
+    "event": "host_tool_execution",
+    "tool_call_id": "fc_a91130dd-53ec-4268-98e1-13893ec5aa74",
+    "tool_name": "search_docs",
+    "execution_status": "completed",
+    "timestamp": "2026-10-07T11:39:40.686269+00:00"
+  },
+  {
+    "event": "llm_tool_selected",
+    "tool_call_id": "fc_d9f033e7-2cfe-4b95-a225-ab482737b372",
+    "tool_name": "check_deprecation",
+    "arguments": {
+      "api_version": "2025-06-01",
+      "endpoint": "create_issue"
+    },
+    "execution_status": "pending",
+    "timestamp": "2026-10-07T11:40:03.335372+00:00"
+  },
+  {
+    "event": "host_tool_execution",
+    "tool_call_id": "fc_d9f033e7-2cfe-4b95-a225-ab482737b372",
+    "tool_name": "check_deprecation",
+    "execution_status": "completed",
+    "timestamp": "2026-10-07T11:40:03.339726+00:00"
+  },
+  {
+    "event": "llm_tool_selected",
+    "tool_call_id": "fc_8dad7599-1fa6-4732-af7b-eba64dd4663d",
+    "tool_name": "get_openapi_spec",
+    "arguments": {
+      "api_version": "2025-06-01",
+      "endpoint": "create_release"
+    },
+    "execution_status": "pending",
+    "timestamp": "2026-10-07T11:40:16.952078+00:00"
+  },
+  {
+    "event": "host_tool_execution",
+    "tool_call_id": "fc_8dad7599-1fa6-4732-af7b-eba64dd4663d",
+    "tool_name": "get_openapi_spec",
+    "execution_status": "completed",
+    "timestamp": "2026-10-07T11:40:16.955836+00:00"
+  },
+  {
+    "event": "llm_tool_selected",
+    "tool_call_id": "fc_bbe8b259-92ab-40c0-87c9-0cebc440bf2a",
+    "tool_name": "check_deprecation",
+    "arguments": {
+      "api_version": "2025-06-01",
+      "endpoint": "create_release"
+    },
+    "execution_status": "pending",
+    "timestamp": "2026-10-07T11:40:27.115558+00:00"
+  },
+  {
+    "event": "host_tool_execution",
+    "tool_call_id": "fc_bbe8b259-92ab-40c0-87c9-0cebc440bf2a",
+    "tool_name": "check_deprecation",
+    "execution_status": "completed",
+    "timestamp": "2026-10-07T11:40:27.119898+00:00"
+  },
+  {
+    "event": "llm_tool_selected",
+    "tool_call_id": "fc_7ca10512-da4d-4907-9f2d-1f35c57a9265",
+    "tool_name": "get_openapi_spec",
+    "arguments": {
+      "api_version": "2022-11-28",
+      "endpoint": "render_markdown"
+    },
+    "execution_status": "pending",
+    "timestamp": "2026-10-07T11:40:43.876705+00:00"
+  },
+  {
+    "event": "host_tool_execution",
+    "tool_call_id": "fc_7ca10512-da4d-4907-9f2d-1f35c57a9265",
+    "tool_name": "get_openapi_spec",
+    "execution_status": "completed",
+    "timestamp": "2026-10-07T11:40:43.878199+00:00"
+  },
+  {
+    "event": "llm_tool_selected",
+    "tool_call_id": "fc_1426fffc-9df6-42be-85ec-ae6e641bfdc6",
+    "tool_name": "get_openapi_spec",
+    "arguments": {
+      "api_version": "2025-06-01",
+      "endpoint": "render_markdown"
+    },
+    "execution_status": "pending",
+    "timestamp": "2026-10-07T11:40:49.619851+00:00"
+  },
+  {
+    "event": "host_tool_execution",
+    "tool_call_id": "fc_1426fffc-9df6-42be-85ec-ae6e641bfdc6",
+    "tool_name": "get_openapi_spec",
+    "execution_status": "completed",
+    "timestamp": "2026-10-07T11:40:49.623384+00:00"
+  },
+  {
+    "event": "llm_tool_selected",
+    "tool_call_id": "fc_5d3ce653-bfbf-483e-a1f1-64709b3af44f",
+    "tool_name": "search_docs",
+    "arguments": {
+      "k": 10,
+      "query": "maintainer_can_modify pull request create API 2022-11-28 2025-06-01"
+    },
+    "execution_status": "pending",
+    "timestamp": "2026-10-07T11:41:12.324259+00:00"
+  },
+  {
+    "event": "host_tool_execution",
+    "tool_call_id": "fc_5d3ce653-bfbf-483e-a1f1-64709b3af44f",
+    "tool_name": "search_docs",
+    "execution_status": "completed",
+    "timestamp": "2026-10-07T11:41:12.366139+00:00"
+  },
+  {
+    "event": "llm_tool_selected",
+    "tool_call_id": "fc_9556026e-3cbe-4119-b69e-f8756b9f3c13",
+    "tool_name": "search_docs",
+    "arguments": {
+      "k": 5,
+      "query": "make_latest parameter GitHub API 2025-06-01 release creation replace heuristic 2022-11-28"
+    },
+    "execution_status": "pending",
+    "timestamp": "2026-10-07T11:41:43.039355+00:00"
+  },
+  {
+    "event": "host_tool_execution",
+    "tool_call_id": "fc_9556026e-3cbe-4119-b69e-f8756b9f3c13",
+    "tool_name": "search_docs",
+    "execution_status": "completed",
+    "timestamp": "2026-10-07T11:41:43.071992+00:00"
+  },
+  {
+    "event": "llm_tool_selected",
+    "tool_call_id": "fc_9159e260-da47-4db5-894c-5650ded77553",
+    "tool_name": "search_docs",
+    "arguments": {
+      "k": 10,
+      "query": "draft pull requests auto-merge settings API version 2022-11-28 2025-06-01"
+    },
+    "execution_status": "pending",
+    "timestamp": "2026-10-07T11:42:10.646865+00:00"
+  },
+  {
+    "event": "host_tool_execution",
+    "tool_call_id": "fc_9159e260-da47-4db5-894c-5650ded77553",
+    "tool_name": "search_docs",
+    "execution_status": "completed",
+    "timestamp": "2026-10-07T11:42:10.687183+00:00"
+  },
+  {
+    "event": "llm_tool_selected",
+    "tool_call_id": "fc_60c8f69a-4d96-408d-8741-e67e5cb639be",
+    "tool_name": "search_docs",
+    "arguments": {
+      "k": 5,
+      "query": "auto-merge draft PR could not have auto-merge enabled until explicitly marked ready for review 2022-11-28"
+    },
+    "execution_status": "pending",
+    "timestamp": "2026-10-07T11:42:23.563858+00:00"
+  },
+  {
+    "event": "host_tool_execution",
+    "tool_call_id": "fc_60c8f69a-4d96-408d-8741-e67e5cb639be",
+    "tool_name": "search_docs",
+    "execution_status": "completed",
+    "timestamp": "2026-10-07T11:42:23.587237+00:00"
+  },
+  {
+    "event": "llm_tool_selected",
+    "tool_call_id": "fc_d015317b-0fda-4053-ba43-8c552daeb80d",
+    "tool_name": "search_docs",
+    "arguments": {
+      "k": 5,
+      "query": "auto_merge field pull request create API"
+    },
+    "execution_status": "pending",
+    "timestamp": "2026-10-07T11:42:44.661426+00:00"
+  },
+  {
+    "event": "host_tool_execution",
+    "tool_call_id": "fc_d015317b-0fda-4053-ba43-8c552daeb80d",
+    "tool_name": "search_docs",
+    "execution_status": "completed",
+    "timestamp": "2026-10-07T11:42:44.679080+00:00"
+  },
+  {
+    "event": "llm_tool_selected",
+    "tool_call_id": "fc_bfbb4930-0223-4b64-a98a-bf98ae8e6daa",
+    "tool_name": "search_docs",
+    "arguments": {
+      "k": 5,
+      "query": "auto_merge draft pull request create body"
+    },
+    "execution_status": "pending",
+    "timestamp": "2026-10-07T11:43:13.512186+00:00"
+  },
+  {
+    "event": "host_tool_execution",
+    "tool_call_id": "fc_bfbb4930-0223-4b64-a98a-bf98ae8e6daa",
+    "tool_name": "search_docs",
+    "execution_status": "completed",
+    "timestamp": "2026-10-07T11:43:13.542554+00:00"
+  },
+  {
+    "event": "llm_tool_selected",
+    "tool_call_id": "fc_2e9c33e4-3531-4f3f-8bf3-2d9166832349",
+    "tool_name": "search_docs",
+    "arguments": {
+      "k": 5,
+      "query": "issue types on creation GitHub API 2022-11-28 2025-06-01"
+    },
+    "execution_status": "pending",
+    "timestamp": "2026-10-07T11:43:22.863183+00:00"
+  },
+  {
+    "event": "host_tool_execution",
+    "tool_call_id": "fc_2e9c33e4-3531-4f3f-8bf3-2d9166832349",
+    "tool_name": "search_docs",
+    "execution_status": "completed",
+    "timestamp": "2026-10-07T11:43:22.885129+00:00"
   }
 ]
