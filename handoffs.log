@@ -1,0 +1,44 @@
+{"case_id": "q01", "hop": "orchestrator->routing_decision", "status": "ok", "decision": "code_sample_worker", "tokens": 543}
+{"case_id": "q01", "hop": "orchestrator->deprecation_worker", "status": "skipped", "tokens": 0}
+{"case_id": "q01", "hop": "orchestrator->code_sample_worker", "status": "ok", "tokens": 1649}
+{"case_id": "q01", "hop": "orchestrator->synthesis_resend", "status": "ok", "tokens": 496}
+{"case_id": "q02", "hop": "orchestrator->routing_decision", "status": "ok", "decision": "code_sample_worker", "tokens": 567}
+{"case_id": "q02", "hop": "orchestrator->deprecation_worker", "status": "skipped", "tokens": 0}
+{"case_id": "q02", "hop": "orchestrator->code_sample_worker", "status": "ok", "tokens": 1587}
+{"case_id": "q02", "hop": "orchestrator->synthesis_resend", "status": "ok", "tokens": 518}
+{"case_id": "q03", "hop": "orchestrator->routing_decision", "status": "ok", "decision": "code_sample_worker", "tokens": 549}
+{"case_id": "q03", "hop": "orchestrator->deprecation_worker", "status": "skipped", "tokens": 0}
+{"case_id": "q03", "hop": "orchestrator->code_sample_worker", "status": "ok", "tokens": 1555}
+{"case_id": "q03", "hop": "orchestrator->synthesis_resend", "status": "ok", "tokens": 643}
+{"case_id": "q04", "hop": "orchestrator->routing_decision", "status": "ok", "decision": "deprecation_worker", "tokens": 608}
+{"case_id": "q04", "hop": "orchestrator->deprecation_worker", "status": "ok", "error": null, "attempts": 1, "tokens": 1297}
+{"case_id": "q04", "hop": "orchestrator->code_sample_worker", "status": "skipped", "tokens": 0}
+{"case_id": "q04", "hop": "orchestrator->synthesis_resend", "status": "ok", "tokens": 412}
+{"case_id": "q05", "hop": "orchestrator->routing_decision", "status": "ok", "decision": "deprecation_worker", "tokens": 612}
+{"case_id": "q05", "hop": "orchestrator->deprecation_worker", "status": "ok", "error": null, "attempts": 1, "tokens": 2776}
+{"case_id": "q05", "hop": "orchestrator->code_sample_worker", "status": "skipped", "tokens": 0}
+{"case_id": "q05", "hop": "orchestrator->synthesis_resend", "status": "ok", "tokens": 438}
+{"case_id": "q06", "hop": "orchestrator->routing_decision", "status": "ok", "decision": "deprecation_worker", "tokens": 864}
+{"case_id": "q06", "hop": "orchestrator->deprecation_worker", "status": "ok", "error": null, "attempts": 1, "tokens": 2632}
+{"case_id": "q06", "hop": "orchestrator->code_sample_worker", "status": "skipped", "tokens": 0}
+{"case_id": "q06", "hop": "orchestrator->synthesis_resend", "status": "ok", "tokens": 885}
+{"case_id": "q07", "hop": "orchestrator->routing_decision", "status": "ok", "decision": "code_sample_worker", "tokens": 722}
+{"case_id": "q07", "hop": "orchestrator->deprecation_worker", "status": "skipped", "tokens": 0}
+{"case_id": "q07", "hop": "orchestrator->code_sample_worker", "status": "ok", "tokens": 2660}
+{"case_id": "q07", "hop": "orchestrator->synthesis_resend", "status": "ok", "tokens": 799}
+{"case_id": "q08", "hop": "orchestrator->routing_decision", "status": "ok", "decision": "code_sample_worker", "tokens": 670}
+{"case_id": "q08", "hop": "orchestrator->deprecation_worker", "status": "skipped", "tokens": 0}
+{"case_id": "q08", "hop": "orchestrator->code_sample_worker", "status": "ok", "tokens": 1838}
+{"case_id": "q08", "hop": "orchestrator->synthesis_resend", "status": "ok", "tokens": 923}
+{"case_id": "q09", "hop": "orchestrator->routing_decision", "status": "ok", "decision": "code_sample_worker", "tokens": 604}
+{"case_id": "q09", "hop": "orchestrator->deprecation_worker", "status": "skipped", "tokens": 0}
+{"case_id": "q09", "hop": "orchestrator->code_sample_worker", "status": "ok", "tokens": 8823}
+{"case_id": "q09", "hop": "orchestrator->synthesis_resend", "status": "ok", "tokens": 369}
+{"case_id": "q10", "hop": "orchestrator->routing_decision", "status": "ok", "decision": "code_sample_worker", "tokens": 628}
+{"case_id": "q10", "hop": "orchestrator->deprecation_worker", "status": "skipped", "tokens": 0}
+{"case_id": "q10", "hop": "orchestrator->code_sample_worker", "status": "ok", "tokens": 2086}
+{"case_id": "q10", "hop": "orchestrator->synthesis_resend", "status": "ok", "tokens": 1257}
+{"case_id": "q04-failure-injection", "hop": "orchestrator->routing_decision", "status": "ok", "decision": "deprecation_worker", "tokens": 577}
+{"case_id": "q04-failure-injection", "hop": "orchestrator->deprecation_worker", "status": "error", "error": "HTTP 500: deprecation_worker service unavailable", "attempts": 2, "tokens": 0}
+{"case_id": "q04-failure-injection", "hop": "orchestrator->code_sample_worker", "status": "skipped", "tokens": 0}
+{"case_id": "q04-failure-injection", "hop": "orchestrator->synthesis_resend", "status": "ok", "tokens": 387}
