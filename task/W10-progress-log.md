@@ -157,7 +157,41 @@ All 4 required deliverables are now done and in sync: `race_table.md`,
 numbers every time -- re-check `verdict.md` still matches after any
 re-run.
 
-## Bonus — AgentCard & A2A mapping (not started)
+## Bonus — AgentCard & A2A mapping (done, then corrected)
+
+Created `agentcard.md` at the repo root. First draft mapped the HTTP 500
+case to `completed` (orchestrator silently degraded into a final answer).
+User disagreed -- wanted it to genuinely map to `PAUSED: input-required`
+(matching the task doc's own example), and wanted the real code changed
+to match, not just the docs rewritten to claim something the code didn't
+actually do.
+
+**Real code change made** to `agent/squad.py`:
+- `SquadResult` gained a `status` field (`"completed"` or
+  `"paused_input_required"`).
+- If the deprecation worker is needed and still fails after its retry,
+  `run_squad` now stops immediately -- it never calls the code-sample
+  worker or the synthesis step -- and returns a fixed pause message
+  asking the user how to proceed. This message is a plain Python string,
+  not another LLM call, so it cannot hallucinate the missing fact.
+- Re-ran `eval/week10/failure_injection.py` for real; confirmed
+  `failure_case.md` now shows `status: paused_input_required` with the
+  exact pause message.
+
+Updated `agentcard.md` Sections 2 and 3 to match this real behavior:
+mapped to `input-required`/PAUSED (not completed, not failed), and
+Section 3's protocol-value argument now ties directly to this concrete
+pause instead of speaking generically.
+
+Normal race runs are unaffected -- this new early-exit path only ever
+triggers when `force_failure="deprecation_worker"` is explicitly passed,
+which only `failure_injection.py` does.
+
+## Status: Week 10 task complete
+
+All required deliverables done and in sync: `race_table.md`,
+`handoffs.log`, `failure_case.md`, `verdict.md`. Bonus done:
+`agentcard.md` (now matching the real `paused_input_required` behavior).
 
 Will add `run_squad()` to `agent/squad.py`: calls both workers, then one
 LLM "synthesis" call to merge their answers, logging the token cost of

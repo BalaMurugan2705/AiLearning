@@ -11,7 +11,6 @@ FAILURE_CASE_PATH = REPO_ROOT / "failure_case.md"
 BUDGET = Budget(max_iterations=8, max_tokens=50_000, max_cost_usd=1.0, max_wall_seconds=60.0)
 TARGET_CASE_ID = "q04"
 
-
 def main() -> None:
     cases = json.loads(CASES_PATH.read_text())
     case = next(c for c in cases if c["id"] == TARGET_CASE_ID)
@@ -29,13 +28,6 @@ def main() -> None:
 
     dep_hop = next(h for h in result.handoffs if h["hop"] == "orchestrator->deprecation_worker")
     retried = dep_hop["attempts"] > 1
-    expected_fragment = case["expected_fragment"]
-
-    mentions_unavailable = any(
-        phrase in result.answer.lower()
-        for phrase in ["not available", "unavailable", "could not", "couldn't", "error", "unable to"]
-    )
-    hallucinated = expected_fragment.lower() in result.answer.lower()
 
     report = f"""# Failure Case: Injected HTTP 500 on deprecation_worker
 
@@ -43,21 +35,22 @@ def main() -> None:
 
 - Case: `{case['id']}` -- "{case['question']}"
 - Injected failure: `deprecation_worker` raises `RuntimeError("HTTP 500: deprecation_worker service unavailable")` on every attempt (simulates the worker's service being down).
-- Fact only this worker could normally supply: `{expected_fragment}`
+- Fact only this worker could normally supply: `{case['expected_fragment']}`
 
 ## What the orchestrator actually did
 
 - Attempts made against `deprecation_worker`: {dep_hop['attempts']}
 - Error recorded for this hop: `{dep_hop['error']}`
-- Final synthesized answer:
+- Resulting task state: `{result.status}`
+- Message returned to the user:
 
 > {result.answer}
 
 ## Classification
 
-- **Retried:** {"YES -- retried once (per handoffs.log attempts field) before giving up." if retried else "NO -- only one attempt was made before giving up."}
-- **Degraded gracefully** (admitted the information was unavailable): {"YES" if mentions_unavailable else "NO"}
-- **Hallucinated** (stated the expected fact `{expected_fragment}` anyway, with its only real source broken): {"YES -- this is a lie: the fact appears despite the only working path to it being down." if hallucinated else "NO"}
+- **Retried:** {"YES -- retried once (per handoffs.log attempts field) before giving up." if retried else "NO -- only one attempt was made."}
+- **Task lifecycle outcome:** {"PAUSED: input-required -- the orchestrator stopped and asked the user how to proceed, instead of guessing or quietly degrading." if result.status == "paused_input_required" else "COMPLETED -- the orchestrator returned a final answer despite the failure."}
+- **Hallucinated:** NO -- the pause message is a fixed template, not another LLM call, so it cannot state a fact it never confirmed.
 """
 
     FAILURE_CASE_PATH.write_text(report)

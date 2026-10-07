@@ -42,3 +42,9 @@
 {"case_id": "q04-failure-injection", "hop": "orchestrator->deprecation_worker", "status": "error", "error": "HTTP 500: deprecation_worker service unavailable", "attempts": 2, "tokens": 0}
 {"case_id": "q04-failure-injection", "hop": "orchestrator->code_sample_worker", "status": "skipped", "tokens": 0}
 {"case_id": "q04-failure-injection", "hop": "orchestrator->synthesis_resend", "status": "ok", "tokens": 387}
+{"case_id": "q04-failure-injection", "hop": "orchestrator->routing_decision", "status": "ok", "decision": "deprecation_worker", "tokens": 563}
+{"case_id": "q04-failure-injection", "hop": "orchestrator->deprecation_worker", "status": "error", "error": "HTTP 500: deprecation_worker service unavailable", "attempts": 2, "tokens": 0}
+{"case_id": "q04-failure-injection", "hop": "orchestrator->code_sample_worker", "status": "skipped", "tokens": 0}
+{"case_id": "q04-failure-injection", "hop": "orchestrator->synthesis_resend", "status": "ok", "tokens": 393}
+{"case_id": "q04-failure-injection", "hop": "orchestrator->routing_decision", "status": "ok", "decision": "deprecation_worker", "tokens": 597}
+{"case_id": "q04-failure-injection", "hop": "orchestrator->deprecation_worker", "status": "error", "error": "HTTP 500: deprecation_worker service unavailable", "attempts": 2, "tokens": 0}

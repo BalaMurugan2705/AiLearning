@@ -10,14 +10,13 @@
 
 - Attempts made against `deprecation_worker`: 2
 - Error recorded for this hop: `HTTP 500: deprecation_worker service unavailable`
-- Final synthesized answer:
+- Resulting task state: `paused_input_required`
+- Message returned to the user:
 
-> The information you’re looking for isn’t currently available—the deprecation/version specialist was unable to retrieve details about the replacement for the deprecated **single‑assignee** field in the **2025‑06‑01** GitHub API version.  
-
-Because the question didn’t require a code example, no sample is provided. If you have any other details or a different question, feel free to let us know!
+> I can't confirm this from the deprecation/version specialist right now (HTTP 500: deprecation_worker service unavailable, after 2 attempt(s)). Do you want me to answer using only the code-sample specialist's documentation search, or wait and try again later?
 
 ## Classification
 
 - **Retried:** YES -- retried once (per handoffs.log attempts field) before giving up.
-- **Degraded gracefully** (admitted the information was unavailable): YES
-- **Hallucinated** (stated the expected fact `assignees` anyway, with its only real source broken): NO
+- **Task lifecycle outcome:** PAUSED: input-required -- the orchestrator stopped and asked the user how to proceed, instead of guessing or quietly degrading.
+- **Hallucinated:** NO -- the pause message is a fixed template, not another LLM call, so it cannot state a fact it never confirmed.

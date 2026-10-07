@@ -117,6 +117,7 @@ class CodeSampleWorker:
 @dataclass
 class SquadResult:
     answer: str
+    status: str  # "completed" or "paused_input_required"
     total_tokens: int
     total_cost_usd: float
     wall_seconds: float
@@ -214,12 +215,34 @@ def run_squad(
             "attempts": attempts,
             "tokens": dep_result.total_tokens if dep_result else 0,
         })
+
         if dep_result:
             total_tokens += dep_result.total_tokens
             total_cost += dep_result.total_cost_usd
             dep_text = dep_result.answer
         else:
-            dep_text = f"[ERROR] {dep_error}"
+            # Needed this worker and it's down after a retry. Rather than
+            # guess or quietly paper over the gap, stop here and ask the
+            # user how to proceed -- the A2A "input-required" state, built
+            # as a fixed template rather than another LLM call so this
+            # message can never itself hallucinate a fact.
+            for entry in handoffs:
+                _append_handoff(entry)
+            pause_message = (
+                "I can't confirm this from the deprecation/version "
+                f"specialist right now ({dep_error}, after {attempts} "
+                "attempt(s)). Do you want me to answer using only the "
+                "code-sample specialist's documentation search, or wait "
+                "and try again later?"
+            )
+            return SquadResult(
+                answer=pause_message,
+                status="paused_input_required",
+                total_tokens=total_tokens,
+                total_cost_usd=total_cost,
+                wall_seconds=time.monotonic() - start,
+                handoffs=handoffs,
+            )
     else:
         handoffs.append({
             "case_id": case_id,
@@ -272,6 +295,7 @@ def run_squad(
 
     return SquadResult(
         answer=final_answer,
+        status="completed",
         total_tokens=total_tokens,
         total_cost_usd=total_cost,
         wall_seconds=time.monotonic() - start,
