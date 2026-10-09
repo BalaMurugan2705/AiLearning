@@ -11,3 +11,6 @@ data/documents/*
 # data — results.md is unreproducible without it.
 !data/documents/v2/
 !data/documents/v3/
+
+# Subagent-driven-development scratch workspace (ledgers, briefs, review packages)
+.superpowers/
