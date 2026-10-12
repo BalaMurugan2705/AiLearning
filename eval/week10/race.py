@@ -4,7 +4,8 @@ from pathlib import Path
 
 from agent.budgets import Budget
 from agent.loop import run_agent
-from agent.squad import DeprecationWorker, CodeSampleWorker, run_squad
+from agent.specialists import close_specialists, load_specialists
+from agent.squad import run_squad
 from eval.week7.run_race import grade_entry
 from collections import defaultdict
 
@@ -12,6 +13,7 @@ REPO_ROOT = Path(__file__).resolve().parent.parent.parent
 CASES_PATH = REPO_ROOT / "eval" / "week8" / "cases.json"
 RACE_TABLE_PATH = REPO_ROOT / "race_table.md"
 HANDOFFS_LOG_PATH = REPO_ROOT / "handoffs.log"
+SPECIALISTS_CONFIG_PATH = REPO_ROOT / "specialists.json"
 
 RACE_BUDGET = Budget(max_iterations=8, max_tokens=50_000, max_cost_usd=1.0, max_wall_seconds=60.0)
 
@@ -53,17 +55,19 @@ def run_single_agent_arm(cases: list[dict]) -> list[dict]:
 
 def run_squad_arm(cases: list[dict]) -> list[dict]:
     records = []
-    for case in cases:
-        dep_worker = DeprecationWorker(RACE_BUDGET)
-        code_worker = CodeSampleWorker(RACE_BUDGET)
-        result = run_squad(case["question"], dep_worker, code_worker, case_id=case["id"])
-        records.append({
-            "id": case["id"],
-            "passed": grade_entry(result.answer, case),
-            "total_tokens": result.total_tokens,
-            "total_cost_usd": result.total_cost_usd,
-            "wall_seconds": result.wall_seconds,
-        })
+    specialists = load_specialists(SPECIALISTS_CONFIG_PATH, budget=RACE_BUDGET)
+    try:
+        for case in cases:
+            result = run_squad(case["question"], specialists, case_id=case["id"])
+            records.append({
+                "id": case["id"],
+                "passed": grade_entry(result.answer, case),
+                "total_tokens": result.total_tokens,
+                "total_cost_usd": result.total_cost_usd,
+                "wall_seconds": result.wall_seconds,
+            })
+    finally:
+        close_specialists(specialists)
     return records
 
 

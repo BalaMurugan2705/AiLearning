@@ -115,3 +115,72 @@ def test_agent_eventually_hits_budget_if_every_retry_keeps_failing():
     result = run_agent("q", budget=tight_budget, client=client)
     assert result.terminated_by_budget is True
     assert "max_iterations" in result.budget_reason
+
+
+def test_agent_survives_malformed_tool_call_json_and_records_error_evidence():
+    bad = FakeToolCall("c1", "check_deprecation", "{not json")
+    client = FakeGroqClient([fake_response(tool_calls=[bad]), fake_response(content="recovered")])
+    result = run_agent("q", budget=_generous_budget(), client=client)
+    assert result.answer == "recovered"
+    assert result.tool_calls[0]["status"] == "error"
+    tool_msg = [m for m in result.transcript if m.get("role") == "tool"][0]
+    assert "invalid_arguments" in tool_msg["content"]
+
+
+def test_agent_reuses_identical_successful_tool_call_instead_of_repeating_it():
+    calls = []
+
+    def fn(**kw):
+        calls.append(kw)
+        return json.dumps({"content": ["v"]})
+
+    args = json.dumps({"a": 1})
+    client = FakeGroqClient([
+        fake_response(tool_calls=[FakeToolCall("c1", "t", args)]),
+        fake_response(tool_calls=[FakeToolCall("c2", "t", args)]),
+        fake_response(content="done"),
+    ])
+    result = run_agent("q", budget=_generous_budget(), client=client,
+                       tool_schemas=[], tool_functions={"t": fn})
+    assert len(calls) == 1
+    assert [c["status"] for c in result.tool_calls] == ["ok", "ok"]
+
+
+def test_agent_flags_failed_and_unknown_tools_in_evidence():
+    client = FakeGroqClient([
+        fake_response(tool_calls=[FakeToolCall("c1", "nope", "{}")]),
+        fake_response(content="gave up"),
+    ])
+    result = run_agent("q", budget=_generous_budget(), client=client, tool_schemas=[], tool_functions={})
+    assert result.tool_calls[0]["status"] == "error"
+
+
+def test_host_capture_is_opt_in(tmp_path, monkeypatch):
+    monkeypatch.delenv("HOST_TOOL_CAPTURE", raising=False)
+    monkeypatch.chdir(tmp_path)
+    client = FakeGroqClient([
+        fake_response(tool_calls=[FakeToolCall("c1", "t", "{}")]), fake_response(content="x"),
+    ])
+    run_agent("q", budget=_generous_budget(), client=client,
+              tool_schemas=[], tool_functions={"t": lambda **k: "{}"})
+    assert not (tmp_path / "host_tool_calls.json").exists()
+
+
+def test_application_level_error_inside_content_is_not_counted_as_success():
+    payload = json.dumps({"content": [json.dumps({"error": "No spec for endpoint='nope'"})]})
+    client = FakeGroqClient([
+        fake_response(tool_calls=[FakeToolCall("c1", "t", "{}")]), fake_response(content="x"),
+    ])
+    result = run_agent("q", budget=_generous_budget(), client=client,
+                       tool_schemas=[], tool_functions={"t": lambda **k: payload})
+    assert result.tool_calls[0]["status"] == "error"
+
+
+def test_successful_content_is_counted_as_success():
+    payload = json.dumps({"content": [json.dumps({"deprecated": False})]})
+    client = FakeGroqClient([
+        fake_response(tool_calls=[FakeToolCall("c1", "t", "{}")]), fake_response(content="x"),
+    ])
+    result = run_agent("q", budget=_generous_budget(), client=client,
+                       tool_schemas=[], tool_functions={"t": lambda **k: payload})
+    assert result.tool_calls[0]["status"] == "ok"

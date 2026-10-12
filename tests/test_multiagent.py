@@ -1,78 +1,85 @@
-from types import SimpleNamespace
-from unittest.mock import patch
+"""End-to-end: real Specialist -> real MCP registry -> real stdio server,
+with a scripted LLM standing in for Groq."""
 
-from agent.orchestrator import run_orchestrator
+import json
+from types import SimpleNamespace as NS
+
+import pytest
+
 from agent.budgets import Budget
-from agent.loop import SYSTEM_PROMPT
+from agent.specialists import Specialist
+from agent.squad import run_squad
+
+PROBE = "tests/fixtures/mcp_probe_server.py"
 
 
-class FakeSpecialist:
-    """A specialist agent that returns a predefined result."""
-
-    def __init__(self, name, result):
-        self.name = name
-        self.result = result
-        self.calls = []
-
-    def run(self, task):
-        self.calls.append(task)
-        return SimpleNamespace(
-            answer=self.result,
-            terminated_by_budget=False,
-        )
+def _tc(call_id, name, args):
+    return NS(id=call_id, function=NS(name=name, arguments=args if isinstance(args, str) else json.dumps(args)))
 
 
-def test_orchestrator_delegates_to_research_agent():
-    research_agent = FakeSpecialist(
-        name="research",
-        result="The documentation says the default mode is markdown.",
-    )
+class ScriptedClient:
+    def __init__(self, route, steps, synth="FINAL"):
+        self.route, self.steps, self.synth = route, list(steps), synth
+        self.messages = []
+        self.chat = NS(completions=NS(create=self._create))
 
-    result = run_orchestrator(
-        question="What is the default mode?",
-        specialists=[research_agent],
-    )
-
-    assert len(research_agent.calls) == 1
-    assert research_agent.calls[0] == "What is the default mode?"
-    assert "markdown" in result.answer.lower()
-
-
-def test_orchestrator_delegates_to_multiple_agents():
-    research_agent = FakeSpecialist(
-        name="research",
-        result="The documentation uses Markdown.",
-    )
-
-    package_agent = FakeSpecialist(
-        name="package",
-        result="The package supports version 2.0.",
-    )
-
-    result = run_orchestrator(
-        question="Explain the documentation and package version.",
-        specialists=[research_agent, package_agent],
-    )
-
-    assert len(research_agent.calls) == 1
-    assert len(package_agent.calls) == 1
-    assert "Markdown" in result.answer
-    assert "version 2.0" in result.answer
-    assert len(result.specialist_results) == 2
+    def _create(self, model, messages, tools=None, tool_choice=None):
+        self.messages.append(messages)
+        usage = NS(prompt_tokens=1, completion_tokens=1)
+        if tools is None:
+            text = self.route if messages[0]["content"].startswith("You are the routing") else self.synth
+            return NS(choices=[NS(message=NS(content=text, tool_calls=None))], usage=usage)
+        step = self.steps.pop(0)
+        msg = NS(content=step, tool_calls=None) if isinstance(step, str) else NS(content=None, tool_calls=step)
+        return NS(choices=[NS(message=msg)], usage=usage)
 
 
-def test_run_agent_uses_default_system_prompt():
-    budget = Budget(
-        max_iterations=3,
-        max_tokens=1000,
-        max_cost_usd=0.01,
-        max_wall_seconds=30,
-    )
+@pytest.fixture
+def squad(tmp_path, monkeypatch):
+    monkeypatch.setattr("agent.squad.HANDOFFS_LOG_PATH", tmp_path / "handoffs.log")
+    monkeypatch.setattr("agent.squad.time.sleep", lambda s: None)
+    budget = Budget(max_iterations=4, max_tokens=10_000, max_cost_usd=1, max_wall_seconds=60)
+    worker = Specialist("probe_worker", "Echo specialist.", [PROBE], budget)
+    yield worker
+    worker.close()
 
-    with patch("agent.loop.Groq", create=True):
-        pass
 
-    # Existing specialist callers should continue using the
-    # default system prompt unless they explicitly override it.
-    assert isinstance(SYSTEM_PROMPT, str)
-    assert len(SYSTEM_PROMPT) > 0
+def test_routing_prompt_uses_discovered_tools(squad):
+    from agent.squad import build_routing_prompt
+    assert "echo" in build_routing_prompt([squad])
+
+
+def test_tool_result_propagates_with_evidence(squad):
+    client = ScriptedClient("probe_worker", [[_tc("1", "echo", {"text": "hi"})], "It echoed hi."])
+    result = run_squad("say hi", [squad], client=client)
+    assert result.status == "completed"
+    call = result.evidence["probe_worker"][0]
+    assert call["tool"] == "echo" and call["status"] == "ok" and "hi" in call["result_excerpt"]
+    assert "hi" in client.messages[-1][1]["content"]  # evidence reached synthesis
+
+
+def test_fabricated_answer_after_tool_error_is_rejected_not_synthesized(squad):
+    client = ScriptedClient("probe_worker", [
+        [_tc("1", "echo", {})], "All good, nothing to report.",       # attempt 1: invalid args, then claims success
+        [_tc("2", "echo", {})], "All good, nothing to report.",       # attempt 2: same
+    ])
+    result = run_squad("q", [squad], client=client)
+    assert result.status == "paused_input_required"
+    assert "no successful tool evidence" in result.answer
+
+
+def test_malformed_tool_json_is_recoverable_inside_one_attempt(squad):
+    client = ScriptedClient("probe_worker", [
+        [_tc("1", "echo", "{bad")], [_tc("2", "echo", {"text": "ok"})], "done",
+    ])
+    result = run_squad("q", [squad], client=client)
+    assert result.status == "completed"
+    assert [c["status"] for c in result.evidence["probe_worker"]] == ["error", "ok"]
+
+
+def test_budget_exhaustion_is_reported_as_failure(squad):
+    steps = [[_tc(str(i), "echo", {"text": str(i)})] for i in range(10)]
+    client = ScriptedClient("probe_worker", steps)
+    result = run_squad("q", [squad], client=client)
+    assert result.status == "paused_input_required"
+    assert "budget" in result.answer

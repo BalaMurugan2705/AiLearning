@@ -28,14 +28,16 @@ def _record_host_tool_event(event: dict) -> None:
     """Record an LLM host tool-selection or execution event when enabled."""
 
     # Read the optional output path; without it, normal agent runs are unchanged.
-    output_path = os.getenv("HOST_TOOL_CAPTURE", "host_tool_calls.json")
+    output_path = os.getenv("HOST_TOOL_CAPTURE")
+    if not output_path:
+        return
 
     # Load previous events so multiple tool calls are retained in one JSON array.
     try:
         with open(output_path, "r", encoding="utf-8") as file:
             events = json.load(file)
-    except FileNotFoundError:
-        # Start a fresh capture when the output file does not exist yet.
+    except (FileNotFoundError, json.JSONDecodeError):
+        # Start a fresh capture when the file is missing or unreadable.
         events = []
 
     # Add a timestamp so the host events can be correlated with wire.json.
@@ -66,9 +68,37 @@ class RunResult:
     total_cost_usd: float
     wall_seconds: float
     transcript: list[dict] = field(default_factory=list)
+    # Evidence of what each tool call did: name, arguments, ok/error, excerpt.
+    tool_calls: list[dict] = field(default_factory=list)
 
 
-def _budget_result(tracker: BudgetTracker, reason: str, transcript: list[dict]) -> RunResult:
+_EXCERPT_CHARS = 600
+_FULL_RESULT_CHARS = 20_000
+
+
+def _tool_status(result: str) -> str:
+    """A tool result is an error if the host/adapter flagged it, or if the
+    tool itself reported an application-level error inside its content
+    (e.g. {"error": "No spec for ..."}), which is not usable evidence."""
+    try:
+        parsed = json.loads(result)
+    except (TypeError, ValueError):
+        return "ok"
+    if not isinstance(parsed, dict):
+        return "ok"
+    if "content" not in parsed:
+        return "error" if parsed.get("error") else "ok"
+    for item in parsed["content"] if isinstance(parsed["content"], list) else []:
+        try:
+            inner = json.loads(item) if isinstance(item, str) else item
+        except ValueError:
+            continue
+        if isinstance(inner, dict) and inner.get("error"):
+            return "error"
+    return "ok"
+
+
+def _budget_result(tracker: BudgetTracker, reason: str, transcript: list[dict], tool_calls: list[dict]) -> RunResult:
     return RunResult(
         answer=None,
         terminated_by_budget=True,
@@ -78,6 +108,7 @@ def _budget_result(tracker: BudgetTracker, reason: str, transcript: list[dict]) 
         total_cost_usd=tracker.total_cost_usd,
         wall_seconds=tracker.elapsed(),
         transcript=transcript,
+        tool_calls=tool_calls,
     )
 
 def run_agent(
@@ -108,12 +139,14 @@ def run_agent(
     {"role": "user", "content": question}, 
 ]
     transcript = [dict(m) for m in messages]
+    tool_calls: list[dict] = []
+    call_cache: dict[str, str] = {}
 
     while True:
         try:
             tracker.start_iteration()
         except BudgetExceeded as exc:
-            return _budget_result(tracker, exc.reason, transcript)
+            return _budget_result(tracker, exc.reason, transcript, tool_calls)
 
         try:
             response = client.chat.completions.create(
@@ -140,12 +173,12 @@ def run_agent(
         try:
             tracker.record_usage(usage.prompt_tokens, usage.completion_tokens, price_in, price_out)
         except BudgetExceeded as exc:
-            return _budget_result(tracker, exc.reason, transcript)
+            return _budget_result(tracker, exc.reason, transcript, tool_calls)
 
         message = response.choices[0].message
-        tool_calls = getattr(message, "tool_calls", None)
+        requested_calls = getattr(message, "tool_calls", None)
 
-        if not tool_calls:
+        if not requested_calls:
             transcript.append({"role": "assistant", "content": message.content})
             return RunResult(
                 answer=message.content,
@@ -156,6 +189,7 @@ def run_agent(
                 total_cost_usd=tracker.total_cost_usd,
                 wall_seconds=tracker.elapsed(),
                 transcript=transcript,
+                tool_calls=tool_calls,
             )
 
         assistant_msg = {
@@ -164,76 +198,77 @@ def run_agent(
             "tool_calls": [
                 {"id": tc.id, "type": "function",
                  "function": {"name": tc.function.name, "arguments": tc.function.arguments}}
-                for tc in tool_calls
+                for tc in requested_calls
             ],
         }
         messages.append(assistant_msg)
         transcript.append(assistant_msg)
 
-        for tc in tool_calls:
-            # Parse the exact arguments returned by the LLM for this tool call.
-            args = json.loads(tc.function.arguments)
+        for tc in requested_calls:
+            name = tc.function.name
+            fn = effective_tool_functions.get(name)
 
-            # Resolve the callable registered for the selected tool.
-            fn = effective_tool_functions.get(tc.function.name)
+            # Malformed arguments become a tool error the model can correct,
+            # instead of crashing the whole run.
+            try:
+                args = json.loads(tc.function.arguments)
+                if not isinstance(args, dict):
+                    raise ValueError("arguments must be a JSON object")
+                parse_error = None
+            except ValueError as exc:
+                args, parse_error = {}, str(exc)
 
             # Record the model's decision separately from MCP wire traffic.
             _record_host_tool_event({
                 "event": "llm_tool_selected",
                 "tool_call_id": tc.id,
-                "tool_name": tc.function.name,
+                "tool_name": name,
                 "arguments": args,
                 "execution_status": "pending",
             })
 
-            # Return a recoverable error if the model selected an unknown tool.
-            if fn is None:
+            cache_key = f"{name}:{json.dumps(args, sort_keys=True)}"
+            if parse_error is not None:
                 result = json.dumps({
-                    "error": f"Unknown tool: {tc.function.name}"
+                    "error": "invalid tool-call arguments",
+                    "kind": "invalid_arguments",
+                    "tool": name,
+                    "detail": parse_error,
                 })
-
-                # Record the failed dispatch so the capture shows what happened.
-                _record_host_tool_event({
-                    "event": "host_tool_execution",
-                    "tool_call_id": tc.id,
-                    "tool_name": tc.function.name,
-                    "execution_status": "failed",
-                    "error": f"Unknown tool: {tc.function.name}",
-                })
+            elif fn is None:
+                result = json.dumps({"error": f"Unknown tool: {name}", "kind": "unknown_tool", "tool": name})
+            elif cache_key in call_cache:
+                # Identical successful call already made this run: reuse it.
+                result = call_cache[cache_key]
             else:
                 try:
-                    # Execute the selected tool through the host's registered callable.
                     result = fn(**args)
-
-                    # Record that the host callable returned a result.
-                    _record_host_tool_event({
-                        "event": "host_tool_execution",
-                        "tool_call_id": tc.id,
-                        "tool_name": tc.function.name,
-                        "execution_status": "completed",
-                    })
-
                 except Exception as exc:
                     # Convert tool exceptions into tool results so the agent can recover.
-                    result = json.dumps({
-                        "error": str(exc),
-                        "tool": tc.function.name,
-                    })
+                    result = json.dumps({"error": str(exc), "kind": "exception", "tool": name})
+                if _tool_status(result) == "ok":
+                    call_cache[cache_key] = result
 
-                    # Record the execution error for debugging and trajectory analysis.
-                    _record_host_tool_event({
-                        "event": "host_tool_execution",
-                        "tool_call_id": tc.id,
-                        "tool_name": tc.function.name,
-                        "execution_status": "failed",
-                        "error": str(exc),
-                    })
+            status = _tool_status(result)
+            tool_calls.append({
+                "tool": name,
+                "arguments": args,
+                "status": status,
+                "result_excerpt": str(result)[:_EXCERPT_CHARS],
+                "result": str(result)[:_FULL_RESULT_CHARS],  # used by grounding checks
+            })
+            _record_host_tool_event({
+                "event": "host_tool_execution",
+                "tool_call_id": tc.id,
+                "tool_name": name,
+                "execution_status": "completed" if status == "ok" else "failed",
+            })
 
             # Add the tool result to the conversation so the LLM can continue.
             tool_msg = {
                 "role": "tool",
                 "tool_call_id": tc.id,
-                "name": tc.function.name,
+                "name": name,
                 "content": result,
             }
 

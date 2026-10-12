@@ -2,29 +2,37 @@ import json
 from pathlib import Path
 
 from agent.budgets import Budget
-from agent.squad import DeprecationWorker, CodeSampleWorker, run_squad
+from agent.specialists import close_specialists, load_specialists
+from agent.squad import run_squad
 
 REPO_ROOT = Path(__file__).resolve().parent.parent.parent
 CASES_PATH = REPO_ROOT / "eval" / "week8" / "cases.json"
 FAILURE_CASE_PATH = REPO_ROOT / "failure_case.md"
+SPECIALISTS_CONFIG_PATH = REPO_ROOT / "specialists.json"
 
 BUDGET = Budget(max_iterations=8, max_tokens=50_000, max_cost_usd=1.0, max_wall_seconds=60.0)
 TARGET_CASE_ID = "q04"
+
+def _inject_deprecation_worker_failure(specialist) -> None:
+    if specialist.name == "deprecation_worker":
+        raise RuntimeError("HTTP 500: deprecation_worker service unavailable")
+
 
 def main() -> None:
     cases = json.loads(CASES_PATH.read_text())
     case = next(c for c in cases if c["id"] == TARGET_CASE_ID)
 
-    dep_worker = DeprecationWorker(BUDGET)
-    code_worker = CodeSampleWorker(BUDGET)
+    specialists = load_specialists(SPECIALISTS_CONFIG_PATH, budget=BUDGET)
 
-    result = run_squad(
-        case["question"],
-        dep_worker,
-        code_worker,
-        case_id=f"{case['id']}-failure-injection",
-        force_failure="deprecation_worker",
-    )
+    try:
+        result = run_squad(
+            case["question"],
+            specialists,
+            case_id=f"{case['id']}-failure-injection",
+            fault_hook=_inject_deprecation_worker_failure,
+        )
+    finally:
+        close_specialists(specialists)
 
     dep_hop = next(h for h in result.handoffs if h["hop"] == "orchestrator->deprecation_worker")
     retried = dep_hop["attempts"] > 1
